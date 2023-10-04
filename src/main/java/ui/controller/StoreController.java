@@ -36,9 +36,9 @@ public class StoreController {
 
         return availableBChecks().stream()
                 .filter(bCheck -> bCheck.name().toLowerCase().contains(searchText.toLowerCase()) ||
-                        bCheck.author().toLowerCase().contains(searchText) ||
-                        bCheck.description().toLowerCase().contains(searchText) ||
-                        bCheck.tags().contains(searchText))
+                        bCheck.author().toLowerCase().contains(searchText.toLowerCase()) ||
+                        bCheck.description().toLowerCase().contains(searchText.toLowerCase()) ||
+                        bCheck.tags().contains(searchText.toLowerCase()))
                 .toList();
     }
 
