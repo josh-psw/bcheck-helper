@@ -17,7 +17,7 @@ import ui.controller.StoreController;
 import ui.view.BCheckStore;
 
 public class Extension implements BurpExtension {
-    private static final String TAB_TITLE = "BCheck Store";
+    private static final String TAB_TITLE = "BCheck Helper";
 
     @Override
     public void initialize(MontoyaApi api) {

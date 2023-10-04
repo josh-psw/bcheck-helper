@@ -1,4 +1,4 @@
-# BCheck Store
+# BCheck Helper
 This extension provides a quick way to view and download BChecks in any given GitHub repository. 
 By default, this is `portswigger/bchecks`, which you can find [here](https://github.com/portswigger/bchecks).
 
