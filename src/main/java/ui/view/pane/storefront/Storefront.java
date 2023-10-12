@@ -62,18 +62,14 @@ public class Storefront extends JPanel {
 
     private void setupButtons() {
         copyButton.addActionListener(e -> {
-            int selectedRow = bCheckTable.getSelectedRow();
-            int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
-            BCheck selectedBCheck = tableModel.getBCheckAtRow(selectedModelRow);
+            BCheck selectedBCheck = getSelectedBCheck();
 
             storeController.copyBCheck(selectedBCheck);
             statusLabel.setText("Copied BCheck " + selectedBCheck.name() + " to clipboard");
         });
 
         saveButton.addActionListener(e -> {
-            int selectedRow = bCheckTable.getSelectedRow();
-            int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
-            BCheck selectedBCheck = tableModel.getBCheckAtRow(selectedModelRow);
+            BCheck selectedBCheck = getSelectedBCheck();
 
             Optional<Path> potentialSaveLocation = getSaveLocation(FILES_ONLY, selectedBCheck.filename());
             potentialSaveLocation.ifPresent(path -> {
@@ -138,14 +134,27 @@ public class Storefront extends JPanel {
 
         JMenuItem copyBCheckMenuItem = new JMenuItem("Copy BCheck");
         copyBCheckMenuItem.addActionListener(l -> {
-            int selectedRow = bCheckTable.getSelectedRow();
-            int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
-            BCheck selectedBCheck = tableModel.getBCheckAtRow(selectedModelRow);
+            BCheck selectedBCheck = getSelectedBCheck();
 
             storeController.copyBCheck(selectedBCheck);
         });
 
+        JMenuItem saveBCheckMenuItem = new JMenuItem("Save BCheck");
+        saveBCheckMenuItem.addActionListener(l -> {
+            BCheck selectedBCheck = getSelectedBCheck();
+
+            Optional<Path> potentialSaveLocation = getSaveLocation(FILES_ONLY, selectedBCheck.filename());
+            potentialSaveLocation.ifPresent(path -> {
+                if (path.toFile().isDirectory()) {
+                    path = path.resolve(selectedBCheck.filename());
+                }
+
+                storeController.saveBCheck(selectedBCheck, path);
+            });
+        });
+
         popupMenu.add(copyBCheckMenuItem);
+        popupMenu.add(saveBCheckMenuItem);
         bCheckTable.setComponentPopupMenu(popupMenu);
 
         bCheckTable.setModel(tableModel);
@@ -254,6 +263,14 @@ public class Storefront extends JPanel {
         }));
 
         return searchBar;
+    }
+
+    private BCheck getSelectedBCheck()
+    {
+        int selectedRow = bCheckTable.getSelectedRow();
+        int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
+
+        return tableModel.getBCheckAtRow(selectedModelRow);
     }
 
     private void handleTableRowChange(ListSelectionEvent selectionEvent, BCheckTableModel tableModel) {
