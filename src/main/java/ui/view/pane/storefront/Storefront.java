@@ -113,8 +113,7 @@ public class Storefront extends JPanel {
         popupMenu.addPopupMenuListener(new PopupMenuListener()
         {
             @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
-            {
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 SwingUtilities.invokeLater(() -> {
                     int rowAtPoint = bCheckTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), bCheckTable));
                     if (rowAtPoint > -1) {
