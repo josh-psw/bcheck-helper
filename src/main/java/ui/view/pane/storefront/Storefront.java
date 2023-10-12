@@ -9,9 +9,7 @@ import ui.view.component.filechooser.FileChooser;
 import ui.view.listener.SingleHandlerDocumentListener;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.*;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
@@ -39,7 +37,7 @@ public class Storefront extends JPanel {
     private final JPanel tablePanel = new JPanel();
     private final JTextArea codePreview = new JTextArea();
     private final JTable bCheckTable = new JTable();
-    private final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);;
+    private final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
     private final BCheckTableModel tableModel = new BCheckTableModel();
     private final SearchBar searchBar = new SearchBar();
 
@@ -114,6 +112,41 @@ public class Storefront extends JPanel {
 
     private void setupTablePanel() {
         tableModel.setBChecks(storeController.availableBChecks());
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e)
+            {
+                SwingUtilities.invokeLater(() -> {
+                    int rowAtPoint = bCheckTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), bCheckTable));
+                    if (rowAtPoint > -1) {
+                        bCheckTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+                    }
+                });
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+        });
+
+        JMenuItem copyBCheckMenuItem = new JMenuItem("Copy BCheck");
+        copyBCheckMenuItem.addActionListener(l -> {
+            int selectedRow = bCheckTable.getSelectedRow();
+            int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
+            BCheck selectedBCheck = tableModel.getBCheckAtRow(selectedModelRow);
+
+            storeController.copyBCheck(selectedBCheck);
+        });
+
+        popupMenu.add(copyBCheckMenuItem);
+        bCheckTable.setComponentPopupMenu(popupMenu);
 
         bCheckTable.setModel(tableModel);
         bCheckTable.setAutoCreateRowSorter(true);
