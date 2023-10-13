@@ -9,9 +9,7 @@ import ui.view.component.filechooser.FileChooser;
 import ui.view.listener.SingleHandlerDocumentListener;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.*;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
@@ -39,7 +37,7 @@ public class Storefront extends JPanel {
     private final JPanel tablePanel = new JPanel();
     private final JTextArea codePreview = new JTextArea();
     private final JTable bCheckTable = new JTable();
-    private final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);;
+    private final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
     private final BCheckTableModel tableModel = new BCheckTableModel();
     private final SearchBar searchBar = new SearchBar();
 
@@ -64,18 +62,14 @@ public class Storefront extends JPanel {
 
     private void setupButtons() {
         copyButton.addActionListener(e -> {
-            int selectedRow = bCheckTable.getSelectedRow();
-            int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
-            BCheck selectedBCheck = tableModel.getBCheckAtRow(selectedModelRow);
+            BCheck selectedBCheck = getSelectedBCheck();
 
             storeController.copyBCheck(selectedBCheck);
             statusLabel.setText("Copied BCheck " + selectedBCheck.name() + " to clipboard");
         });
 
         saveButton.addActionListener(e -> {
-            int selectedRow = bCheckTable.getSelectedRow();
-            int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
-            BCheck selectedBCheck = tableModel.getBCheckAtRow(selectedModelRow);
+            BCheck selectedBCheck = getSelectedBCheck();
 
             Optional<Path> potentialSaveLocation = getSaveLocation(FILES_ONLY, selectedBCheck.filename());
             potentialSaveLocation.ifPresent(path -> {
@@ -114,6 +108,53 @@ public class Storefront extends JPanel {
 
     private void setupTablePanel() {
         tableModel.setBChecks(storeController.availableBChecks());
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.addPopupMenuListener(new PopupMenuListener()
+        {
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    int rowAtPoint = bCheckTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), bCheckTable));
+                    if (rowAtPoint > -1) {
+                        bCheckTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+                    }
+                });
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+            }
+        });
+
+        JMenuItem copyBCheckMenuItem = new JMenuItem("Copy BCheck");
+        copyBCheckMenuItem.addActionListener(l -> {
+            BCheck selectedBCheck = getSelectedBCheck();
+
+            storeController.copyBCheck(selectedBCheck);
+        });
+
+        JMenuItem saveBCheckMenuItem = new JMenuItem("Save BCheck");
+        saveBCheckMenuItem.addActionListener(l -> {
+            BCheck selectedBCheck = getSelectedBCheck();
+
+            Optional<Path> potentialSaveLocation = getSaveLocation(FILES_ONLY, selectedBCheck.filename());
+            potentialSaveLocation.ifPresent(path -> {
+                if (path.toFile().isDirectory()) {
+                    path = path.resolve(selectedBCheck.filename());
+                }
+
+                storeController.saveBCheck(selectedBCheck, path);
+            });
+        });
+
+        popupMenu.add(copyBCheckMenuItem);
+        popupMenu.add(saveBCheckMenuItem);
+        bCheckTable.setComponentPopupMenu(popupMenu);
 
         bCheckTable.setModel(tableModel);
         bCheckTable.setAutoCreateRowSorter(true);
@@ -221,6 +262,14 @@ public class Storefront extends JPanel {
         }));
 
         return searchBar;
+    }
+
+    private BCheck getSelectedBCheck()
+    {
+        int selectedRow = bCheckTable.getSelectedRow();
+        int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
+
+        return tableModel.getBCheckAtRow(selectedModelRow);
     }
 
     private void handleTableRowChange(ListSelectionEvent selectionEvent, BCheckTableModel tableModel) {
