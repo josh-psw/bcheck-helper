@@ -14,6 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation("org.mockito:mockito-core:5.5.0")
+    testImplementation("net.portswigger.burp.extensions:montoya-api:2023.10.2")
 }
 
 tasks.test {

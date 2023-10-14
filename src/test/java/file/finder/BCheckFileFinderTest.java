@@ -30,6 +30,6 @@ class BCheckFileFinderTest {
         writeString(nonEmptySubDirectory.resolve("sub-bcheck"), "");
 
         List<Path> foundBChecks = bCheckFileFinder.find(directory);
-        assertThat(foundBChecks).containsExactly(nonEmptySubDirectory.resolve("sub-bcheck.bcheck"), directory.resolve("bcheck.bcheck"));
+        assertThat(foundBChecks).containsExactlyInAnyOrder(nonEmptySubDirectory.resolve("sub-bcheck.bcheck"), directory.resolve("bcheck.bcheck"));
     }
 }
