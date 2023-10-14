@@ -12,13 +12,9 @@ repositories {
 
 publishing {
   publications {
-      maven(MavenPublication) {
-          groupId = group
-          artifactId = 'bcheck-helper'
-          version = version
-
-          from components.java
-      }
+    create<MavenPublication>("bcheck-helper") {
+        from(components["java"])
+    }
   }
   repositories {
     maven {
