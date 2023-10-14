@@ -9,7 +9,9 @@ on:
       - opened
     branches:
       - 'main'
-      
+env:
+  VERSION_NUMBER: $({github.run_number})
+  
 jobs:
   build:
 
