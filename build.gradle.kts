@@ -3,8 +3,8 @@ plugins {
     id("maven-publish")
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "net.portswiggerjosh.bcheck-helper"
+version = System.getenv("VERSION_NUMBER")
 
 repositories {
     mavenCentral()
@@ -14,7 +14,7 @@ publishing {
   repositories {
     maven {
       name = "GitHubPackages"
-      url = "https://maven.pkg.github.com/portswigger-josh/bcheck-helper"
+      url = uri("https://maven.pkg.github.com/portswigger-josh/bcheck-helper")
       credentials {
         username = System.getenv("GITHUB_ACTOR")
         password = System.getenv("GITHUB_TOKEN")
