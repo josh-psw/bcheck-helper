@@ -9,6 +9,19 @@ repositories {
     mavenCentral()
 }
 
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/portswigger-josh/bcheck-helper"
+      credentials {
+        username = System.getenv("GITHUB_ACTOR")
+        password = System.getenv("GITHUB_TOKEN")
+      }
+    }
+  }
+}
+
 dependencies {
     compileOnly("net.portswigger.burp.extensions:montoya-api:2023.10.2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
