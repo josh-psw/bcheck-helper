@@ -3,6 +3,13 @@ name: Run tests
 permissions:
   contents: read
 
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - 'main'
+      
 jobs:
   build:
 
