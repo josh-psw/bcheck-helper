@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "net.portswiggerjosh.bcheck-helper"
+group = "net.portswiggerjosh"
 version = System.getenv("VERSION_NUMBER")
 
 repositories {
@@ -11,6 +11,15 @@ repositories {
 }
 
 publishing {
+  publications {
+      maven(MavenPublication) {
+          groupId = group
+          artifactId = 'bcheck-helper'
+          version = version
+
+          from components.java
+      }
+  }
   repositories {
     maven {
       name = "GitHubPackages"
