@@ -3,9 +3,6 @@ plugins {
     id("maven-publish")
 }
 
-group = "net.portswiggerjosh"
-version = System.getenv("VERSION_NUMBER")
-
 repositories {
     mavenCentral()
 }
