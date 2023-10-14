@@ -1,2 +1,2 @@
-rootProject.name = "bcheck-store"
+rootProject.name = "bcheck-helper"
 
