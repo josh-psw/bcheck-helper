@@ -85,7 +85,7 @@ class BCheckFactoryTest {
         assertThat(bCheck.name()).isEqualTo("Log4Shell (collaborator)");
         assertThat(bCheck.author()).isEqualTo("Carlos Montoya");
         assertThat(bCheck.description()).isEqualTo("Tests for the Log4Shell vulnerability");
-        assertThat(bCheck.tags()).containsExactly("log4shell", "cve-2021-44228", "cve");
+        assertThat(bCheck.tags().tags()).containsExactly("log4shell", "cve-2021-44228", "cve");
         assertThat(bCheck.path()).isEqualTo(saveLocation.toString());
         assertThat(bCheck.filename()).isEqualTo(fileName);
         assertThat(bCheck.script()).isEqualTo(contents);
@@ -146,7 +146,7 @@ class BCheckFactoryTest {
         assertThat(bCheck.name()).isEqualTo("No name");
         assertThat(bCheck.author()).isEqualTo("No author");
         assertThat(bCheck.description()).isEqualTo("No description");
-        assertThat(bCheck.tags()).isEmpty();
+        assertThat(bCheck.tags().tags()).isEmpty();
         assertThat(bCheck.path()).isEqualTo(saveLocation.toString());
         assertThat(bCheck.filename()).isEqualTo(fileName);
         assertThat(bCheck.script()).isEqualTo(contents);
@@ -208,7 +208,7 @@ class BCheckFactoryTest {
         assertThat(bCheck.name()).isEqualTo("Log4Shell (collaborator)");
         assertThat(bCheck.author()).isEqualTo("Carlos Montoya");
         assertThat(bCheck.description()).isEqualTo("Tests for the Log4Shell vulnerability");
-        assertThat(bCheck.tags()).containsExactly("log4shell", "cve-2021-44228", "cve");
+        assertThat(bCheck.tags().tags()).containsExactly("log4shell", "cve-2021-44228", "cve");
         assertThat(bCheck.path()).isEqualTo(saveLocation.toString());
         assertThat(bCheck.filename()).isEqualTo(fileName);
         assertThat(bCheck.script()).isEqualTo(contents);
