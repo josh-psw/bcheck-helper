@@ -33,6 +33,12 @@ dependencies {
     testImplementation("net.portswigger.burp.extensions:montoya-api:2023.10.2")
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }
