@@ -11,7 +11,7 @@ public class BCheck {
     private final String name;
     private final String description;
     private final String author;
-    private final List<String> tags;
+    private final Tags tags;
     private final String path;
     private final String filename;
 
@@ -21,9 +21,10 @@ public class BCheck {
         this.name = name;
         this.description = description;
         this.author = author;
-        this.tags = tags;
         this.path = path;
         this.filename = filename;
+
+        this.tags = new Tags(tags);
     }
 
     public String name() {
@@ -46,8 +47,8 @@ public class BCheck {
         return filename;
     }
 
-    public List<String> tags() {
-        return unmodifiableList(tags);
+    public Tags tags() {
+        return tags;
     }
 
     public String script() {
@@ -60,5 +61,22 @@ public class BCheck {
         }
 
         return script;
+    }
+
+    public static class Tags
+    {
+        private final List<String> tags;
+
+        private Tags(List<String> tags) {
+            this.tags = tags;
+        }
+
+        public List<String> tags() {
+            return unmodifiableList(tags);
+        }
+
+        public boolean contains(String searchText) {
+            return tags.stream().anyMatch(tag -> tag.equalsIgnoreCase(searchText));
+        }
     }
 }

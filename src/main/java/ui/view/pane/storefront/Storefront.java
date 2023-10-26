@@ -1,12 +1,15 @@
 package ui.view.pane.storefront;
 
 import bcheck.BCheck;
+import bcheck.BCheck.Tags;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
+import settings.tags.TagColors;
 import ui.controller.StoreController;
 import ui.model.table.BCheckTableModel;
 import ui.view.component.filechooser.ChooseMode;
 import ui.view.component.filechooser.FileChooser;
 import ui.view.listener.SingleHandlerDocumentListener;
+import ui.view.utils.TagRenderer;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -162,6 +165,7 @@ public class Storefront extends JPanel {
         bCheckTable.getTableHeader().setReorderingAllowed(false);
         bCheckTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
         bCheckTable.addRowSelectionInterval(0, 0);
+        bCheckTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());

@@ -40,7 +40,7 @@ public class BCheckTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Function<BCheck, String> renderableTableDataFetcher = TABLE_HEADERS[columnIndex].renderableTableData;
+        Function<BCheck, Object> renderableTableDataFetcher = TABLE_HEADERS[columnIndex].renderableTableData;
         return renderableTableDataFetcher.apply(tableData.get(rowIndex));
     }
 
