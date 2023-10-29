@@ -8,13 +8,9 @@ public class SearchBar extends JTextField {
     private static final String PLACEHOLDER = "Search by name, author, description or tags";
 
     public SearchBar() {
-        super();
-
         addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-
                 if (PLACEHOLDER.equals(getText())) {
                     setText("");
                 }
@@ -22,8 +18,6 @@ public class SearchBar extends JTextField {
 
             @Override
             public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-
                 if (!hasSearchText()) {
                     setText(PLACEHOLDER);
                 }
@@ -37,7 +31,7 @@ public class SearchBar extends JTextField {
         return !getText().isBlank() && !isPlaceholderShowing();
     }
 
-    public boolean isPlaceholderShowing() {
+    private boolean isPlaceholderShowing() {
         return PLACEHOLDER.equals(getText());
     }
 }

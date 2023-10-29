@@ -35,10 +35,8 @@ public class BCheckManager {
         allAvailableBChecks.sort(comparing(BCheck::name));
     }
 
-    public List<BCheck> refresh() {
+    public void refresh() {
         loadData();
-
-        return availableBChecks();
     }
 
     public List<BCheck> availableBChecks() {
