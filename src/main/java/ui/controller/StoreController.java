@@ -27,8 +27,8 @@ public class StoreController {
         return bCheckManager.availableBChecks();
     }
 
-    public List<BCheck> refresh() {
-        return bCheckManager.refresh();
+    public void refresh() {
+        bCheckManager.refresh();
     }
 
     public List<BCheck> findMatchingBChecks(String text) {

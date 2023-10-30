@@ -170,19 +170,19 @@ public class Storefront extends JPanel {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());
 
-        SearchBar searchBar = setupSearchBar();
+        searchBar.getDocument().addDocumentListener(new SingleHandlerDocumentListener(e1 -> updateTable()));
 
         JButton refreshButton = new JButton("Refresh");
         refreshButton.addActionListener(e -> {
             refreshButton.setEnabled(false);
             refreshButton.setText("Refreshing...");
 
-            List<BCheck> refreshedBChecks = storeController.refresh();
+            storeController.refresh();
 
             refreshButton.setText("Refresh");
             refreshButton.setEnabled(true);
 
-            tableModel.setBChecks(refreshedBChecks);
+            updateTable();
 
             statusLabel.setText("Refreshed");
         });
@@ -239,9 +239,7 @@ public class Storefront extends JPanel {
         addAncestorListener(new AncestorListener() {
             @Override
             public void ancestorAdded(AncestorEvent event) {
-                invokeLater(() -> {
-                    event.getComponent().requestFocusInWindow();
-                });
+                invokeLater(() -> event.getComponent().requestFocusInWindow());
             }
 
             @Override
@@ -254,22 +252,15 @@ public class Storefront extends JPanel {
         });
     }
 
-    private SearchBar setupSearchBar() {
-        searchBar.getDocument().addDocumentListener(new SingleHandlerDocumentListener(e -> {
-            if (searchBar.hasSearchText()) {
-                List<BCheck> matchingBChecks = storeController.findMatchingBChecks(searchBar.getText());
-                tableModel.setBChecks(matchingBChecks);
-            } else {
-                List<BCheck> allBChecks = storeController.availableBChecks();
-                tableModel.setBChecks(allBChecks);
-            }
-        }));
+    private void updateTable() {
+        List<BCheck> bChecks = searchBar.hasSearchText()
+                ? storeController.findMatchingBChecks(searchBar.getText())
+                : storeController.availableBChecks();
 
-        return searchBar;
+        tableModel.setBChecks(bChecks);
     }
 
-    private BCheck getSelectedBCheck()
-    {
+    private BCheck getSelectedBCheck() {
         int selectedRow = bCheckTable.getSelectedRow();
         int selectedModelRow = bCheckTable.convertRowIndexToModel(selectedRow);
 
