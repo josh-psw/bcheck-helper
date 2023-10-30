@@ -277,12 +277,18 @@ public class Storefront extends JPanel {
     }
 
     private void handleTableRowChange(ListSelectionEvent selectionEvent, BCheckTableModel tableModel) {
-        if (!selectionEvent.getValueIsAdjusting()) {
-            BCheck selectedBCheck = tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(bCheckTable.getSelectedRow()));
-
-            codePreview.setText(selectedBCheck.script());
-            codePreview.setCaretPosition(0);
+        if (selectionEvent.getValueIsAdjusting()) {
+            return;
         }
+
+        int selectedRow = bCheckTable.getSelectedRow();
+
+        String previewText = selectedRow >= 0
+                ? tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(selectedRow)).script()
+                : "";
+
+        codePreview.setText(previewText);
+        codePreview.setCaretPosition(0);
     }
 
     private Optional<Path> getSaveLocation(ChooseMode chooseMode) {
