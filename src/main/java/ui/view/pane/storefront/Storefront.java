@@ -17,10 +17,12 @@ import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 import static java.awt.BorderLayout.*;
 import static java.awt.FlowLayout.LEADING;
 import static java.awt.GridBagConstraints.NONE;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
@@ -44,12 +46,15 @@ public class Storefront extends JPanel {
     private final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
     private final BCheckTableModel tableModel = new BCheckTableModel();
     private final SearchBar searchBar = new SearchBar();
+    private final JButton refreshButton = new JButton("Refresh");
+    private final ExecutorService refreshExecutorService = newFixedThreadPool(1);
 
     public Storefront(StoreController storeController, DefaultSaveLocationSettingsReader saveLocationSettingsReader) {
         this.storeController = storeController;
         this.saveLocationSettingsReader = saveLocationSettingsReader;
 
         initialiseUi();
+        refreshBChecks();
     }
 
     private void initialiseUi() {
@@ -172,22 +177,9 @@ public class Storefront extends JPanel {
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());
 
-        searchBar.getDocument().addDocumentListener(new SingleHandlerDocumentListener(e1 -> updateTable()));
+        searchBar.getDocument().addDocumentListener(new SingleHandlerDocumentListener(e -> updateTable()));
 
-        JButton refreshButton = new JButton("Refresh");
-        refreshButton.addActionListener(e -> {
-            refreshButton.setEnabled(false);
-            refreshButton.setText("Refreshing...");
-
-            storeController.refresh();
-
-            refreshButton.setText("Refresh");
-            refreshButton.setEnabled(true);
-
-            updateTable();
-
-            statusLabel.setText("Refreshed");
-        });
+        refreshButton.addActionListener(e -> refreshBChecks());
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
@@ -212,6 +204,22 @@ public class Storefront extends JPanel {
         tablePanel.add(topPanel, NORTH);
         tablePanel.add(new JScrollPane(bCheckTable), CENTER);
         tablePanel.setBorder(createEmptyBorder(0, 0, 5, 5));
+    }
+
+    private void refreshBChecks() {
+        refreshButton.setEnabled(false);
+        refreshButton.setText("Refreshing...");
+
+        refreshExecutorService.submit(() -> {
+            storeController.refresh();
+
+            refreshButton.setText("Refresh");
+            refreshButton.setEnabled(true);
+
+            updateTable();
+
+            statusLabel.setText("Refreshed");
+        });
     }
 
     private void setupPreviewPanel() {
@@ -295,5 +303,9 @@ public class Storefront extends JPanel {
         return saveLocationSettingsReader
                 .defaultSaveLocation()
                 .or(() -> new FileChooser(chooseMode).prompt(defaultFileName));
+    }
+
+    public void close() {
+        refreshExecutorService.shutdown();
     }
 }
