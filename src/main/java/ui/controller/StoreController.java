@@ -27,8 +27,17 @@ public class StoreController {
         return bCheckManager.availableBChecks();
     }
 
-    public void refresh() {
-        bCheckManager.refresh();
+    public String status() {
+        return switch (bCheckManager.state()) {
+            case START -> "Loading";
+            case INITIAL_LOAD -> "Loaded %d BCheck scripts".formatted(bCheckManager.numberOfBChecks());
+            case REFRESH -> "Refreshed";
+            case ERROR -> "Error contacting GitHub repository";
+        };
+    }
+
+    public void loadData() {
+        bCheckManager.loadData();
     }
 
     public List<BCheck> findMatchingBChecks(String text) {
