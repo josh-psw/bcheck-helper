@@ -23,6 +23,7 @@ import static java.awt.BorderLayout.*;
 import static java.awt.FlowLayout.LEADING;
 import static java.awt.GridBagConstraints.NONE;
 import static java.util.concurrent.Executors.newFixedThreadPool;
+import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
@@ -112,6 +113,7 @@ public class Storefront extends JPanel {
         splitPane.add(tablePanel);
         splitPane.add(previewScrollPane);
         splitPane.setResizeWeight(0.6);
+        splitPane.setBorder(createEmptyBorder(0, 10, 0, 5));
     }
 
     private void setupTablePanel() {
@@ -183,22 +185,25 @@ public class Storefront extends JPanel {
         constraints.gridx = 0;
         constraints.weightx = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.insets = new Insets(10, 0, 0, 12);
 
         topPanel.add(searchBar, constraints);
 
         constraints.gridx = 1;
         constraints.weightx = 0;
         constraints.fill = NONE;
+        constraints.insets = new Insets(10, 0, 0, 0);
 
         topPanel.add(refreshButton, constraints);
 
         BorderLayout borderLayout = new BorderLayout();
-        borderLayout.setVgap(15);
+        borderLayout.setVgap(10);
 
         tablePanel.setLayout(borderLayout);
 
         tablePanel.add(topPanel, NORTH);
         tablePanel.add(new JScrollPane(bCheckTable), CENTER);
+        tablePanel.setBorder(createEmptyBorder(0, 0, 5, 5));
     }
 
     private void refreshBChecks() {
