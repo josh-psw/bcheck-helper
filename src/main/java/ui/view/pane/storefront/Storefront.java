@@ -17,12 +17,12 @@ import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.awt.BorderLayout.*;
 import static java.awt.FlowLayout.LEADING;
 import static java.awt.GridBagConstraints.NONE;
-import static java.util.concurrent.Executors.newFixedThreadPool;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
@@ -47,14 +47,17 @@ public class Storefront extends JPanel {
     private final BCheckTableModel tableModel = new BCheckTableModel();
     private final SearchBar searchBar = new SearchBar();
     private final JButton refreshButton = new JButton("Refresh");
-    private final ExecutorService refreshExecutorService = newFixedThreadPool(1);
+    private final Executor executor;
+    private final AtomicBoolean initialLoadCompleted;
 
-    public Storefront(StoreController storeController, DefaultSaveLocationSettingsReader saveLocationSettingsReader) {
+    public Storefront(StoreController storeController, DefaultSaveLocationSettingsReader saveLocationSettingsReader, Executor executor) {
         this.storeController = storeController;
         this.saveLocationSettingsReader = saveLocationSettingsReader;
+        this.executor = executor;
+        this.initialLoadCompleted = new AtomicBoolean();
 
         initialiseUi();
-        refreshBChecks();
+        loadBChecks();
     }
 
     private void initialiseUi() {
@@ -179,7 +182,7 @@ public class Storefront extends JPanel {
 
         searchBar.getDocument().addDocumentListener(new SingleHandlerDocumentListener(e -> updateTable()));
 
-        refreshButton.addActionListener(e -> refreshBChecks());
+        refreshButton.addActionListener(e -> loadBChecks());
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
@@ -206,19 +209,20 @@ public class Storefront extends JPanel {
         tablePanel.setBorder(createEmptyBorder(0, 0, 5, 5));
     }
 
-    private void refreshBChecks() {
+    private void loadBChecks() {
         refreshButton.setEnabled(false);
-        refreshButton.setText("Refreshing...");
 
-        refreshExecutorService.submit(() -> {
+        executor.execute(() -> {
             storeController.refresh();
-
-            refreshButton.setText("Refresh");
-            refreshButton.setEnabled(true);
-
             updateTable();
 
-            statusLabel.setText("Refreshed");
+            String statusMessage = initialLoadCompleted.get()
+                    ? "Refreshed"
+                    : "Loaded %d BChecks".formatted(storeController.availableBChecks().size());
+
+            statusLabel.setText(statusMessage);
+            refreshButton.setEnabled(true);
+            initialLoadCompleted.set(true);
         });
     }
 
@@ -303,9 +307,5 @@ public class Storefront extends JPanel {
         return saveLocationSettingsReader
                 .defaultSaveLocation()
                 .or(() -> new FileChooser(chooseMode).prompt(defaultFileName));
-    }
-
-    public void close() {
-        refreshExecutorService.shutdown();
     }
 }

@@ -15,7 +15,7 @@ import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
 import ui.view.BCheckStore;
-import ui.view.pane.storefront.Storefront;
+import utils.CloseablePooledExecutor;
 
 public class Extension implements BurpExtension {
     private static final String TAB_TITLE = "BCheck Helper";
@@ -37,14 +37,11 @@ public class Extension implements BurpExtension {
         BCheckManager bCheckManager = new BCheckManager(onlineBCheckFetcher);
         ClipboardManager clipboardManager = new ClipboardManager();
         FileSystem fileSystem = new FileSystem(logger);
+        CloseablePooledExecutor executor = new CloseablePooledExecutor();
         StoreController storeController = new StoreController(bCheckManager, clipboardManager, fileSystem);
-        Storefront storefront = new Storefront(storeController, settingsController.defaultSaveLocationSettings());
-        BCheckStore bcheckStore = new BCheckStore(settingsController, storefront);
+        BCheckStore bcheckStore = new BCheckStore(storeController, settingsController, executor);
 
         api.userInterface().registerSuiteTab(TAB_TITLE, bcheckStore);
-        api.extension().registerUnloadingHandler(() -> {
-            gitHubClient.close();
-            storefront.close();
-        });
+        api.extension().registerUnloadingHandler(executor::close);
     }
 }
