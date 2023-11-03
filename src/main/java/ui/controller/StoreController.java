@@ -7,6 +7,7 @@ import ui.clipboard.ClipboardManager;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class StoreController {
     private final BCheckManager bCheckManager;
@@ -23,10 +24,6 @@ public class StoreController {
         this.fileSystem = fileSystem;
     }
 
-    public List<BCheck> availableBChecks() {
-        return bCheckManager.availableBChecks();
-    }
-
     public String status() {
         return switch (bCheckManager.state()) {
             case START -> "Loading";
@@ -40,15 +37,10 @@ public class StoreController {
         bCheckManager.loadData();
     }
 
-    public List<BCheck> findMatchingBChecks(String text) {
-        String searchText = text.toLowerCase();
+    public List<BCheck> findMatchingBChecks(String searchText) {
+        Predicate<BCheck> filter = searchText.isBlank() ? bCheck -> true : new BCheckFilterPredicate(searchText);
 
-        return availableBChecks().stream()
-                .filter(bCheck -> bCheck.name().toLowerCase().contains(searchText.toLowerCase()) ||
-                        bCheck.author().toLowerCase().contains(searchText.toLowerCase()) ||
-                        bCheck.description().toLowerCase().contains(searchText.toLowerCase()) ||
-                        bCheck.tags().contains(searchText.toLowerCase()))
-                .toList();
+        return bCheckManager.availableBChecks().stream().filter(filter).toList();
     }
 
     public void copyBCheck(BCheck bCheck) {
@@ -57,5 +49,21 @@ public class StoreController {
 
     public void saveBCheck(BCheck bCheck, Path savePath) {
         fileSystem.saveFile(bCheck.script(), savePath);
+    }
+
+    private static class BCheckFilterPredicate implements Predicate<BCheck> {
+        private final String searchText;
+
+        private BCheckFilterPredicate(String searchText) {
+            this.searchText = searchText.toLowerCase();
+        }
+
+        @Override
+        public boolean test(BCheck bCheck) {
+            return bCheck.name().toLowerCase().contains(searchText) ||
+                    bCheck.author().toLowerCase().contains(searchText) ||
+                    bCheck.description().toLowerCase().contains(searchText) ||
+                    bCheck.tags().contains(searchText);
+        }
     }
 }
