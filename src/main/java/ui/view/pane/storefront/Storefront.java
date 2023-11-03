@@ -117,7 +117,7 @@ public class Storefront extends JPanel {
     }
 
     private void setupTablePanel() {
-        tableModel.setBChecks(storeController.availableBChecks());
+        tableModel.setBChecks(storeController.findMatchingBChecks(""));
 
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.addPopupMenuListener(new PopupMenuListener()
@@ -266,9 +266,7 @@ public class Storefront extends JPanel {
     }
 
     private void updateTable() {
-        List<BCheck> bChecks = searchBar.hasSearchText()
-                ? storeController.findMatchingBChecks(searchBar.getText())
-                : storeController.availableBChecks();
+        List<BCheck> bChecks = storeController.findMatchingBChecks(searchBar.getText());
 
         tableModel.setBChecks(bChecks);
     }
