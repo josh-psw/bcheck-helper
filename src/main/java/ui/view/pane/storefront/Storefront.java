@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executor;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.awt.BorderLayout.*;
 import static java.awt.FlowLayout.LEADING;
@@ -48,13 +47,11 @@ public class Storefront extends JPanel {
     private final SearchBar searchBar = new SearchBar();
     private final JButton refreshButton = new JButton("Refresh");
     private final Executor executor;
-    private final AtomicBoolean initialLoadCompleted;
 
     public Storefront(StoreController storeController, DefaultSaveLocationSettingsReader saveLocationSettingsReader, Executor executor) {
         this.storeController = storeController;
         this.saveLocationSettingsReader = saveLocationSettingsReader;
         this.executor = executor;
-        this.initialLoadCompleted = new AtomicBoolean();
 
         initialiseUi();
         loadBChecks();
@@ -174,7 +171,6 @@ public class Storefront extends JPanel {
         bCheckTable.setSelectionMode(SINGLE_SELECTION);
         bCheckTable.getTableHeader().setReorderingAllowed(false);
         bCheckTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
-        bCheckTable.addRowSelectionInterval(0, 0);
         bCheckTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
 
         JPanel topPanel = new JPanel();
@@ -213,16 +209,16 @@ public class Storefront extends JPanel {
         refreshButton.setEnabled(false);
 
         executor.execute(() -> {
-            storeController.refresh();
+            statusLabel.setText("");
+            storeController.loadData();
             updateTable();
 
-            String statusMessage = initialLoadCompleted.get()
-                    ? "Refreshed"
-                    : "Loaded %d BChecks".formatted(storeController.availableBChecks().size());
+            if (tableModel.getRowCount() > 0) {
+                bCheckTable.addRowSelectionInterval(0, 0);
+            }
 
-            statusLabel.setText(statusMessage);
+            statusLabel.setText(storeController.status());
             refreshButton.setEnabled(true);
-            initialLoadCompleted.set(true);
         });
     }
 
