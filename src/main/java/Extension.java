@@ -14,6 +14,7 @@ import network.RequestSender;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
+import ui.icons.IconFactory;
 import ui.view.BCheckStore;
 import utils.CloseablePooledExecutor;
 
@@ -39,7 +40,8 @@ public class Extension implements BurpExtension {
         FileSystem fileSystem = new FileSystem(logger);
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
         StoreController storeController = new StoreController(bCheckManager, clipboardManager, fileSystem);
-        BCheckStore bcheckStore = new BCheckStore(storeController, settingsController, executor);
+        IconFactory iconFactory = new IconFactory(api.userInterface());
+        BCheckStore bcheckStore = new BCheckStore(storeController, settingsController, executor, iconFactory);
 
         api.userInterface().registerSuiteTab(TAB_TITLE, bcheckStore);
         api.extension().registerUnloadingHandler(executor::close);
