@@ -5,6 +5,7 @@ import bcheck.BCheck.Tags;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import settings.tags.TagColors;
 import ui.controller.StoreController;
+import ui.icons.IconFactory;
 import ui.model.table.BCheckTableModel;
 import ui.view.component.filechooser.ChooseMode;
 import ui.view.component.filechooser.FileChooser;
@@ -44,14 +45,18 @@ public class Storefront extends JPanel {
     private final JTable bCheckTable = new JTable();
     private final JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
     private final BCheckTableModel tableModel = new BCheckTableModel();
-    private final SearchBar searchBar = new SearchBar();
     private final JButton refreshButton = new JButton("Refresh");
     private final Executor executor;
+    private final SearchBar searchBar;
 
-    public Storefront(StoreController storeController, DefaultSaveLocationSettingsReader saveLocationSettingsReader, Executor executor) {
+    public Storefront(StoreController storeController,
+                      DefaultSaveLocationSettingsReader saveLocationSettingsReader,
+                      Executor executor,
+                      IconFactory iconFactory) {
         this.storeController = storeController;
         this.saveLocationSettingsReader = saveLocationSettingsReader;
         this.executor = executor;
+        this.searchBar = new SearchBar(iconFactory);
 
         initialiseUi();
         loadBChecks();
