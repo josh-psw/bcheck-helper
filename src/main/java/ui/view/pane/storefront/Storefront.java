@@ -7,8 +7,6 @@ import settings.tags.TagColors;
 import ui.controller.StoreController;
 import ui.icons.IconFactory;
 import ui.model.table.BCheckTableModel;
-import ui.view.component.filechooser.ChooseMode;
-import ui.view.component.filechooser.FileChooser;
 import ui.view.listener.SingleHandlerDocumentListener;
 import ui.view.utils.TagRenderer;
 
@@ -17,7 +15,6 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executor;
 
 import static java.awt.BorderLayout.*;
@@ -29,12 +26,11 @@ import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.SwingConstants.VERTICAL;
 import static javax.swing.SwingUtilities.invokeLater;
-import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
 import static ui.view.component.filechooser.ChooseMode.FILES_ONLY;
 
 public class Storefront extends JPanel {
     private final StoreController storeController;
-    private final DefaultSaveLocationSettingsReader saveLocationSettingsReader;
+    private final SaveLocation saveLocation;
     private final JButton copyButton = new JButton("Copy to clipboard");
     private final JButton saveButton = new JButton("Save to file");
     private final JButton saveAllButton = new JButton("Save all BChecks to disk");
@@ -54,8 +50,8 @@ public class Storefront extends JPanel {
                       Executor executor,
                       IconFactory iconFactory) {
         this.storeController = storeController;
-        this.saveLocationSettingsReader = saveLocationSettingsReader;
         this.executor = executor;
+        this.saveLocation = new SaveLocation(saveLocationSettingsReader);
         this.searchBar = new SearchBar(iconFactory);
 
         initialiseUi();
@@ -85,29 +81,36 @@ public class Storefront extends JPanel {
         saveButton.addActionListener(e -> {
             BCheck selectedBCheck = getSelectedBCheck();
 
-            Optional<Path> potentialSaveLocation = getSaveLocation(FILES_ONLY, selectedBCheck.filename());
-            potentialSaveLocation.ifPresent(path -> {
-                if (path.toFile().isDirectory()) {
-                    path = path.resolve(selectedBCheck.filename());
-                }
+            saveLocation.find(FILES_ONLY, selectedBCheck.filename())
+                    .ifPresent(path -> {
+                        saveButton.setEnabled(false);
+                        statusLabel.setText("");
 
-                storeController.saveBCheck(selectedBCheck, path);
+                        executor.execute(() -> {
+                            Path savePath = path.toFile().isDirectory() ? path.resolve(selectedBCheck.filename()) : path;
 
-                statusLabel.setText("Saved BCheck to " + path);
-            });
+                            storeController.saveBCheck(selectedBCheck, savePath);
+                            statusLabel.setText("Saved BCheck to " + savePath);
+                            saveButton.setEnabled(true);
+                        });
+                    });
         });
 
-        saveAllButton.addActionListener(e -> {
-            Optional<Path> potentialSaveLocation = getSaveLocation(DIRECTORIES_ONLY);
-            potentialSaveLocation.ifPresent(path -> {
-                for (int i = 0; i < tableModel.getRowCount(); i++) {
-                    BCheck bCheck = tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(i));
-                    storeController.saveBCheck(bCheck, path.resolve(bCheck.filename()));
-                }
+        saveAllButton.addActionListener(e ->
+                saveLocation.find().ifPresent(path -> {
+                    saveAllButton.setEnabled(false);
+                    statusLabel.setText("");
 
-                statusLabel.setText("Saved all BChecks to " + path);
-            });
-        });
+                    executor.execute(() -> {
+                        for (int i = 0; i < tableModel.getRowCount(); i++) {
+                            BCheck bCheck = tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(i));
+                            storeController.saveBCheck(bCheck, path.resolve(bCheck.filename()));
+                        }
+
+                        statusLabel.setText("Saved all BChecks to " + path);
+                        saveAllButton.setEnabled(true);
+                    });
+                }));
     }
 
     private void setupSplitPane() {
@@ -151,20 +154,24 @@ public class Storefront extends JPanel {
             BCheck selectedBCheck = getSelectedBCheck();
 
             storeController.copyBCheck(selectedBCheck);
+            statusLabel.setText("Copied BCheck " + selectedBCheck.name() + " to clipboard");
         });
 
         JMenuItem saveBCheckMenuItem = new JMenuItem("Save BCheck");
         saveBCheckMenuItem.addActionListener(l -> {
             BCheck selectedBCheck = getSelectedBCheck();
 
-            Optional<Path> potentialSaveLocation = getSaveLocation(FILES_ONLY, selectedBCheck.filename());
-            potentialSaveLocation.ifPresent(path -> {
-                if (path.toFile().isDirectory()) {
-                    path = path.resolve(selectedBCheck.filename());
-                }
+            saveLocation.find(FILES_ONLY, selectedBCheck.filename())
+                    .ifPresent(path -> {
+                                statusLabel.setText("");
+                                executor.execute(() -> {
 
-                storeController.saveBCheck(selectedBCheck, path);
-            });
+                                    Path savePath = path.toFile().isDirectory() ? path.resolve(selectedBCheck.filename()) : path;
+                                    storeController.saveBCheck(selectedBCheck, savePath);
+                                    statusLabel.setText("Saved BCheck to " + savePath);
+                                });
+                            }
+                    );
         });
 
         popupMenu.add(copyBCheckMenuItem);
@@ -296,15 +303,5 @@ public class Storefront extends JPanel {
 
         codePreview.setText(previewText);
         codePreview.setCaretPosition(0);
-    }
-
-    private Optional<Path> getSaveLocation(ChooseMode chooseMode) {
-        return getSaveLocation(chooseMode, null);
-    }
-
-    private Optional<Path> getSaveLocation(ChooseMode chooseMode, String defaultFileName) {
-        return saveLocationSettingsReader
-                .defaultSaveLocation()
-                .or(() -> new FileChooser(chooseMode).prompt(defaultFileName));
     }
 }
