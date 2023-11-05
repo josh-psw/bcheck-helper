@@ -2,6 +2,7 @@ package ui.view.pane.storefront;
 
 import ui.icons.IconFactory;
 import ui.icons.IconType;
+import ui.model.StorefrontModel;
 import ui.view.listener.SingleHandlerDocumentListener;
 
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class SearchBar extends JTextField {
     private IconType iconType;
     private int scaledIconSize;
 
-    public SearchBar(IconFactory iconFactory) {
+    public SearchBar(IconFactory iconFactory, StorefrontModel storefrontModel) {
         this.iconFactory = iconFactory;
         this.scaledIconSize = scaledIconSize();
         this.iconType = SEARCH;
@@ -44,6 +45,8 @@ public class SearchBar extends JTextField {
                 iconType = newIconType;
                 updateIcon();
             }
+
+            storefrontModel.setSearchFilter(getText());
         }));
 
         iconLabel.addMouseListener(new MouseAdapter() {

@@ -13,7 +13,6 @@ import file.zip.ZipExtractor;
 import network.RequestSender;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
-import ui.controller.StoreController;
 import ui.icons.IconFactory;
 import ui.view.BCheckStore;
 import utils.CloseablePooledExecutor;
@@ -34,14 +33,16 @@ public class Extension implements BurpExtension {
         ZipExtractor zipExtractor = new ZipExtractor(logger);
         BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
         BCheckFetcher onlineBCheckFetcher = new BCheckFetcher(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
-
-        BCheckManager bCheckManager = new BCheckManager(onlineBCheckFetcher);
-        ClipboardManager clipboardManager = new ClipboardManager();
-        FileSystem fileSystem = new FileSystem(logger);
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
-        StoreController storeController = new StoreController(bCheckManager, clipboardManager, fileSystem);
-        IconFactory iconFactory = new IconFactory(api.userInterface());
-        BCheckStore bcheckStore = new BCheckStore(storeController, settingsController, executor, iconFactory);
+
+        BCheckStore bcheckStore = new BCheckStore(
+                new BCheckManager(onlineBCheckFetcher),
+                new ClipboardManager(),
+                new FileSystem(logger),
+                settingsController,
+                executor,
+                new IconFactory(api.userInterface())
+        );
 
         api.userInterface().registerSuiteTab(TAB_TITLE, bcheckStore);
         api.extension().registerUnloadingHandler(executor::close);
