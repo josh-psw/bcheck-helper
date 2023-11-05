@@ -43,7 +43,12 @@ class PreviewPanel extends JPanel {
                 case STATUS_CHANGED -> statusLabel.setText((String) evt.getNewValue());
                 case SELECTED_BCHECK_CHANGED -> {
                     BCheck selectedBCheck = model.getSelectedBCheck();
-                    String previewText = selectedBCheck == null ? "" : selectedBCheck.script();
+                    boolean bCheckSelected = selectedBCheck != null;
+
+                    copyButton.setEnabled(bCheckSelected);
+                    saveButton.setEnabled(bCheckSelected);
+
+                    String previewText = bCheckSelected ? selectedBCheck.script() : "";
 
                     codePreview.setText(previewText);
                     codePreview.setCaretPosition(0);
