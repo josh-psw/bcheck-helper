@@ -13,7 +13,9 @@ import ui.view.listener.SingleHandlerDocumentListener;
 import ui.view.utils.TagRenderer;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
@@ -28,7 +30,6 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.SwingConstants.VERTICAL;
-import static javax.swing.SwingUtilities.invokeLater;
 import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
 import static ui.view.component.filechooser.ChooseMode.FILES_ONLY;
 
@@ -69,7 +70,6 @@ public class Storefront extends JPanel {
         setupTablePanel();
         setupPreviewPanel();
         setupSplitPane();
-        setupAncestorListener();
 
         add(splitPane);
     }
@@ -251,23 +251,6 @@ public class Storefront extends JPanel {
         previewPanel.setLayout(new BorderLayout());
         previewPanel.add(codePreviewScrollPane, CENTER);
         previewPanel.add(actionPanel, SOUTH);
-    }
-
-    private void setupAncestorListener() {
-        addAncestorListener(new AncestorListener() {
-            @Override
-            public void ancestorAdded(AncestorEvent event) {
-                invokeLater(() -> event.getComponent().requestFocusInWindow());
-            }
-
-            @Override
-            public void ancestorRemoved(AncestorEvent event) {
-            }
-
-            @Override
-            public void ancestorMoved(AncestorEvent event) {
-            }
-        });
     }
 
     private void updateTable() {
