@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 
 import static java.awt.Cursor.DEFAULT_CURSOR;
 import static java.awt.Cursor.HAND_CURSOR;
+import static java.awt.event.HierarchyEvent.SHOWING_CHANGED;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static ui.icons.IconType.CLOSE;
 import static ui.icons.IconType.SEARCH;
@@ -68,6 +69,12 @@ public class SearchBar extends JTextField {
                 if (iconType == CLOSE) {
                     setCursor(new Cursor(DEFAULT_CURSOR));
                 }
+            }
+        });
+
+        addHierarchyListener(e -> {
+            if (e.getChangeFlags() == SHOWING_CHANGED && e.getComponent().isShowing()) {
+                requestFocusInWindow();
             }
         });
     }
