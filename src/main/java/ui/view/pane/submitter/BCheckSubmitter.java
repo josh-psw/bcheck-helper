@@ -95,6 +95,7 @@ public class BCheckSubmitter extends JPanel {
         submitButton.setEnabled(false);
 
         submitButton.addActionListener(e -> {
+            //todo: for some reason this is firing three times
             if (e.getSource() == submitButton) {
                 executor.execute(() -> {
                     var confirmationResult = showConfirmDialog(null, CONFIRMATION_MESSAGE, CONFIRMATION_TITLE, OK_CANCEL_OPTION);
