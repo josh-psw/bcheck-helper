@@ -1,6 +1,8 @@
 package bcheck;
 
 import burp.api.montoya.logging.Logging;
+import file.system.FileSystem;
+import file.temp.TempFileCreator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -14,7 +16,9 @@ import static org.mockito.Mockito.mock;
 
 class BCheckFactoryTest {
     private final Logging logger = mock(Logging.class);
-    private final BCheckFactory bCheckFactory = new BCheckFactory(logger);
+    private final TempFileCreator tempFileCreator = mock(TempFileCreator.class);
+    private final FileSystem fileSystem = mock(FileSystem.class);
+    private final BCheckFactory bCheckFactory = new BCheckFactory(logger, tempFileCreator, fileSystem);
 
     @TempDir
     private Path directory;

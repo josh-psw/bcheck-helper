@@ -15,8 +15,6 @@ public class BCheck {
     private final String path;
     private final String filename;
 
-    private String script;
-
     BCheck(String name, String description, String author, List<String> tags, String path, String filename) {
         this.name = name;
         this.description = description;
@@ -52,15 +50,11 @@ public class BCheck {
     }
 
     public String script() {
-        if (script == null) {
-            try {
-                script = readString(Path.of(path));
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
+        try {
+            return  readString(Path.of(path));
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
-
-        return script;
     }
 
     public static class Tags

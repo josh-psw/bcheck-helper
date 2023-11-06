@@ -18,7 +18,7 @@ public class FileSystem {
         try {
             writeString(path, fileContents);
         } catch (IOException e) {
-            logger.logToError("Failed to save BCheck: " + e);
+            logger.logToError("Failed to save file: " + e);
             throw new IllegalStateException(e);
         }
     }

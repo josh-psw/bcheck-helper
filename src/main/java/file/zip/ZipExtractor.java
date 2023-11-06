@@ -27,10 +27,8 @@ public class ZipExtractor {
                 Path bCheckCopyPath = extractLocation.resolve(entry.getName());
 
                 if (entry.isDirectory()) {
-                    logger.logToOutput("Creating directory: " + bCheckCopyPath);
                     createDirectory(bCheckCopyPath);
                 } else {
-                    logger.logToOutput("Copying file: " + bCheckCopyPath);
                     copy(zipStream, bCheckCopyPath);
                 }
             }

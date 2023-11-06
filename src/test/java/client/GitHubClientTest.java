@@ -3,8 +3,11 @@ package client;
 import burp.api.montoya.core.ByteArray;
 import burp.api.montoya.core.Range;
 import burp.api.montoya.http.message.responses.HttpResponse;
+import burp.api.montoya.logging.Logging;
+import client.github.GitHubClient;
 import network.RequestSender;
 import org.junit.jupiter.api.Test;
+import settings.github.GitHubSettingsReader;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -15,7 +18,9 @@ import static org.mockito.Mockito.*;
 
 class GitHubClientTest {
     private final RequestSender requestSender = mock(RequestSender.class);
-    private final GitHubClient gitHubClient = new GitHubClient(requestSender);
+    private final Logging logger = mock(Logging.class);
+    private final GitHubSettingsReader gitHubSettingsReader = mock(GitHubSettingsReader.class);
+    private final GitHubClient gitHubClient = new GitHubClient(requestSender, gitHubSettingsReader, logger);
 
     @Test
     void givenRepoAndApiKey_whenDownloadRepo_thenCorrectUrl_withCorrectAuthorizationHeader_requested() {
@@ -24,11 +29,12 @@ class GitHubClientTest {
 
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
-        when(requestSender.sendRequest(anyString(), anyMap())).thenReturn(response);
+        when(requestSender.makeGetRequest(anyString(), anyMap())).thenReturn(response);
+        when(gitHubSettingsReader.apiKey()).thenReturn(apiKey);
 
-        gitHubClient.downloadRepoAsZip(repo, apiKey);
+        gitHubClient.downloadRepoAsZip(repo);
 
-        verify(requestSender).sendRequest("https://api.github.com/repos/" + repo + "/zipball", Map.of(
+        verify(requestSender).makeGetRequest("https://api.github.com/repos/" + repo + "/zipball", Map.of(
                 "Authorization", "Bearer " + apiKey
         ));
     }
@@ -39,11 +45,12 @@ class GitHubClientTest {
 
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
-        when(requestSender.sendRequest(anyString(), anyMap())).thenReturn(response);
+        when(requestSender.makeGetRequest(anyString(), anyMap())).thenReturn(response);
+        when(gitHubSettingsReader.apiKey()).thenReturn(null);
 
-        gitHubClient.downloadRepoAsZip(repo, null);
+        gitHubClient.downloadRepoAsZip(repo);
 
-        verify(requestSender).sendRequest("https://api.github.com/repos/" + repo + "/zipball", emptyMap());
+        verify(requestSender).makeGetRequest("https://api.github.com/repos/" + repo + "/zipball", emptyMap());
     }
 
     @Test
@@ -52,11 +59,12 @@ class GitHubClientTest {
 
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
-        when(requestSender.sendRequest(anyString(), anyMap())).thenReturn(response);
+        when(requestSender.makeGetRequest(anyString(), anyMap())).thenReturn(response);
+        when(gitHubSettingsReader.apiKey()).thenReturn("");
 
-        gitHubClient.downloadRepoAsZip(repo, "");
+        gitHubClient.downloadRepoAsZip(repo);
 
-        verify(requestSender).sendRequest("https://api.github.com/repos/" + repo + "/zipball", emptyMap());
+        verify(requestSender).makeGetRequest("https://api.github.com/repos/" + repo + "/zipball", emptyMap());
     }
 
     private static ByteArray createEmptyByteArray() {

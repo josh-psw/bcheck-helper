@@ -19,28 +19,49 @@ public class RequestSender {
         this.logger = logger;
     }
 
-    public HttpResponse sendRequest(String url, Map<String, String> headers) {
-        HttpRequest request = httpRequestFromUrl(url);
+    public HttpResponse makeGetRequest(String url, Map<String, String> headers) {
+        return sendRequest("GET", url, headers, "");
+    }
 
-        for (Map.Entry<String, String> header : headers.entrySet()) {
-            request = request.withAddedHeader(header.getKey(), header.getValue());
-        }
+    public HttpResponse makePostRequest(String url, Map<String, String> headers, String body) {
+        return sendRequest("POST", url, headers, body);
+    }
+
+    public HttpResponse makePutRequest(String url, Map<String, String> headers, String body) {
+        return sendRequest("PUT", url, headers, body);
+    }
+
+    private HttpResponse sendRequest(String method, String url, Map<String, String> headers, String body) {
+        var request = buildRequest(method, url, headers, body);
 
         logger.logToOutput("Requesting " + url);
-        HttpResponse response = http.sendRequest(request).response();
+
+        var response = http.sendRequest(request).response();
 
         if (response.isStatusCodeClass(CLASS_4XX_CLIENT_ERRORS) || response.isStatusCodeClass(CLASS_5XX_SERVER_ERRORS)) {
-            String responseBody = response.bodyToString();
-            String exceptionMessage = "Failed to make request to " + url + ". Error code: " + response.statusCode() + ". Error message: " + responseBody;
+            var responseBody = response.bodyToString();
+            var exceptionMessage = "Failed to make request to " + url + ". Error code: " + response.statusCode() + ". Error message: " + responseBody;
 
             logger.logToError(exceptionMessage);
             throw new IllegalStateException(exceptionMessage);
         } else if (response.isStatusCodeClass(CLASS_3XX_REDIRECTION)) {
-            String redirectLocation = response.headerValue("Location");
-            return sendRequest(redirectLocation, headers);
+            var redirectLocation = response.headerValue("Location");
+            return sendRequest(method, redirectLocation, headers, body);
         } else {
             logger.logToOutput("Request to " + url + " successful");
             return response;
         }
+    }
+
+    private static HttpRequest buildRequest(String method, String url, Map<String, String> headers, String body) {
+        var request = httpRequestFromUrl(url)
+                .withMethod(method)
+                .withBody(body);
+
+        for (var header : headers.entrySet()) {
+            request = request.withAddedHeader(header.getKey(), header.getValue());
+        }
+
+        return request;
     }
 }

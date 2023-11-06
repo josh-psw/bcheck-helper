@@ -2,9 +2,7 @@ import bcheck.BCheckFactory;
 import bcheck.BCheckManager;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
-import burp.api.montoya.logging.Logging;
-import burp.api.montoya.persistence.Persistence;
-import client.GitHubClient;
+import client.github.GitHubClient;
 import fetcher.BCheckFetcher;
 import file.finder.BCheckFileFinder;
 import file.system.FileSystem;
@@ -22,26 +20,30 @@ public class Extension implements BurpExtension {
 
     @Override
     public void initialize(MontoyaApi api) {
-        Logging logger = api.logging();
-        Persistence persistence = api.persistence();
-        SettingsController settingsController = new SettingsController(persistence);
+        var logger = api.logging();
+        var persistence = api.persistence();
+        var settingsController = new SettingsController(persistence);
 
-        RequestSender requestSender = new RequestSender(api.http(), logger);
-        BCheckFactory bCheckFactory = new BCheckFactory(logger);
-        GitHubClient gitHubClient = new GitHubClient(requestSender);
-        TempFileCreator tempFileCreator = new TempFileCreator(logger);
-        ZipExtractor zipExtractor = new ZipExtractor(logger);
-        BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
-        BCheckFetcher onlineBCheckFetcher = new BCheckFetcher(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
-        CloseablePooledExecutor executor = new CloseablePooledExecutor();
+        var requestSender = new RequestSender(api.http(), logger);
+        var gitHubClient = new GitHubClient(requestSender, settingsController.gitHubSettings(), logger);
+        var tempFileCreator = new TempFileCreator(logger);
+        var fileSystem = new FileSystem(logger);
+        var bCheckFactory = new BCheckFactory(logger, tempFileCreator, fileSystem);
+        var zipExtractor = new ZipExtractor(logger);
+        var bCheckFileFinder = new BCheckFileFinder();
+        var onlineBCheckFetcher = new BCheckFetcher(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
+        var executor = new CloseablePooledExecutor();
 
-        BCheckStore bcheckStore = new BCheckStore(
+        var bcheckStore = new BCheckStore(
                 new BCheckManager(onlineBCheckFetcher),
                 new ClipboardManager(),
-                new FileSystem(logger),
+                fileSystem,
                 settingsController,
                 executor,
-                new IconFactory(api.userInterface())
+                new IconFactory(api.userInterface()),
+                gitHubClient,
+                bCheckFactory,
+                logger
         );
 
         api.userInterface().registerSuiteTab(TAB_TITLE, bcheckStore);
