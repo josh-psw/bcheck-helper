@@ -48,6 +48,10 @@ public class BCheckTableModel extends AbstractTableModel {
         return tableData.get(row);
     }
 
+    public int getBCheckRow(BCheck bCheck) {
+        return bCheck == null ? -1 : tableData.indexOf(bCheck);
+    }
+
     public void setBChecks(List<BCheck> bChecks) {
         tableData.clear();
         tableData.addAll(bChecks);
