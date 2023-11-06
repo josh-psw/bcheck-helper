@@ -1,7 +1,5 @@
 package client.github;
 
-import burp.api.montoya.logging.Logging;
-
 import java.util.regex.Pattern;
 
 import static java.lang.String.format;
@@ -81,7 +79,7 @@ public class GitHubClientStringProvider {
         return CREATE_PR_BODY_TEMPLATE.formatted(title, content.replace("\n", "\\n"), branchName, defaultBranch);
     }
 
-    public static Pattern branchShaCapturingPattern(String defaultBranch, String repo, Logging logger) {
+    public static Pattern branchShaCapturingPattern(String defaultBranch, String repo) {
         var regex = BRANCH_SHA_CAPTURING_REGEX_TEMPLATE.formatted(defaultBranch, repo, defaultBranch)
                 .replace("/", "\\/");
 

@@ -37,7 +37,7 @@ public class GitHubClient {
         var repoRefHeadUrl = repoRefHeadUrl(repo);
         var repoRefHead = requestSender.makeGetRequest(repoRefHeadUrl, headers).body().getBytes();
 
-        var branchShaCapturingRegexPattern = branchShaCapturingPattern(defaultBranch, repo, logger);
+        var branchShaCapturingRegexPattern = branchShaCapturingPattern(defaultBranch, repo);
         var branchShaMatcher = branchShaCapturingRegexPattern.matcher(new String(repoRefHead));
         branchShaMatcher.find(); //todo: need to do something if it doesnt' work
 
