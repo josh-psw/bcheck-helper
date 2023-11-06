@@ -58,7 +58,7 @@ public class GitHubSettingsPanel extends JPanel {
     }
 
     private void setupApiKeyField() {
-        apiKeyField.setText(gitHubSettings.apiKey());
+        apiKeyField.setText(gitHubSettings.apiKey().key());
         apiKeyField.setColumns(40);
         apiKeyField.getDocument().addDocumentListener(
                 new SingleHandlerDocumentListener(e -> gitHubSettings.setApiKey(apiKeyField.getText()))

@@ -2,6 +2,7 @@ package client.github;
 
 import burp.api.montoya.logging.Logging;
 import network.RequestSender;
+import settings.github.ApiKey;
 import settings.github.GitHubSettingsReader;
 
 import java.util.Map;
@@ -82,9 +83,9 @@ public class GitHubClient {
         return defaultBranchMatcher.group(1);
     }
 
-    private static Map<String, String> createHeaders(String apiKey) {
-        return apiKey != null && !apiKey.isBlank() ?
-                Map.of("Authorization", "Bearer " + apiKey) :
+    private static Map<String, String> createHeaders(ApiKey apiKey) {
+        return apiKey.isValid() ?
+                Map.of("Authorization", "Bearer " + apiKey.key()) :
                 emptyMap();
     }
 }

@@ -30,8 +30,8 @@ public class GitHubSettings implements GitHubSettingsReader {
     }
 
     @Override
-    public String apiKey() {
-        return persistence.preferences().getString(API_KEY_KEY);
+    public ApiKey apiKey() {
+        return new ApiKey(persistence.preferences().getString(API_KEY_KEY));
     }
 
     public void setApiKey(String apiKey) {

@@ -59,10 +59,10 @@ public class BCheckSubmitter extends JPanel {
     private void initialiseUi() {
         removeAll();
 
-        if (gitHubSettingsReader.apiKey() == null || gitHubSettingsReader.apiKey().isBlank()) {
-            setupAuthenticationNeededUi();
-        } else {
+        if (gitHubSettingsReader.apiKey().isValid()) {
             setupSubmitUi();
+        } else {
+            setupAuthenticationNeededUi();
         }
     }
 

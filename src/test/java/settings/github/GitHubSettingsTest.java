@@ -2,6 +2,7 @@ package settings.github;
 
 import burp.api.montoya.persistence.Persistence;
 import burp.api.montoya.persistence.Preferences;
+import event.EventFirerer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,8 @@ import static org.mockito.Mockito.when;
 class GitHubSettingsTest {
     private final Persistence persistence = mock(Persistence.class);
     private final Preferences preferences = mock(Preferences.class);
-    private final GitHubSettings gitHubSettings = new GitHubSettings(persistence);
+    private final EventFirerer eventFirerer = mock(EventFirerer.class);
+    private final GitHubSettings gitHubSettings = new GitHubSettings(persistence, eventFirerer);
 
     @BeforeEach
     void initialiseMock() {

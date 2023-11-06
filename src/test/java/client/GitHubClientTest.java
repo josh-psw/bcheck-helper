@@ -7,6 +7,7 @@ import burp.api.montoya.logging.Logging;
 import client.github.GitHubClient;
 import network.RequestSender;
 import org.junit.jupiter.api.Test;
+import settings.github.ApiKey;
 import settings.github.GitHubSettingsReader;
 
 import java.util.Iterator;
@@ -25,7 +26,7 @@ class GitHubClientTest {
     @Test
     void givenRepoAndApiKey_whenDownloadRepo_thenCorrectUrl_withCorrectAuthorizationHeader_requested() {
         String repo = "owner/repo";
-        String apiKey = "abcde";
+        ApiKey apiKey = new ApiKey("abcde");
 
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
@@ -46,7 +47,7 @@ class GitHubClientTest {
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
         when(requestSender.makeGetRequest(anyString(), anyMap())).thenReturn(response);
-        when(gitHubSettingsReader.apiKey()).thenReturn(null);
+        when(gitHubSettingsReader.apiKey()).thenReturn(new ApiKey(null));
 
         gitHubClient.downloadRepoAsZip(repo);
 
@@ -60,7 +61,7 @@ class GitHubClientTest {
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
         when(requestSender.makeGetRequest(anyString(), anyMap())).thenReturn(response);
-        when(gitHubSettingsReader.apiKey()).thenReturn("");
+        when(gitHubSettingsReader.apiKey()).thenReturn(new ApiKey(""));
 
         gitHubClient.downloadRepoAsZip(repo);
 
