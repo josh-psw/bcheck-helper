@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import static java.awt.BorderLayout.CENTER;
@@ -55,7 +56,12 @@ class TablePanel extends JPanel {
 
         model.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals(SEARCH_FILTER_CHANGED)) {
-                tableModel.setBChecks(model.getFilteredBChecks());
+                List<BCheck> filteredBChecks = model.getFilteredBChecks();
+                tableModel.setBChecks(filteredBChecks);
+
+                if (!filteredBChecks.contains(model.getSelectedBCheck())) {
+                    model.setSelectedBCheck(null);
+                }
             }
         });
 
@@ -154,10 +160,17 @@ class TablePanel extends JPanel {
 
         int selectedRow = bCheckTable.getSelectedRow();
 
-        BCheck selectedBCheck = selectedRow >= 0
-                ? tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(selectedRow))
-                : null;
+        if (selectedRow >= 0) {
+            BCheck newSelectedBCheck = tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(selectedRow));
+            model.setSelectedBCheck(newSelectedBCheck);
+        } else {
+            BCheck previouslySelectedBCheck = model.getSelectedBCheck();
+            int modelRow = tableModel.getBCheckRow(previouslySelectedBCheck);
 
-        model.setSelectedBCheck(selectedBCheck);
+            if (modelRow >= 0) {
+                int viewRow = bCheckTable.convertRowIndexToView(modelRow);
+                bCheckTable.getSelectionModel().setSelectionInterval(viewRow, viewRow);
+            }
+        }
     }
 }

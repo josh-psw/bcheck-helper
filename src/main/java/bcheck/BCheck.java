@@ -3,6 +3,7 @@ package bcheck;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 import static java.nio.file.Files.readString;
 import static java.util.Collections.unmodifiableList;
@@ -63,6 +64,22 @@ public class BCheck {
         return script;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BCheck bCheck = (BCheck) o;
+        return Objects.equals(name, bCheck.name) && Objects.equals(description, bCheck.description) &&
+                Objects.equals(author, bCheck.author) && Objects.equals(tags, bCheck.tags) &&
+                Objects.equals(path, bCheck.path) && Objects.equals(filename, bCheck.filename) &&
+                Objects.equals(script, bCheck.script);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, author, tags, path, filename, script);
+    }
+
     public static class Tags
     {
         private final List<String> tags;
@@ -77,6 +94,19 @@ public class BCheck {
 
         public boolean contains(String searchText) {
             return tags.stream().anyMatch(tag -> tag.equalsIgnoreCase(searchText));
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Tags tags1 = (Tags) o;
+            return Objects.equals(tags, tags1.tags);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(tags);
         }
     }
 }
