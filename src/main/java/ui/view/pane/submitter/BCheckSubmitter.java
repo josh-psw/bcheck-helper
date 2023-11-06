@@ -25,17 +25,20 @@ public class BCheckSubmitter extends JPanel {
     private static final String FAILED_TO_SUBMIT_BCHECK_MESSAGE = "Something went wrong when submitting your BCheck. Make sure your GitHub configuration is correct in the settings tab, or try again later.";
     private static final String CONFIRMATION_MESSAGE = "This will create a PR on the repo defined in the settings tab as the user defined by the API key. Do you want to continue?";
     private static final String CONFIRMATION_TITLE = "Confirm";
+    private static final String INSTRUCTION_MESSAGE = "Type your BCheck below and click the 'Submit' button to submit your BCheck";
+    private static final String AUTHENTICATION_MESSAGE = "You need to supply a GitHub API key in the 'Settings' tab to submit a BCheck.";
+    private static final String SUBMIT_HEADER = "Submit BCheck";
+    private static final String SUBMIT_BUTTON_TEXT = "Submit";
 
     private final GitHubSettingsReader gitHubSettingsReader;
     private final SubmitterController submitterController;
-    private final EventListener eventListener;
     private final Executor executor;
 
     private final JPanel titleArea = new JPanel();
-    private final JLabel headerLabel = new HeaderLabel("Submit BCheck");
-    private final JLabel instructionLabel = new JLabel("Type your BCheck below and click the 'Submit' button to submit your BCheck");
-    private final JLabel authenticationLabel = new HeaderLabel("You need to supply a GitHub API key in the 'Settings' tab to submit a BCheck");
-    private final JButton submitButton = new JButton("Submit");
+    private final JLabel headerLabel = new HeaderLabel(SUBMIT_HEADER);
+    private final JLabel instructionLabel = new JLabel(INSTRUCTION_MESSAGE);
+    private final JLabel authenticationLabel = new HeaderLabel(AUTHENTICATION_MESSAGE);
+    private final JButton submitButton = new JButton(SUBMIT_BUTTON_TEXT);
     private final JTextArea bCheckArea = new JTextArea();
 
     public BCheckSubmitter(
@@ -47,7 +50,6 @@ public class BCheckSubmitter extends JPanel {
 
         this.gitHubSettingsReader = gitHubSettingsReader;
         this.submitterController = submitterController;
-        this.eventListener = eventListener;
         this.executor = executor;
 
         initialiseUi();
