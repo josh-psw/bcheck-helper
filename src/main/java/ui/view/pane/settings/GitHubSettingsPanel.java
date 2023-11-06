@@ -11,8 +11,8 @@ import static java.awt.GridBagConstraints.FIRST_LINE_START;
 
 public class GitHubSettingsPanel extends JPanel {
     private final JLabel headerLabel = new HeaderLabel("GitHub configuration");
-    private final JLabel descriptionLabelFirstLine = new JLabel("Use these settings to define which GitHub repo the extension looks at to find BChecks.");
-    private final JLabel descriptionLabelSecondLine = new JLabel("If the repo isn't public, you'll need to specify an API key too. You can look at GitHub's documentation to find out how to create one.");
+    private final JLabel descriptionLabelFirstLine = new JLabel("Use these settings to define which GitHub repo the extension looks at to find BChecks, and which repo BChecks will be submitted to..");
+    private final JLabel descriptionLabelSecondLine = new JLabel("If the repo isn't public or you want to submit BChecks, you'll need to specify an API key too. You can look at GitHub's documentation to find out how to create one.");
     private final JLabel descriptionLabelThirdLine = new JLabel("If you're using the same API key across multiple applications, you might exceed GitHub's rate limit, meaning that this extension will no longer work until the rate limit resets.");
     private final JLabel descriptionLabelFourthLine = new JLabel("Once you've changed these settings, you'll need to refresh the store for them to take effect.");
     private final JLabel repoNameDescription = new JLabel("Repo name (in owner/repo format e.g. portswigger/bchecks)");

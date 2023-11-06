@@ -4,6 +4,7 @@ import event.EventListener;
 import settings.github.GitHubSettingsReader;
 import ui.controller.submission.SubmitterController;
 import ui.view.component.HeaderLabel;
+import ui.view.listener.SingleHandlerDocumentListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -58,8 +59,7 @@ public class BCheckSubmitter extends JPanel {
 
         if (gitHubSettingsReader.apiKey() == null || gitHubSettingsReader.apiKey().isBlank()) {
             setupAuthenticationNeededUi();
-        }
-        else {
+        } else {
             setupSubmitUi();
         }
     }
@@ -83,24 +83,32 @@ public class BCheckSubmitter extends JPanel {
                 bCheckArea.getFont().getSize()
         );
 
+        var listener = new SingleHandlerDocumentListener(e -> submitButton.setEnabled(bCheckArea.getText() != null && !bCheckArea.getText().isBlank()));
+
         bCheckArea.setFont(monospacedFont);
+        bCheckArea.getDocument().addDocumentListener(listener);
     }
 
     private void initialiseButton() {
-        submitButton.addActionListener(e -> executor.execute(() -> {
-            var confirmationResult = showConfirmDialog(null, CONFIRMATION_MESSAGE, CONFIRMATION_TITLE, OK_CANCEL_OPTION);
+        submitButton.setEnabled(false);
 
-            if (confirmationResult == OK_OPTION) {
-                var submissionResult = submitterController.submitBCheck(bCheckArea.getText());
+        submitButton.addActionListener(e -> {
+            if (e.getSource() == submitButton) {
+                executor.execute(() -> {
+                    var confirmationResult = showConfirmDialog(null, CONFIRMATION_MESSAGE, CONFIRMATION_TITLE, OK_CANCEL_OPTION);
 
-                if (submissionResult == SUCCESS) {
-                    showMessageDialog(null, BCHECK_SUBMITTED_MESSAGE);
-                }
-                else if (submissionResult == REQUEST_FAILED){
-                    showMessageDialog(null, FAILED_TO_SUBMIT_BCHECK_MESSAGE);
-                }
+                    if (confirmationResult == OK_OPTION) {
+                        var submissionResult = submitterController.submitBCheck(bCheckArea.getText());
+
+                        if (submissionResult == SUCCESS) {
+                            showMessageDialog(null, BCHECK_SUBMITTED_MESSAGE);
+                        } else if (submissionResult == REQUEST_FAILED) {
+                            showMessageDialog(null, FAILED_TO_SUBMIT_BCHECK_MESSAGE);
+                        }
+                    }
+                });
             }
-        }));
+        });
     }
 
     private void setupAuthenticationNeededUi() {
