@@ -3,6 +3,7 @@ import bcheck.BCheckManager;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import client.github.GitHubClient;
+import event.EventManager;
 import fetcher.BCheckFetcher;
 import file.finder.BCheckFileFinder;
 import file.system.FileSystem;
@@ -22,8 +23,10 @@ public class Extension implements BurpExtension {
     public void initialize(MontoyaApi api) {
         var logger = api.logging();
         var persistence = api.persistence();
-        var settingsController = new SettingsController(persistence);
 
+        var executor = new CloseablePooledExecutor();
+        var eventManager = new EventManager(executor);
+        var settingsController = new SettingsController(persistence, eventManager);
         var requestSender = new RequestSender(api.http(), logger);
         var gitHubClient = new GitHubClient(requestSender, settingsController.gitHubSettings(), logger);
         var tempFileCreator = new TempFileCreator(logger);
@@ -32,7 +35,6 @@ public class Extension implements BurpExtension {
         var zipExtractor = new ZipExtractor(logger);
         var bCheckFileFinder = new BCheckFileFinder();
         var onlineBCheckFetcher = new BCheckFetcher(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
-        var executor = new CloseablePooledExecutor();
 
         var bcheckStore = new BCheckStore(
                 new BCheckManager(onlineBCheckFetcher),
@@ -43,6 +45,7 @@ public class Extension implements BurpExtension {
                 new IconFactory(api.userInterface()),
                 gitHubClient,
                 bCheckFactory,
+                eventManager,
                 logger
         );
 

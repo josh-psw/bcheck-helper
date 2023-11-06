@@ -1,5 +1,6 @@
 package ui.view.pane.submitter;
 
+import event.EventListener;
 import settings.github.GitHubSettingsReader;
 import ui.controller.submission.SubmitterController;
 import ui.view.component.HeaderLabel;
@@ -9,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.concurrent.Executor;
 
+import static event.EventKey.API_KEY_CHANGED;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
@@ -25,6 +27,7 @@ public class BCheckSubmitter extends JPanel {
 
     private final GitHubSettingsReader gitHubSettingsReader;
     private final SubmitterController submitterController;
+    private final EventListener eventListener;
     private final Executor executor;
 
     private final JPanel titleArea = new JPanel();
@@ -34,17 +37,22 @@ public class BCheckSubmitter extends JPanel {
     private final JButton submitButton = new JButton("Submit");
     private final JTextArea bCheckArea = new JTextArea();
 
-    public BCheckSubmitter(GitHubSettingsReader gitHubSettingsReader, SubmitterController submitterController, Executor executor) {
+    public BCheckSubmitter(
+            GitHubSettingsReader gitHubSettingsReader,
+            SubmitterController submitterController,
+            EventListener eventListener,
+            Executor executor) {
         super();
 
         this.gitHubSettingsReader = gitHubSettingsReader;
         this.submitterController = submitterController;
+        this.eventListener = eventListener;
         this.executor = executor;
 
         initialiseUi();
+        eventListener.listen(this::initialiseUi, API_KEY_CHANGED);
     }
 
-    //todo: pubsub on setting change
     private void initialiseUi() {
         removeAll();
 

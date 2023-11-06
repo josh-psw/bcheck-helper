@@ -4,6 +4,7 @@ import bcheck.BCheckFactory;
 import bcheck.BCheckManager;
 import burp.api.montoya.logging.Logging;
 import client.github.GitHubClient;
+import event.EventListener;
 import file.system.FileSystem;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
@@ -28,6 +29,7 @@ public class BCheckStore extends JTabbedPane {
             IconFactory iconFactory,
             GitHubClient gitHubClient,
             BCheckFactory bCheckFactory,
+            EventListener eventListener,
             Logging logger
     ) {
         var storeController = new StoreController(bCheckManager, clipboardManager, fileSystem);
@@ -35,7 +37,7 @@ public class BCheckStore extends JTabbedPane {
         var storefrontModel = new StorefrontModel(storeController);
 
         add("Store", new Storefront(storeController, storefrontModel, settingsController.defaultSaveLocationSettings(), executor, iconFactory));
-        add("Submit BCheck", new BCheckSubmitter(settingsController.gitHubSettings(), submitterController, executor));
+        add("Submit BCheck", new BCheckSubmitter(settingsController.gitHubSettings(), submitterController, eventListener, executor));
         add("Settings", new Settings(settingsController));
     }
 }
