@@ -1,6 +1,6 @@
 package file.temp;
 
-import burp.api.montoya.logging.Logging;
+import logging.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class TempFileCreator {
-    private final Logging logger;
+    private final Logger logger;
 
-    public TempFileCreator(Logging logger) {
+    public TempFileCreator(Logger logger) {
         this.logger = logger;
     }
 
@@ -21,11 +21,11 @@ public class TempFileCreator {
 
             tempDirectoryAsFile.deleteOnExit();
 
-            logger.logToOutput("Created temp directory: " + tempDirectoryAsFile.getAbsolutePath());
+            logger.logDebug("Created temp directory: " + tempDirectoryAsFile.getAbsolutePath());
 
             return tempDirectory;
         } catch (IOException e) {
-            logger.logToError("Failed to create temp directory. Exception: " + e);
+            logger.logError("Failed to create temp directory. Exception: " + e);
             throw new IllegalStateException(e);
         }
     }

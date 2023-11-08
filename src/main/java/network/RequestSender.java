@@ -3,7 +3,7 @@ package network;
 import burp.api.montoya.http.Http;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
-import burp.api.montoya.logging.Logging;
+import logging.Logger;
 
 import java.util.Map;
 
@@ -12,9 +12,9 @@ import static burp.api.montoya.http.message.requests.HttpRequest.httpRequestFrom
 
 public class RequestSender {
     private final Http http;
-    private final Logging logger;
+    private final Logger logger;
 
-    public RequestSender(Http http, Logging logger) {
+    public RequestSender(Http http, Logger logger) {
         this.http = http;
         this.logger = logger;
     }
@@ -26,20 +26,20 @@ public class RequestSender {
             request = request.withAddedHeader(header.getKey(), header.getValue());
         }
 
-        logger.logToOutput("Requesting " + url);
+        logger.logDebug("Requesting " + url);
         HttpResponse response = http.sendRequest(request).response();
 
         if (response.isStatusCodeClass(CLASS_4XX_CLIENT_ERRORS) || response.isStatusCodeClass(CLASS_5XX_SERVER_ERRORS)) {
             String responseBody = response.bodyToString();
             String exceptionMessage = "Failed to make request to " + url + ". Error code: " + response.statusCode() + ". Error message: " + responseBody;
 
-            logger.logToError(exceptionMessage);
+            logger.logError(exceptionMessage);
             throw new IllegalStateException(exceptionMessage);
         } else if (response.isStatusCodeClass(CLASS_3XX_REDIRECTION)) {
             String redirectLocation = response.headerValue("Location");
             return sendRequest(redirectLocation, headers);
         } else {
-            logger.logToOutput("Request to " + url + " successful");
+            logger.logDebug("Request to " + url + " successful");
             return response;
         }
     }

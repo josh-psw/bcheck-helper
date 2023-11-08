@@ -1,6 +1,6 @@
 package file.system;
 
-import burp.api.montoya.logging.Logging;
+import logging.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -8,9 +8,9 @@ import java.nio.file.Path;
 import static java.nio.file.Files.writeString;
 
 public class FileSystem {
-    private final Logging logger;
+    private final Logger logger;
 
-    public FileSystem(Logging logger) {
+    public FileSystem(Logger logger) {
         this.logger = logger;
     }
 
@@ -18,7 +18,7 @@ public class FileSystem {
         try {
             writeString(path, fileContents);
         } catch (IOException e) {
-            logger.logToError("Failed to save BCheck: " + e);
+            logger.logError("Failed to save BCheck: " + e);
             throw new IllegalStateException(e);
         }
     }
