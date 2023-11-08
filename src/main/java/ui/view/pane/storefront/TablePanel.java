@@ -59,6 +59,10 @@ class TablePanel extends JPanel {
                 List<BCheck> filteredBChecks = model.getFilteredBChecks();
                 tableModel.setBChecks(filteredBChecks);
 
+                String script = filteredBChecks.size() == 1 ? "script" : "scripts";
+                String message = "Showing %d %s".formatted(filteredBChecks.size(), script);
+                model.setStatus(message);
+
                 if (!filteredBChecks.contains(model.getSelectedBCheck())) {
                     model.setSelectedBCheck(null);
                 }
