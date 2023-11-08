@@ -1,6 +1,6 @@
 package file.zip;
 
-import burp.api.montoya.logging.Logging;
+import logging.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,9 +12,9 @@ import static java.nio.file.Files.copy;
 import static java.nio.file.Files.createDirectory;
 
 public class ZipExtractor {
-    private final Logging logger;
+    private final Logger logger;
 
-    public ZipExtractor(Logging logger) {
+    public ZipExtractor(Logger logger) {
         this.logger = logger;
     }
 
@@ -27,18 +27,18 @@ public class ZipExtractor {
                 Path bCheckCopyPath = extractLocation.resolve(entry.getName());
 
                 if (entry.isDirectory()) {
-                    logger.logToOutput("Creating directory: " + bCheckCopyPath);
+                    logger.logDebug("Creating directory: " + bCheckCopyPath);
                     createDirectory(bCheckCopyPath);
                 } else {
-                    logger.logToOutput("Copying file: " + bCheckCopyPath);
+                    logger.logDebug("Copying file: " + bCheckCopyPath);
                     copy(zipStream, bCheckCopyPath);
                 }
             }
         } catch (IOException e) {
-            logger.logToError("Failed to deserialise ZIP response. Exception: " + e);
+            logger.logError("Failed to deserialise ZIP response. Exception: " + e);
             throw new IllegalStateException(e);
         }
 
-        logger.logToOutput("Successfully extracted BChecks");
+        logger.logInfo("Successfully extracted BChecks");
     }
 }

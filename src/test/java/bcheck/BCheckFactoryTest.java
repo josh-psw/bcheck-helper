@@ -1,6 +1,6 @@
 package bcheck;
 
-import burp.api.montoya.logging.Logging;
+import logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.mockito.Mockito.mock;
 
 class BCheckFactoryTest {
-    private final Logging logger = mock(Logging.class);
+    private final Logger logger = mock(Logger.class);
     private final BCheckFactory bCheckFactory = new BCheckFactory(logger);
 
     @TempDir

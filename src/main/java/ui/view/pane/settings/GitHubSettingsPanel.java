@@ -9,7 +9,7 @@ import java.awt.*;
 
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 
-public class GitHubSettingsPanel extends JPanel {
+class GitHubSettingsPanel extends JPanel {
     private final JLabel headerLabel = new HeaderLabel("GitHub configuration");
     private final JLabel descriptionLabelFirstLine = new JLabel("Use these settings to define which GitHub repo the extension looks at to find BChecks.");
     private final JLabel descriptionLabelSecondLine = new JLabel("If the repo isn't public, you'll need to specify an API key too. You can look at GitHub's documentation to find out how to create one.");
@@ -22,9 +22,7 @@ public class GitHubSettingsPanel extends JPanel {
 
     private final GitHubSettings gitHubSettings;
 
-    public GitHubSettingsPanel(GitHubSettings gitHubSettings) {
-        super();
-
+    GitHubSettingsPanel(GitHubSettings gitHubSettings) {
         this.gitHubSettings = gitHubSettings;
 
         initialiseUi();

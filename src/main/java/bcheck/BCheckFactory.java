@@ -1,6 +1,6 @@
 package bcheck;
 
-import burp.api.montoya.logging.Logging;
+import logging.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -19,9 +19,9 @@ public class BCheckFactory {
     private static final Pattern BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN = compile("description:\\s\"(.+)\"");
     private static final Pattern BCHECK_TAG_EXTRACTING_REGEX_PATTERN = compile("tags:\\s(.+)");
 
-    private final Logging logger;
+    private final Logger logger;
 
-    public BCheckFactory(Logging logger) {
+    public BCheckFactory(Logger logger) {
         this.logger = logger;
     }
 
@@ -35,7 +35,7 @@ public class BCheckFactory {
 
             return parseFileContents(bCheckFilePath, fileContents);
         } catch (IOException e) {
-            logger.logToError("Couldn't read BCheck file " + bCheckFilePath + ": " + e);
+            logger.logError("Couldn't read BCheck file " + bCheckFilePath + ": " + e);
             throw new IllegalStateException(e);
         }
     }

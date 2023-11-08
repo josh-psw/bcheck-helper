@@ -2,7 +2,6 @@ import bcheck.BCheckFactory;
 import bcheck.BCheckManager;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
-import burp.api.montoya.logging.Logging;
 import burp.api.montoya.persistence.Persistence;
 import client.GitHubClient;
 import fetcher.BCheckFetcher;
@@ -10,6 +9,7 @@ import file.finder.BCheckFileFinder;
 import file.system.FileSystem;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
+import logging.Logger;
 import network.RequestSender;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
@@ -22,10 +22,10 @@ public class Extension implements BurpExtension {
 
     @Override
     public void initialize(MontoyaApi api) {
-        Logging logger = api.logging();
         Persistence persistence = api.persistence();
         SettingsController settingsController = new SettingsController(persistence);
 
+        Logger logger = new Logger(api.logging(), settingsController.debugSettings());
         RequestSender requestSender = new RequestSender(api.http(), logger);
         BCheckFactory bCheckFactory = new BCheckFactory(logger);
         GitHubClient gitHubClient = new GitHubClient(requestSender);

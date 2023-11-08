@@ -13,7 +13,7 @@ import static java.awt.GridBagConstraints.FIRST_LINE_START;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
 
-public class DefaultSaveLocationSettingsPanel extends JPanel {
+class DefaultSaveLocationSettingsPanel extends JPanel {
     private final JLabel headerLabel = new HeaderLabel("Default save location for BChecks");
     private final JLabel descriptionLabel = new JLabel("Use this setting to define where BChecks should be saved to by default. If you don't use this setting, you'll be asked where to save the BCheck to every time that you save one");
     private final JButton chooseFileButton = new JButton("Choose directory");
@@ -22,9 +22,7 @@ public class DefaultSaveLocationSettingsPanel extends JPanel {
     private final DefaultSaveLocationSettings defaultSaveLocationSettings;
     private final JTextField pathField = new JTextField();
 
-    public DefaultSaveLocationSettingsPanel(DefaultSaveLocationSettings defaultSaveLocationSettings) {
-        super();
-
+    DefaultSaveLocationSettingsPanel(DefaultSaveLocationSettings defaultSaveLocationSettings) {
         this.defaultSaveLocationSettings = defaultSaveLocationSettings;
 
         initialiseUi();
