@@ -3,7 +3,7 @@ package ui.view.pane.storefront;
 import bcheck.BCheck;
 import bcheck.BCheck.Tags;
 import settings.tags.TagColors;
-import ui.controller.StoreController;
+import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.model.table.BCheckTableModel;
@@ -26,7 +26,7 @@ import static javax.swing.SwingUtilities.invokeLater;
 import static ui.model.StorefrontModel.SEARCH_FILTER_CHANGED;
 
 class TablePanel extends JPanel {
-    private final StoreController storeController;
+    private final TablePanelController panelController;
     private final JTable bCheckTable = new JTable();
     private final BCheckTableModel tableModel = new BCheckTableModel();
     private final JButton refreshButton = new JButton("Refresh");
@@ -35,14 +35,14 @@ class TablePanel extends JPanel {
     private final StorefrontModel model;
     private final ActionController actionController;
 
-    TablePanel(StoreController storeController,
+    TablePanel(TablePanelController panelController,
                StorefrontModel storefrontModel,
                Executor executor,
                IconFactory iconFactory,
                ActionController actionController) {
         super(new BorderLayout());
 
-        this.storeController = storeController;
+        this.panelController = panelController;
         this.executor = executor;
         this.model = storefrontModel;
         this.actionController = actionController;
@@ -144,15 +144,13 @@ class TablePanel extends JPanel {
         refreshButton.setEnabled(false);
 
         executor.execute(() -> {
-            model.setStatus("");
-            storeController.loadData();
+            panelController.loadData();
             tableModel.setBChecks(model.getFilteredBChecks());
 
             if (tableModel.getRowCount() > 0) {
                 bCheckTable.addRowSelectionInterval(0, 0);
             }
 
-            model.setStatus(storeController.status());
             refreshButton.setEnabled(true);
         });
     }

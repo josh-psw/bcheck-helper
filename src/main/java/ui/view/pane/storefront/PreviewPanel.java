@@ -11,8 +11,7 @@ import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.SOUTH;
 import static java.awt.FlowLayout.LEADING;
 import static javax.swing.SwingConstants.VERTICAL;
-import static ui.model.StorefrontModel.SELECTED_BCHECK_CHANGED;
-import static ui.model.StorefrontModel.STATUS_CHANGED;
+import static ui.model.StorefrontModel.*;
 
 class PreviewPanel extends JPanel {
     private final StorefrontModel model;
@@ -52,6 +51,10 @@ class PreviewPanel extends JPanel {
 
                     codePreview.setText(previewText);
                     codePreview.setCaretPosition(0);
+                }
+                case SEARCH_FILTER_CHANGED, BCHECKS_UPDATED -> {
+                    boolean bChecksEmpty = model.getFilteredBChecks().isEmpty();
+                    saveAllButton.setEnabled(!bChecksEmpty);
                 }
             }
         });
