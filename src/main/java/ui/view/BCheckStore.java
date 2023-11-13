@@ -2,6 +2,7 @@ package ui.view;
 
 import bcheck.BCheckManager;
 import file.system.FileSystem;
+import logging.Logger;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
@@ -19,11 +20,12 @@ public class BCheckStore extends JTabbedPane {
                        FileSystem fileSystem,
                        SettingsController settingsController,
                        Executor executor,
-                       IconFactory iconFactory) {
+                       IconFactory iconFactory,
+                       Logger logger) {
         StoreController storeController = new StoreController(bCheckManager, clipboardManager, fileSystem);
         StorefrontModel storefrontModel = new StorefrontModel(storeController);
 
-        add("Store", new Storefront(storeController, storefrontModel, settingsController.defaultSaveLocationSettings(), executor, iconFactory));
+        add("Store", new Storefront(storeController, storefrontModel, settingsController.defaultSaveLocationSettings(), executor, iconFactory, logger));
         add("Settings", new Settings(settingsController));
     }
 }

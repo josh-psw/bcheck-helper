@@ -41,7 +41,8 @@ public class Extension implements BurpExtension {
                 new FileSystem(logger),
                 settingsController,
                 executor,
-                new IconFactory(api.userInterface())
+                new IconFactory(api.userInterface()),
+                logger
         );
 
         api.userInterface().registerSuiteTab(TAB_TITLE, bcheckStore);

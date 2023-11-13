@@ -1,6 +1,7 @@
 package ui.view.pane.storefront;
 
 import bcheck.BCheck;
+import logging.Logger;
 import ui.controller.StoreController;
 import ui.model.StorefrontModel;
 
@@ -15,12 +16,19 @@ class ActionController {
     private final StoreController storeController;
     private final SaveLocation saveLocation;
     private final Executor executor;
+    private final Logger logger;
 
-    ActionController(StorefrontModel model, StoreController storeController, SaveLocation saveLocation, Executor executor) {
+    ActionController(
+            StorefrontModel model,
+            StoreController storeController,
+            SaveLocation saveLocation,
+            Executor executor,
+            Logger logger) {
         this.model = model;
         this.storeController = storeController;
         this.saveLocation = saveLocation;
         this.executor = executor;
+        this.logger = logger;
     }
 
     void copySelectedBCheck() {
@@ -44,9 +52,15 @@ class ActionController {
                     executor.execute(() -> {
                         Path savePath = path.toFile().isDirectory() ? path.resolve(selectedBCheck.filename()) : path;
 
-                        storeController.saveBCheck(selectedBCheck, savePath);
-                        model.setStatus("Saved BCheck to " + savePath);
-                        actionCallbacks.actionComplete();
+                        try {
+                            storeController.saveBCheck(selectedBCheck, savePath);
+                            model.setStatus("Saved BCheck to " + savePath);
+                        } catch (RuntimeException e) {
+                            logger.logError(e);
+                            model.setStatus("Error saving BCheck!");
+                        } finally {
+                            actionCallbacks.actionComplete();
+                        }
                     });
                 });
     }
@@ -57,9 +71,15 @@ class ActionController {
             model.setStatus("");
 
             executor.execute(() -> {
-                model.getFilteredBChecks().forEach(bCheck -> storeController.saveBCheck(bCheck, path.resolve(bCheck.filename())));
-                model.setStatus("Saved all BChecks to " + path);
-                actionCallbacks.actionComplete();
+                try {
+                    model.getFilteredBChecks().forEach(bCheck -> storeController.saveBCheck(bCheck, path.resolve(bCheck.filename())));
+                    model.setStatus("Saved all BChecks to " + path);
+                } catch (RuntimeException e) {
+                    logger.logError(e);
+                    model.setStatus("Error saving BCheck!");
+                } finally {
+                    actionCallbacks.actionComplete();
+                }
             });
         });
     }
