@@ -16,6 +16,10 @@ public class Logger {
         logging.logToError(error);
     }
 
+    public void logError(Throwable throwable) {
+        logging.logToError(throwable);
+    }
+
     public void logInfo(String info) {
         logging.logToOutput(info);
     }
