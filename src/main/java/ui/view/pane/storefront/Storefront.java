@@ -2,6 +2,8 @@ package ui.view.pane.storefront;
 
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
+import ui.controller.TablePanelController;
+import ui.controller.TablePanelController.DefaultTablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 
@@ -29,7 +31,9 @@ public class Storefront extends JPanel {
         );
 
         JPanel previewPanel = new PreviewPanel(storefrontModel, actionController);
-        JPanel tablePanel = new TablePanel(storeController, storefrontModel, executor, iconFactory, actionController);
+
+        TablePanelController panelController = new DefaultTablePanelController(storeController);
+        JPanel tablePanel = new TablePanel(panelController, storefrontModel, executor, iconFactory, actionController);
 
         JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
         splitPane.add(tablePanel);

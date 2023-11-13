@@ -1,46 +1,50 @@
 package ui.controller;
 
 import bcheck.BCheck;
-import bcheck.BCheckManager;
+import fetcher.BCheckFetcher;
 import file.system.FileSystem;
 import ui.clipboard.ClipboardManager;
+import ui.model.StorefrontModel;
 
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static java.util.Collections.emptyList;
+import static ui.model.State.ERROR;
+
 public class StoreController {
-    private final BCheckManager bCheckManager;
+    private final StorefrontModel model;
+    private final BCheckFetcher onlineBCheckFetcher;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
 
     public StoreController(
-            BCheckManager bCheckManager,
+            StorefrontModel model,
+            BCheckFetcher bCheckFetcher,
             ClipboardManager clipboardManager,
             FileSystem fileSystem
     ) {
-        this.bCheckManager = bCheckManager;
+        this.model = model;
+        this.onlineBCheckFetcher = bCheckFetcher;
         this.clipboardManager = clipboardManager;
         this.fileSystem = fileSystem;
     }
 
-    public String status() {
-        return switch (bCheckManager.state()) {
-            case START -> "Loading";
-            case INITIAL_LOAD -> "Loaded %d BCheck scripts".formatted(bCheckManager.numberOfBChecks());
-            case REFRESH -> "Refreshed";
-            case ERROR -> "Error contacting GitHub repository";
-        };
-    }
-
     public void loadData() {
-        bCheckManager.loadData();
+        model.setStatus("");
+
+        try {
+            model.updateModel(onlineBCheckFetcher.fetchAllBChecks(), model.state().nextState());
+        } catch (Exception e) {
+            model.updateModel(emptyList(), ERROR);
+        }
     }
 
     public List<BCheck> findMatchingBChecks(String searchText) {
         Predicate<BCheck> filter = searchText.isBlank() ? bCheck -> true : new BCheckFilterPredicate(searchText);
 
-        return bCheckManager.availableBChecks().stream().filter(filter).toList();
+        return model.getAvailableBChecks().stream().filter(filter).toList();
     }
 
     public void copyBCheck(BCheck bCheck) {
