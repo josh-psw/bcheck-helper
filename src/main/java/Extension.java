@@ -65,7 +65,8 @@ public class Extension implements BurpExtension {
                 storefrontModel,
                 settingsController.defaultSaveLocationSettings(),
                 executor,
-                iconFactory
+                iconFactory,
+                logger
         );
 
         BCheckStore bcheckStore = new BCheckStore(settings, storefront);

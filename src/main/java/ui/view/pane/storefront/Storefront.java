@@ -1,5 +1,6 @@
 package ui.view.pane.storefront;
 
+import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
 import ui.controller.TablePanelController;
@@ -20,14 +21,16 @@ public class Storefront extends JPanel {
                       StorefrontModel storefrontModel,
                       DefaultSaveLocationSettingsReader saveLocationSettingsReader,
                       Executor executor,
-                      IconFactory iconFactory) {
+                      IconFactory iconFactory,
+                      Logger logger) {
         super(new BorderLayout());
 
         ActionController actionController = new ActionController(
                 storefrontModel,
                 storeController,
                 new SaveLocation(saveLocationSettingsReader),
-                executor
+                executor,
+                logger
         );
 
         JPanel previewPanel = new PreviewPanel(storefrontModel, actionController);
