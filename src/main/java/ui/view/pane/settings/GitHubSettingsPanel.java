@@ -22,8 +22,6 @@ public class GitHubSettingsPanel extends JPanel {
 
     private final GitHubSettings gitHubSettings;
 
-    //todo: add link to docs for generating api key and what we need access to
-
     public GitHubSettingsPanel(GitHubSettings gitHubSettings) {
         super();
 

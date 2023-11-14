@@ -10,6 +10,7 @@ public class SettingsController {
     private final GitHubSettings gitHubSettings;
 
     public SettingsController(Persistence persistence, EventFirerer eventFirerer) {
+        //todo: pass settings lock down
         this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(persistence);
         this.gitHubSettings = new GitHubSettings(persistence, eventFirerer);
     }

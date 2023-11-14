@@ -5,6 +5,8 @@ import network.RequestSender;
 import settings.github.ApiKey;
 import settings.github.GitHubSettingsReader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static client.github.GitHubClientStringProvider.*;
@@ -45,9 +47,9 @@ public class GitHubClient {
         var defaultBranchSha = branchShaMatcher.group(1);
 
         var repoRefUrl = repoRefUrl(repo);
-        var body = createBranchBody(branchName, defaultBranchSha);
+        var createBranchBody = createBranchBody(branchName, defaultBranchSha);
 
-        requestSender.makePostRequest(repoRefUrl, headers, body);
+        requestSender.makePostRequest(repoRefUrl, headers, createBranchBody);
         logger.logToOutput("Created branch " + branchName + " on repo " + repo);
     }
 
@@ -60,8 +62,30 @@ public class GitHubClient {
 
         requestSender.makePutRequest(url, headers, requestBody);
         logger.logToOutput("Created file " + fileName);
-
     }
+
+    public List<String> findDirectoriesInRepo(String repo) {
+        var folderNameCapturingPattern = folderNameCapturingPattern();
+
+        var headers = createHeaders(gitHubSettingsReader.apiKey());
+
+        var defaultBranch = findRepoDefaultBranch(repo, headers);
+
+        var gitTreeUrl = gitTreeUrl(repo, defaultBranch);
+        var repoInfo = requestSender.makeGetRequest(gitTreeUrl, headers).body().getBytes();
+        var repoInfoAsString = new String(repoInfo);
+
+        var matcher = folderNameCapturingPattern.matcher(repoInfoAsString);
+
+        var folderPaths = new ArrayList<String>();
+
+        while (matcher.find()) {
+            folderPaths.add(matcher.group(1));
+        }
+
+        return folderPaths;
+    }
+
     public void createPullRequest(String repo, String branchName, String prTitle, String prContent) {
         var url = repoPrUrl(repo);
         var headers = createHeaders(gitHubSettingsReader.apiKey());

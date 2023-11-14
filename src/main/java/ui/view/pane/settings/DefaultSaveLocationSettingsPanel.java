@@ -2,7 +2,6 @@ package ui.view.pane.settings;
 
 import settings.defaultsavelocation.DefaultSaveLocationSettings;
 import ui.view.component.HeaderLabel;
-import ui.view.component.filechooser.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +11,7 @@ import java.util.Optional;
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
+import static ui.view.component.filechooser.FileChooser.withChooseMode;
 
 public class DefaultSaveLocationSettingsPanel extends JPanel {
     private final JLabel headerLabel = new HeaderLabel("Default save location for BChecks");
@@ -63,7 +63,7 @@ public class DefaultSaveLocationSettingsPanel extends JPanel {
         chooseFileButton.setVisible(potentialDefaultSaveLocation.isPresent());
         chooseFileButton.addActionListener(e -> {
             if (e.getSource() == chooseFileButton) {
-                Optional<Path> selectedDirectory = new FileChooser(DIRECTORIES_ONLY).prompt();
+                Optional<Path> selectedDirectory = withChooseMode(DIRECTORIES_ONLY).prompt();
 
                 selectedDirectory.ifPresent(file -> {
                     String pathToDirectory = file.toAbsolutePath().toString();

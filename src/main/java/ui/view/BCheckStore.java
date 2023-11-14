@@ -14,7 +14,7 @@ import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.view.pane.settings.Settings;
 import ui.view.pane.storefront.Storefront;
-import ui.view.pane.submitter.BCheckSubmitter;
+import ui.view.pane.submitter.Submitter;
 
 import javax.swing.*;
 import java.util.concurrent.Executor;
@@ -37,7 +37,7 @@ public class BCheckStore extends JTabbedPane {
         var storefrontModel = new StorefrontModel(storeController);
 
         add("Store", new Storefront(storeController, storefrontModel, settingsController.defaultSaveLocationSettings(), executor, iconFactory));
-        add("Submit BCheck", new BCheckSubmitter(settingsController.gitHubSettings(), submitterController, eventListener, executor));
+        add("Submit BCheck", new Submitter(settingsController.gitHubSettings(), submitterController, eventListener, executor));
         add("Settings", new Settings(settingsController));
     }
 }

@@ -1,13 +1,17 @@
 package ui.controller.submission;
 
+import bcheck.BCheck;
 import bcheck.BCheckFactory;
 import burp.api.montoya.logging.Logging;
 import client.github.GitHubClient;
+import file.system.view.CustomFileSystemView;
+import file.system.view.RepoFileSystemView;
 import settings.github.GitHubSettingsReader;
+import ui.controller.submission.result.Result;
 
 import static java.util.UUID.randomUUID;
-import static ui.controller.submission.SubmissionResult.REQUEST_FAILED;
-import static ui.controller.submission.SubmissionResult.SUCCESS;
+import static ui.controller.submission.result.Result.failed;
+import static ui.controller.submission.result.Result.success;
 
 public class SubmitterController {
     private static final String NON_ALPHANUMERIC_REGEX = "[^A-Za-z0-9]";
@@ -30,9 +34,8 @@ public class SubmitterController {
         this.logger = logger;
     }
 
-    //todo: needs to prompt user where to put the bcheck
-
-    public SubmissionResult submitBCheck(String bCheckContents) {
+    //todo: make this return something more useful
+    public Result<BCheck> submitBCheck(String bCheckContents) {
         var repo = gitHubSettingsReader.repo();
         var bCheck = bCheckFactory.fromString(bCheckContents);
         var branchName = randomUUID().toString()
@@ -43,15 +46,27 @@ public class SubmitterController {
         var prContent = PULL_REQUEST_CONTENT_TEMPLATE.formatted(bCheck.name(), bCheck.author(), bCheck.description());
 
         try {
-            //todo: this probably shouldn't be in here - have a GitClient which has pushFileAndRaisePr?
+            //todo: extract to bchecksubmitter somewhere else
             gitHubClient.createBranch(repo, branchName);
             gitHubClient.createFile(repo, bCheck.filename(), bCheckContents, branchName);
             gitHubClient.createPullRequest(repo, branchName, prTitle, prContent);
         } catch (Exception e) {
             logger.logToError(e);
-            return REQUEST_FAILED;
+            return failed(null); //todo: find a way to pass e in
         }
 
-        return SUCCESS;
+        return success(bCheck);
+    }
+
+    public Result<CustomFileSystemView> gitRepoAsFileSystem() {
+        try {
+            var repo = gitHubSettingsReader.repo();
+            var folderPaths = gitHubClient.findDirectoriesInRepo(repo);
+
+            var fileSystemView = new RepoFileSystemView(repo, folderPaths);
+            return success(fileSystemView);
+        } catch (Exception e) {
+            return failed(null); //todo: find a way to pass e in
+        }
     }
 }

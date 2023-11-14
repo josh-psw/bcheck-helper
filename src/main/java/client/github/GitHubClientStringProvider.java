@@ -8,6 +8,7 @@ import static java.util.regex.Pattern.compile;
 
 public class GitHubClientStringProvider {
     private static final Pattern DEFAULT_BRANCH_CAPTURING_REGEX_PATTERN = compile("\"default_branch\": \"(.*)\",");
+    private static final Pattern FOLDER_NAME_REGEX_PATTERN = compile("\"path\": \"(.*)\",\\s+\"mode\": \".*\",\\s+\"type\": \"tree\"");
     private static final String BRANCH_SHA_CAPTURING_REGEX_TEMPLATE = """
             \\"ref\\": \\"refs/heads/%s\\",
             \\s+\\"node_id\\": \\".*\\",
@@ -21,6 +22,7 @@ public class GitHubClientStringProvider {
     private static final String REPO_REFS_URL_TEMPLATE = "https://api.github.com/repos/%s/git/refs";
     private static final String REPO_CONTENT_URL_TEMPLATE = "https://api.github.com/repos/%s/contents/%s";
     private static final String REPO_PR_URL_TEMPLATE = "https://api.github.com/repos/%s/pulls";
+    private static final String GIT_TREE_URL_TEMPLATE = "https://api.github.com/repos/%s/git/trees/%s?recursive=true";
     private static final String CREATE_BRANCH_BODY_TEMPLATE = """
             {
                 "ref": "refs/heads/%s",
@@ -67,6 +69,10 @@ public class GitHubClientStringProvider {
         return REPO_PR_URL_TEMPLATE.formatted(repo);
     }
 
+    public static String gitTreeUrl(String repo, String branch) {
+        return GIT_TREE_URL_TEMPLATE.formatted(repo, branch);
+    }
+
     public static String createFileBody(String fileName, String encodedContent, String branchName) {
         return CREATE_FILE_BODY_TEMPLATE.formatted(fileName, encodedContent, branchName);
     }
@@ -88,5 +94,9 @@ public class GitHubClientStringProvider {
 
     public static Pattern defaultBranchCapturingPattern() {
         return DEFAULT_BRANCH_CAPTURING_REGEX_PATTERN;
+    }
+
+    public static Pattern folderNameCapturingPattern() {
+        return FOLDER_NAME_REGEX_PATTERN;
     }
 }

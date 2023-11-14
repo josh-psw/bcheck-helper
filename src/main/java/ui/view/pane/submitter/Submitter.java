@@ -17,10 +17,12 @@ import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
 import static java.awt.GridBagConstraints.*;
 import static javax.swing.JOptionPane.*;
-import static ui.controller.submission.SubmissionResult.REQUEST_FAILED;
-import static ui.controller.submission.SubmissionResult.SUCCESS;
+import static ui.controller.submission.result.Status.FAILED;
+import static ui.controller.submission.result.Status.SUCCESS;
+import static ui.view.component.filechooser.ChooseMode.FILES_ONLY;
+import static ui.view.component.filechooser.FileChooser.withChooseModeAndCustomFileSystemView;
 
-public class BCheckSubmitter extends JPanel {
+public class Submitter extends JPanel {
     private static final String BCHECK_SUBMITTED_MESSAGE = "Your BCheck has been submitted. You can view the PR in the GitHub repo.";
     private static final String FAILED_TO_SUBMIT_BCHECK_MESSAGE = "Something went wrong when submitting your BCheck. Make sure your GitHub configuration is correct in the settings tab, or try again later.";
     private static final String CONFIRMATION_MESSAGE = "This will create a PR on the repo defined in the settings tab as the user defined by the API key. Do you want to continue?";
@@ -41,7 +43,7 @@ public class BCheckSubmitter extends JPanel {
     private final JButton submitButton = new JButton(SUBMIT_BUTTON_TEXT);
     private final JTextArea bCheckArea = new JTextArea();
 
-    public BCheckSubmitter(
+    public Submitter(
             GitHubSettingsReader gitHubSettingsReader,
             SubmitterController submitterController,
             EventListener eventListener,
@@ -98,15 +100,26 @@ public class BCheckSubmitter extends JPanel {
             //todo: for some reason this is firing three times
             if (e.getSource() == submitButton) {
                 executor.execute(() -> {
-                    var confirmationResult = showConfirmDialog(null, CONFIRMATION_MESSAGE, CONFIRMATION_TITLE, OK_CANCEL_OPTION);
+                    var confirmationResult = showConfirmDialog(this, CONFIRMATION_MESSAGE, CONFIRMATION_TITLE, OK_CANCEL_OPTION);
 
                     if (confirmationResult == OK_OPTION) {
-                        var submissionResult = submitterController.submitBCheck(bCheckArea.getText());
+                        var fileSystemResult = submitterController.gitRepoAsFileSystem();
 
-                        if (submissionResult == SUCCESS) {
-                            showMessageDialog(null, BCHECK_SUBMITTED_MESSAGE);
-                        } else if (submissionResult == REQUEST_FAILED) {
-                            showMessageDialog(null, FAILED_TO_SUBMIT_BCHECK_MESSAGE);
+                        if (fileSystemResult.status() == FAILED) {
+                            showMessageDialog(this, FAILED_TO_SUBMIT_BCHECK_MESSAGE);
+                        } else if (fileSystemResult.status() == SUCCESS) {
+                            var directoryToSaveIn = withChooseModeAndCustomFileSystemView(FILES_ONLY, fileSystemResult.body())
+                                    .prompt();
+
+                            showMessageDialog(this, directoryToSaveIn);
+
+//                            var submissionResult = submitterController.submitBCheck(bCheckArea.getText(), directoryToSaveIn);
+//
+//                            if (submissionResult.status() == SUCCESS) {
+//                                showMessageDialog(this, BCHECK_SUBMITTED_MESSAGE);
+//                            } else if (submissionResult.status() == FAILED) {
+//                                showMessageDialog(this, FAILED_TO_SUBMIT_BCHECK_MESSAGE);
+//                            }
                         }
                     }
                 });

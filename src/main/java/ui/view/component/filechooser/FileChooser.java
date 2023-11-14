@@ -1,6 +1,9 @@
 package ui.view.component.filechooser;
 
+import file.system.view.CustomFileSystemView;
+
 import javax.swing.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -9,9 +12,19 @@ import static javax.swing.JFileChooser.APPROVE_OPTION;
 
 public class FileChooser {
     private final ChooseMode chooseMode;
+    private final CustomFileSystemView fileSystemView;
 
-    public FileChooser(ChooseMode chooseMode) {
+    private FileChooser(ChooseMode chooseMode, CustomFileSystemView fileSystemView) {
         this.chooseMode = chooseMode;
+        this.fileSystemView = fileSystemView;
+    }
+
+    public static FileChooser withChooseMode(ChooseMode chooseMode) {
+        return new FileChooser(chooseMode, null);
+    }
+
+    public static FileChooser withChooseModeAndCustomFileSystemView(ChooseMode chooseMode, CustomFileSystemView fileSystemView) {
+        return new FileChooser(chooseMode, fileSystemView);
     }
 
     public Optional<Path> prompt() {
@@ -19,7 +32,14 @@ public class FileChooser {
     }
 
     public Optional<Path> prompt(String defaultFileName) {
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser;
+
+        if (fileSystemView == null) {
+            fileChooser = new JFileChooser();
+        } else {
+            fileChooser = new JFileChooser(new File(fileSystemView.root()), fileSystemView);
+        }
+
         fileChooser.setFileSelectionMode(chooseMode.jFileChooserMode);
 
         if (defaultFileName != null) {
