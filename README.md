@@ -25,7 +25,7 @@ Alternatively, *BCheck Helper* can be built from source.
 * This can be loaded into Burp by navigating to the 'Extensions' tab, 'Installed' sub-tab, clicking the 'Add' button and loading the JAR file
 
 ## Requirements
-BCheck Helper currently requires Burp Suite v2023.10 or newer. As BChecks are used by Burp's Scanner, BCheck Helper
+*BCheck Helper* currently requires Burp Suite v2023.10 or newer. As BChecks are used by Burp's Scanner, *BCheck Helper*
 is only available for Burp Suite Professional edition.
 
 ## Finding BChecks
@@ -40,7 +40,7 @@ The table can be quickly filtered using the search bar to find the most relevant
 
 <img src="img/search.png" width="800"/>
 
-The filter performs a case-insensitive match on BChecks containing the search term with any of the following fields:
+The filter performs a case-insensitive match on BChecks containing the search term within any of the following fields:
 
 * Name
 * Author
