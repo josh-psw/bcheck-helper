@@ -11,6 +11,7 @@ import ui.model.StorefrontModel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Executor;
+import java.util.function.Supplier;
 
 import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createEmptyBorder;
@@ -22,7 +23,8 @@ public class Storefront extends JPanel {
                       DefaultSaveLocationSettingsReader saveLocationSettingsReader,
                       Executor executor,
                       IconFactory iconFactory,
-                      Logger logger) {
+                      Logger logger,
+                      Supplier<Font> fontSupplier) {
         super(new BorderLayout());
 
         ActionController actionController = new ActionController(
@@ -36,7 +38,14 @@ public class Storefront extends JPanel {
         JPanel previewPanel = new PreviewPanel(storefrontModel, actionController);
 
         TablePanelController panelController = new DefaultTablePanelController(storeController);
-        JPanel tablePanel = new TablePanel(panelController, storefrontModel, executor, iconFactory, actionController);
+        JPanel tablePanel = new TablePanel(
+                panelController,
+                storefrontModel,
+                executor,
+                iconFactory,
+                actionController,
+                fontSupplier
+        );
 
         JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);
         splitPane.add(tablePanel);
