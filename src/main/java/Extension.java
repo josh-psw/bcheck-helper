@@ -66,7 +66,8 @@ public class Extension implements BurpExtension {
                 settingsController.defaultSaveLocationSettings(),
                 executor,
                 iconFactory,
-                logger
+                logger,
+                () -> api.userInterface().currentDisplayFont()
         );
 
         BCheckStore bcheckStore = new BCheckStore(settings, storefront);

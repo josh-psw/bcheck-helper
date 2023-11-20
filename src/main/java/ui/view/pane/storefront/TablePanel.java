@@ -16,6 +16,7 @@ import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Supplier;
 
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
@@ -34,18 +35,21 @@ class TablePanel extends JPanel {
     private final JComponent searchBar;
     private final StorefrontModel model;
     private final ActionController actionController;
+    private final Supplier<Font> fontSupplier;
 
     TablePanel(TablePanelController panelController,
                StorefrontModel storefrontModel,
                Executor executor,
                IconFactory iconFactory,
-               ActionController actionController) {
+               ActionController actionController,
+               Supplier<Font> fontSupplier) {
         super(new BorderLayout());
 
         this.panelController = panelController;
         this.executor = executor;
         this.model = storefrontModel;
         this.actionController = actionController;
+        this.fontSupplier = fontSupplier;
         this.searchBar = new SearchBar(iconFactory, storefrontModel);
 
         BorderLayout borderLayout = new BorderLayout();
@@ -114,6 +118,9 @@ class TablePanel extends JPanel {
         bCheckTable.getTableHeader().setReorderingAllowed(false);
         bCheckTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
         bCheckTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
+
+        int rowHeight = (int) (fontSupplier.get().getSize() * 1.5);
+        bCheckTable.setRowHeight(rowHeight);
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());
