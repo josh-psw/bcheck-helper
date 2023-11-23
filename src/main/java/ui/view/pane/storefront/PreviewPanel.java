@@ -71,6 +71,7 @@ class PreviewPanel extends JPanel {
         codePreview.setEditable(false);
         codePreview.setFont(monospacedFont);
         codePreview.setWrapStyleWord(true);
+        codePreview.setComponentPopupMenu(new BCheckPopupMenu(actionController));
 
         return codePreview;
     }
