@@ -7,12 +7,12 @@ import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.model.table.BCheckTableModel;
+import ui.view.listener.InertPopupMenuListener;
 import ui.view.utils.TagRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -76,8 +76,8 @@ class TablePanel extends JPanel {
         model.setSearchFilter("");
         tableModel.setBChecks(model.getFilteredBChecks());
 
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.addPopupMenuListener(new PopupMenuListener()
+        JPopupMenu popupMenu = new BCheckPopupMenu(actionController);
+        popupMenu.addPopupMenuListener(new InertPopupMenuListener()
         {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
@@ -88,24 +88,8 @@ class TablePanel extends JPanel {
                     }
                 });
             }
-
-            @Override
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            }
-
-            @Override
-            public void popupMenuCanceled(PopupMenuEvent e) {
-            }
         });
 
-        JMenuItem copyBCheckMenuItem = new JMenuItem("Copy BCheck");
-        copyBCheckMenuItem.addActionListener(l -> actionController.copySelectedBCheck());
-
-        JMenuItem saveBCheckMenuItem = new JMenuItem("Save BCheck");
-        saveBCheckMenuItem.addActionListener(l -> actionController.saveSelectedBCheck());
-
-        popupMenu.add(copyBCheckMenuItem);
-        popupMenu.add(saveBCheckMenuItem);
         bCheckTable.setComponentPopupMenu(popupMenu);
 
         bCheckTable.setModel(tableModel);
