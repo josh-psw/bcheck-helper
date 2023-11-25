@@ -5,8 +5,7 @@ permissions:
 
 on:
   pull_request:
-    types:
-      - opened
+    types: [opened, reopened, edited, synchronize]
     branches:
       - 'main'
 env:
