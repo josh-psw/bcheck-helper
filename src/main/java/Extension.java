@@ -3,11 +3,12 @@ import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
 import client.GitHubClient;
-import fetcher.BCheckFetcher;
 import file.finder.BCheckFileFinder;
 import file.system.FileSystem;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
+import loader.BCheckLoader;
+import loader.GitHubBCheckLoader;
 import logging.Logger;
 import network.RequestSender;
 import settings.controller.SettingsController;
@@ -39,7 +40,7 @@ public class Extension implements BurpExtension {
         TempFileCreator tempFileCreator = new TempFileCreator(logger);
         ZipExtractor zipExtractor = new ZipExtractor(logger);
         BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
-        BCheckFetcher onlineBCheckFetcher = new BCheckFetcher(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
+        BCheckLoader bCheckLoader = new GitHubBCheckLoader(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
         IconFactory iconFactory = new IconFactory(api.userInterface());
@@ -50,7 +51,7 @@ public class Extension implements BurpExtension {
         StorefrontModel lateInitializationStorefrontModel = new LateInitializationStorefrontModel(modelReference::get);
         StoreController storeController = new StoreController(
                 lateInitializationStorefrontModel,
-                onlineBCheckFetcher,
+                bCheckLoader,
                 clipboardManager,
                 fileSystem
         );
