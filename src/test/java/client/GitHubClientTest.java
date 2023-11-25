@@ -4,11 +4,13 @@ import burp.api.montoya.core.ByteArray;
 import burp.api.montoya.core.Range;
 import burp.api.montoya.http.message.responses.HttpResponse;
 import network.RequestSender;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static java.util.Collections.emptyMap;
 import static org.mockito.Mockito.*;
@@ -17,8 +19,19 @@ class GitHubClientTest {
     private final RequestSender requestSender = mock(RequestSender.class);
     private final GitHubClient gitHubClient = new GitHubClient(requestSender);
 
-    @Test
-    void givenRepoAndApiKey_whenDownloadRepo_thenCorrectUrl_withCorrectAuthorizationHeader_requested() {
+    private static Stream<String> repositoryUrls() {
+        return Stream.of(
+          "https://api.github.com",
+          " https://api.github.com ",
+          "     https://api.github.com   ",
+          " https://api.github.com/ ",
+          "     https://api.github.com/   "
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("repositoryUrls")
+    void givenRepoAndApiKey_whenDownloadRepo_thenCorrectUrl_withCorrectAuthorizationHeader_requested(String repositoryUrl) {
         String repo = "owner/repo";
         String apiKey = "abcde";
 
@@ -26,35 +39,37 @@ class GitHubClientTest {
         when(response.body()).thenReturn(createEmptyByteArray());
         when(requestSender.sendRequest(anyString(), anyMap())).thenReturn(response);
 
-        gitHubClient.downloadRepoAsZip(repo, apiKey);
+        gitHubClient.downloadRepoAsZip(repositoryUrl, repo, apiKey);
 
         verify(requestSender).sendRequest("https://api.github.com/repos/" + repo + "/zipball", Map.of(
                 "Authorization", "Bearer " + apiKey
         ));
     }
 
-    @Test
-    void givenRepoWithNullApiKey_whenDownloadRepo_thenCorrectUrl_withNoHeaders_requested() {
+    @ParameterizedTest
+    @MethodSource("repositoryUrls")
+    void givenRepoWithNullApiKey_whenDownloadRepo_thenCorrectUrl_withNoHeaders_requested(String repositoryUrl) {
         String repo = "owner/repo";
 
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
         when(requestSender.sendRequest(anyString(), anyMap())).thenReturn(response);
 
-        gitHubClient.downloadRepoAsZip(repo, null);
+        gitHubClient.downloadRepoAsZip(repositoryUrl, repo, null);
 
         verify(requestSender).sendRequest("https://api.github.com/repos/" + repo + "/zipball", emptyMap());
     }
 
-    @Test
-    void givenRepoWithBlankApiKey_whenDownloadRepo_thenCorrectUrl_withNoHeaders_requested() {
+    @ParameterizedTest
+    @MethodSource("repositoryUrls")
+    void givenRepoWithBlankApiKey_whenDownloadRepo_thenCorrectUrl_withNoHeaders_requested(String repositoryUrl) {
         String repo = "owner/repo";
 
         HttpResponse response = mock(HttpResponse.class);
         when(response.body()).thenReturn(createEmptyByteArray());
         when(requestSender.sendRequest(anyString(), anyMap())).thenReturn(response);
 
-        gitHubClient.downloadRepoAsZip(repo, "");
+        gitHubClient.downloadRepoAsZip(repositoryUrl, repo, "");
 
         verify(requestSender).sendRequest("https://api.github.com/repos/" + repo + "/zipball", emptyMap());
     }
@@ -68,27 +83,22 @@ class GitHubClientTest {
 
             @Override
             public void setByte(int index, byte value) {
-
             }
 
             @Override
             public void setByte(int index, int value) {
-
             }
 
             @Override
             public void setBytes(int index, byte... data) {
-
             }
 
             @Override
             public void setBytes(int index, int... data) {
-
             }
 
             @Override
             public void setBytes(int index, ByteArray byteArray) {
-
             }
 
             @Override

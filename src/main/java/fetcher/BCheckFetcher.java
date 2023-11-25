@@ -37,7 +37,11 @@ public class BCheckFetcher {
 
     public List<BCheck> fetchAllBChecks() {
         Path bCheckDownloadLocation = tempFileCreator.createTempDirectory("bcheck-store");
-        byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(gitHubSettings.repo(), gitHubSettings.apiKey());
+        byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(
+                gitHubSettings.repositoryUrl(),
+                gitHubSettings.repositoryName(),
+                gitHubSettings.apiKey()
+        );
 
         zipExtractor.extractZip(bChecksAsZip, bCheckDownloadLocation);
 

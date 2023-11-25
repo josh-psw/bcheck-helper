@@ -46,10 +46,10 @@ class GitHubSettingsPanel extends JPanel {
     }
 
     private void setupRepoNameField() {
-        repoNameField.setText(gitHubSettings.repo());
+        repoNameField.setText(gitHubSettings.repositoryName());
         repoNameField.setColumns(25);
         repoNameField.getDocument().addDocumentListener(
-                new SingleHandlerDocumentListener(e -> gitHubSettings.setRepo(repoNameField.getText()))
+                new SingleHandlerDocumentListener(e -> gitHubSettings.setRepositoryName(repoNameField.getText()))
         );
     }
 

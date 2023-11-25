@@ -4,11 +4,10 @@ import network.RequestSender;
 
 import java.util.Map;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyMap;
 
 public class GitHubClient {
-    private static final String BCHECK_REPO_ZIP_URL_TEMPLATE = "https://api.github.com/repos/%s/zipball";
+    private static final String REPOSITORY_ZIPBALL_URL_TEMPLATE = "%s/repos/%s/zipball";
 
     private final RequestSender requestSender;
 
@@ -16,8 +15,9 @@ public class GitHubClient {
         this.requestSender = requestSender;
     }
 
-    public byte[] downloadRepoAsZip(String repo, String apiKey) {
-        String url = format(BCHECK_REPO_ZIP_URL_TEMPLATE, repo);
+    public byte[] downloadRepoAsZip(String repositoryUrl, String repositoryName, String apiKey) {
+        String trimmedRepositoryUrl = repositoryUrl.trim().replaceAll("/$", "");
+        String url = REPOSITORY_ZIPBALL_URL_TEMPLATE.formatted(trimmedRepositoryUrl, repositoryName);
 
         Map<String, String> headers = apiKey != null && !apiKey.isBlank() ?
                 Map.of("Authorization", "Bearer " + apiKey) :
