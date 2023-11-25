@@ -1,7 +1,6 @@
 package ui.view.pane.settings;
 
 import settings.defaultsavelocation.DefaultSaveLocationSettings;
-import ui.view.component.HeaderLabel;
 import ui.view.component.filechooser.FileChooser;
 
 import javax.swing.*;
@@ -10,19 +9,16 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
-import static java.awt.GridBagConstraints.HORIZONTAL;
 import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
 
-class DefaultSaveLocationSettingsPanel extends JPanel {
-    private final JLabel headerLabel = new HeaderLabel("Default save location for BChecks");
-    private final JLabel descriptionLabel = new JLabel("Use this setting to define where BChecks should be saved to by default. If you don't use this setting, you'll be asked where to save the BCheck to every time that you save one");
+class DefaultSaveLocationSettingsComponent implements SettingsComponent {
+    private final JPanel component = new JPanel();
     private final JButton chooseFileButton = new JButton("Choose directory");
     private final JCheckBox useSettingCheckbox = new JCheckBox("Enabled");
-
-    private final DefaultSaveLocationSettings defaultSaveLocationSettings;
     private final JTextField pathField = new JTextField();
+    private final DefaultSaveLocationSettings defaultSaveLocationSettings;
 
-    DefaultSaveLocationSettingsPanel(DefaultSaveLocationSettings defaultSaveLocationSettings) {
+    DefaultSaveLocationSettingsComponent(DefaultSaveLocationSettings defaultSaveLocationSettings) {
         this.defaultSaveLocationSettings = defaultSaveLocationSettings;
 
         initialiseUi();
@@ -41,8 +37,8 @@ class DefaultSaveLocationSettingsPanel extends JPanel {
     private void setupLayout() {
         GridBagLayout layout = new GridBagLayout();
         layout.columnWidths = new int[]{0, 20, 0};
-        layout.rowHeights = new int[]{0, 10, 0, 5, 0, 5, 0};
-        setLayout(layout);
+        layout.rowHeights = new int[]{0, 5, 0};
+        component.setLayout(layout);
     }
 
     private void setupPathLabel() {
@@ -81,8 +77,7 @@ class DefaultSaveLocationSettingsPanel extends JPanel {
                     pathField.setVisible(true);
 
                     defaultSaveLocationSettings.setUseSetting(true);
-                }
-                else {
+                } else {
                     chooseFileButton.setVisible(false);
                     pathField.setVisible(false);
 
@@ -98,33 +93,33 @@ class DefaultSaveLocationSettingsPanel extends JPanel {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = FIRST_LINE_START;
-        constraints.gridwidth = 3;
-        add(headerLabel, constraints);
+        component.add(useSettingCheckbox, constraints);
 
+        constraints = new GridBagConstraints();
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.anchor = FIRST_LINE_START;
-        constraints.gridwidth = 3;
-        constraints.weightx = 1.0;
-        constraints.fill = HORIZONTAL;
-        add(descriptionLabel, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.anchor = FIRST_LINE_START;
-        constraints.gridwidth = 3;
-        add(useSettingCheckbox, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 6;
-        constraints.anchor = FIRST_LINE_START;
-        add(pathField, constraints);
+        component.add(pathField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.gridx = 2;
-        constraints.gridy = 6;
+        constraints.gridy = 2;
         constraints.anchor = FIRST_LINE_START;
-        add(chooseFileButton, constraints);
+        component.add(chooseFileButton, constraints);
+    }
+
+    @Override
+    public String title() {
+        return "Default save location for BChecks";
+    }
+
+    @Override
+    public String description() {
+        return "Use this setting to define where BChecks should be saved to by default. If you don't use this setting, you'll be asked where to save the BCheck to every time that you save one";
+    }
+
+    @Override
+    public JComponent component() {
+        return component;
     }
 }
