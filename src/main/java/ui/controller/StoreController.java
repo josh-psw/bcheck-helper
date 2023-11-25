@@ -1,8 +1,8 @@
 package ui.controller;
 
 import bcheck.BCheck;
-import fetcher.BCheckFetcher;
 import file.system.FileSystem;
+import loader.BCheckLoader;
 import ui.clipboard.ClipboardManager;
 import ui.model.StorefrontModel;
 
@@ -15,18 +15,18 @@ import static ui.model.State.ERROR;
 
 public class StoreController {
     private final StorefrontModel model;
-    private final BCheckFetcher onlineBCheckFetcher;
+    private final BCheckLoader bCheckLoader;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
 
     public StoreController(
             StorefrontModel model,
-            BCheckFetcher bCheckFetcher,
+            BCheckLoader bCheckLoader,
             ClipboardManager clipboardManager,
             FileSystem fileSystem
     ) {
         this.model = model;
-        this.onlineBCheckFetcher = bCheckFetcher;
+        this.bCheckLoader = bCheckLoader;
         this.clipboardManager = clipboardManager;
         this.fileSystem = fileSystem;
     }
@@ -35,7 +35,7 @@ public class StoreController {
         model.setStatus("");
 
         try {
-            model.updateModel(onlineBCheckFetcher.fetchAllBChecks(), model.state().nextState());
+            model.updateModel(bCheckLoader.loadAllBChecks(), model.state().nextState());
         } catch (Exception e) {
             model.updateModel(emptyList(), ERROR);
         }
