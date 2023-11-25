@@ -1,7 +1,9 @@
 package settings.github;
 
 public interface GitHubSettingsReader {
-    String repo();
+    String repositoryUrl();
+
+    String repositoryName();
 
     String apiKey();
 }

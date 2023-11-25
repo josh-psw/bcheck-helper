@@ -38,7 +38,11 @@ public class GitHubBCheckLoader implements BCheckLoader {
     @Override
     public List<BCheck> loadAllBChecks() {
         Path bCheckDownloadLocation = tempFileCreator.createTempDirectory("bcheck-store");
-        byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(gitHubSettings.repo(), gitHubSettings.apiKey());
+        byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(
+                gitHubSettings.repositoryUrl(),
+                gitHubSettings.repositoryName(),
+                gitHubSettings.apiKey()
+        );
 
         zipExtractor.extractZip(bChecksAsZip, bCheckDownloadLocation);
 
