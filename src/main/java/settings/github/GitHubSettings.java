@@ -21,6 +21,10 @@ public class GitHubSettings implements GitHubSettingsReader {
         return loadStringFromPreferences(REPOSITORY_URL_KEY, GITHUB_API_URL);
     }
 
+    public void setRepositoryUrl(String repositoryName) {
+        saveStringToPreferences(REPOSITORY_URL_KEY, repositoryName);
+    }
+
     @Override
     public String repositoryName() {
         return loadStringFromPreferences(REPOSITORY_NAME_KEY, DEFAULT_REPOSITORY_NAME_VALUE);
