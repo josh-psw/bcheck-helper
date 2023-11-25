@@ -1,7 +1,6 @@
 package ui.view.pane.settings;
 
 import settings.github.GitHubSettings;
-import ui.view.component.HeaderLabel;
 import ui.view.listener.SingleHandlerDocumentListener;
 
 import javax.swing.*;
@@ -9,9 +8,8 @@ import java.awt.*;
 
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 
-class GitHubSettingsPanel extends JPanel {
-    private final JLabel headerLabel = new HeaderLabel("GitHub configuration");
-    private final JLabel descriptionLabelFirstLine = new JLabel("Use these settings to define which GitHub repo the extension looks at to find BChecks.");
+class GitHubSettingsComponent implements SettingsComponent {
+    private final JPanel component = new JPanel();
     private final JLabel descriptionLabelSecondLine = new JLabel("If the repo isn't public, you'll need to specify an API key too. You can look at GitHub's documentation to find out how to create one.");
     private final JLabel descriptionLabelThirdLine = new JLabel("If you're using the same API key across multiple applications, you might exceed GitHub's rate limit, meaning that this extension will no longer work until the rate limit resets.");
     private final JLabel descriptionLabelFourthLine = new JLabel("Once you've changed these settings, you'll need to refresh the store for them to take effect.");
@@ -22,7 +20,7 @@ class GitHubSettingsPanel extends JPanel {
 
     private final GitHubSettings gitHubSettings;
 
-    GitHubSettingsPanel(GitHubSettings gitHubSettings) {
+    GitHubSettingsComponent(GitHubSettings gitHubSettings) {
         this.gitHubSettings = gitHubSettings;
 
         initialiseUi();
@@ -40,9 +38,9 @@ class GitHubSettingsPanel extends JPanel {
     private void setupLayout() {
         GridBagLayout layout = new GridBagLayout();
         layout.columnWidths = new int[]{0, 20, 0};
-        layout.rowHeights = new int[]{0, 10, 0, 5, 0, 5, 0, 5, 0, 30, 0, 5, 0};
+        layout.rowHeights = new int[]{0, 5, 0, 5, 0, 30, 0, 5, 0};
 
-        setLayout(layout);
+        component.setLayout(layout);
     }
 
     private void setupRepoNameField() {
@@ -63,58 +61,61 @@ class GitHubSettingsPanel extends JPanel {
 
     private void addElements() {
         GridBagConstraints constraints = new GridBagConstraints();
-
         constraints.anchor = FIRST_LINE_START;
-        constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 3;
-        add(headerLabel, constraints);
+        component.add(descriptionLabelSecondLine, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 2;
         constraints.gridwidth = 3;
-        add(descriptionLabelFirstLine, constraints);
+        component.add(descriptionLabelThirdLine, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 4;
         constraints.gridwidth = 3;
-        add(descriptionLabelSecondLine, constraints);
+        component.add(descriptionLabelFourthLine, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 6;
-        constraints.gridwidth = 3;
-        add(descriptionLabelThirdLine, constraints);
+        component.add(repoNameDescription, constraints);
+
+        constraints = new GridBagConstraints();
+        constraints.anchor = FIRST_LINE_START;
+        constraints.gridx = 2;
+        constraints.gridy = 6;
+        constraints.weightx = 1;
+        component.add(repoNameField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 8;
-        constraints.gridwidth = 3;
-        add(descriptionLabelFourthLine, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.anchor = FIRST_LINE_START;
-        constraints.gridy = 10;
-        add(repoNameDescription, constraints);
+        component.add(apiKeyDescription, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridx = 2;
-        constraints.gridy = 10;
-        constraints.weightx = 1;
-        add(repoNameField, constraints);
+        constraints.gridy = 8;
+        constraints.insets = new Insets(0, 0, 10, 0);
 
-        constraints = new GridBagConstraints();
-        constraints.anchor = FIRST_LINE_START;
-        constraints.gridy = 12;
-        add(apiKeyDescription, constraints);
+        component.add(apiKeyField, constraints);
+    }
 
-        constraints = new GridBagConstraints();
-        constraints.anchor = FIRST_LINE_START;
-        constraints.gridx = 2;
-        constraints.gridy = 12;
-        add(apiKeyField, constraints);
+    @Override
+    public String title() {
+        return "GitHub configuration";
+    }
+
+    @Override
+    public String description() {
+        return "Use these settings to define which GitHub repo the extension looks at to find BChecks.";
+    }
+
+    @Override
+    public JComponent component() {
+        return component;
     }
 }
