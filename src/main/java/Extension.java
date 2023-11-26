@@ -1,16 +1,10 @@
-import bcheck.BCheckFactory;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
-import client.GitHubClient;
-import file.finder.BCheckFileFinder;
 import file.system.FileSystem;
-import file.temp.TempFileCreator;
-import file.zip.ZipExtractor;
 import logging.Logger;
-import network.RequestSender;
-import repository.GitHubRepository;
 import repository.Repository;
+import repository.RepositoryFacadeFactory;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
@@ -33,22 +27,9 @@ public class Extension implements BurpExtension {
     public void initialize(MontoyaApi api) {
         Persistence persistence = api.persistence();
         SettingsController settingsController = new SettingsController(persistence.preferences());
-
         Logger logger = new Logger(api.logging(), settingsController.debugSettings());
-        RequestSender requestSender = new RequestSender(api.http(), logger);
-        BCheckFactory bCheckFactory = new BCheckFactory(logger);
-        GitHubClient gitHubClient = new GitHubClient(requestSender);
-        TempFileCreator tempFileCreator = new TempFileCreator(logger);
-        ZipExtractor zipExtractor = new ZipExtractor(logger);
-        BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
-        Repository repository = new GitHubRepository(
-                bCheckFactory,
-                gitHubClient,
-                tempFileCreator,
-                zipExtractor,
-                bCheckFileFinder,
-                settingsController.gitHubSettings()
-        );
+
+        Repository repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController);
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
         IconFactory iconFactory = new IconFactory(api.userInterface());
