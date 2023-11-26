@@ -1,6 +1,6 @@
 package settings.controller;
 
-import burp.api.montoya.persistence.Persistence;
+import burp.api.montoya.persistence.Preferences;
 import settings.debug.DebugSettings;
 import settings.defaultsavelocation.DefaultSaveLocationSettings;
 import settings.github.GitHubSettings;
@@ -10,10 +10,10 @@ public class SettingsController {
     private final GitHubSettings gitHubSettings;
     private final DebugSettings debugSettings;
 
-    public SettingsController(Persistence persistence) {
-        this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(persistence);
-        this.gitHubSettings = new GitHubSettings(persistence);
-        this.debugSettings = new DebugSettings(persistence);
+    public SettingsController(Preferences preferences) {
+        this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences);
+        this.gitHubSettings = new GitHubSettings(preferences);
+        this.debugSettings = new DebugSettings(preferences);
     }
 
     public DefaultSaveLocationSettings defaultSaveLocationSettings() {
