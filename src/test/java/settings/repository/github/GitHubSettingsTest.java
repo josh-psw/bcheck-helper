@@ -1,4 +1,4 @@
-package settings.github;
+package settings.repository.github;
 
 import burp.api.montoya.persistence.Preferences;
 import org.junit.jupiter.api.Test;

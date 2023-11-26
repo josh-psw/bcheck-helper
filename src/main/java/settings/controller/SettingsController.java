@@ -3,7 +3,7 @@ package settings.controller;
 import burp.api.montoya.persistence.Preferences;
 import settings.debug.DebugSettings;
 import settings.defaultsavelocation.DefaultSaveLocationSettings;
-import settings.github.GitHubSettings;
+import settings.repository.github.GitHubSettings;
 
 public class SettingsController {
     private final DefaultSaveLocationSettings defaultSaveLocationSettings;

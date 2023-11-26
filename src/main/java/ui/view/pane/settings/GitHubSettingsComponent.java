@@ -1,6 +1,6 @@
 package ui.view.pane.settings;
 
-import settings.github.GitHubSettings;
+import settings.repository.github.GitHubSettings;
 import ui.view.listener.SingleHandlerDocumentListener;
 
 import javax.swing.*;

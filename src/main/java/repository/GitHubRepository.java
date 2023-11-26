@@ -1,4 +1,4 @@
-package loader;
+package repository;
 
 import bcheck.BCheck;
 import bcheck.BCheckFactory;
@@ -6,12 +6,12 @@ import client.GitHubClient;
 import file.finder.BCheckFileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
-import settings.github.GitHubSettingsReader;
+import settings.repository.github.GitHubSettingsReader;
 
 import java.nio.file.Path;
 import java.util.List;
 
-public class GitHubBCheckLoader implements BCheckLoader {
+public class GitHubRepository implements Repository {
     private final GitHubClient gitHubClient;
     private final TempFileCreator tempFileCreator;
     private final ZipExtractor zipExtractor;
@@ -19,7 +19,7 @@ public class GitHubBCheckLoader implements BCheckLoader {
     private final GitHubSettingsReader gitHubSettings;
     private final BCheckFactory bCheckFactory;
 
-    public GitHubBCheckLoader(
+    public GitHubRepository(
             BCheckFactory bCheckFactory,
             GitHubClient gitHubClient,
             TempFileCreator tempFileCreator,
