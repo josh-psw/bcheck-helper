@@ -2,7 +2,7 @@ package ui.controller;
 
 import bcheck.BCheck;
 import file.system.FileSystem;
-import loader.BCheckLoader;
+import repository.Repository;
 import ui.clipboard.ClipboardManager;
 import ui.model.StorefrontModel;
 
@@ -15,18 +15,18 @@ import static ui.model.State.ERROR;
 
 public class StoreController {
     private final StorefrontModel model;
-    private final BCheckLoader bCheckLoader;
+    private final Repository repository;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
 
     public StoreController(
             StorefrontModel model,
-            BCheckLoader bCheckLoader,
+            Repository repository,
             ClipboardManager clipboardManager,
             FileSystem fileSystem
     ) {
         this.model = model;
-        this.bCheckLoader = bCheckLoader;
+        this.repository = repository;
         this.clipboardManager = clipboardManager;
         this.fileSystem = fileSystem;
     }
@@ -35,7 +35,7 @@ public class StoreController {
         model.setStatus("");
 
         try {
-            model.updateModel(bCheckLoader.loadAllBChecks(), model.state().nextState());
+            model.updateModel(repository.loadAllBChecks(), model.state().nextState());
         } catch (Exception e) {
             model.updateModel(emptyList(), ERROR);
         }

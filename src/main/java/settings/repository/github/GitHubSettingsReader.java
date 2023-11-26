@@ -1,4 +1,4 @@
-package settings.github;
+package settings.repository.github;
 
 public interface GitHubSettingsReader {
     String repositoryUrl();

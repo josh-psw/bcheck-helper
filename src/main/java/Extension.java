@@ -7,10 +7,10 @@ import file.finder.BCheckFileFinder;
 import file.system.FileSystem;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
-import loader.BCheckLoader;
-import loader.GitHubBCheckLoader;
 import logging.Logger;
 import network.RequestSender;
+import repository.GitHubRepository;
+import repository.Repository;
 import settings.controller.SettingsController;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
@@ -41,7 +41,14 @@ public class Extension implements BurpExtension {
         TempFileCreator tempFileCreator = new TempFileCreator(logger);
         ZipExtractor zipExtractor = new ZipExtractor(logger);
         BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
-        BCheckLoader bCheckLoader = new GitHubBCheckLoader(bCheckFactory, gitHubClient, tempFileCreator, zipExtractor, bCheckFileFinder, settingsController.gitHubSettings());
+        Repository repository = new GitHubRepository(
+                bCheckFactory,
+                gitHubClient,
+                tempFileCreator,
+                zipExtractor,
+                bCheckFileFinder,
+                settingsController.gitHubSettings()
+        );
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
         IconFactory iconFactory = new IconFactory(api.userInterface());
@@ -52,7 +59,7 @@ public class Extension implements BurpExtension {
         StorefrontModel lateInitializationStorefrontModel = new LateInitializationStorefrontModel(modelReference::get);
         StoreController storeController = new StoreController(
                 lateInitializationStorefrontModel,
-                bCheckLoader,
+                repository,
                 clipboardManager,
                 fileSystem
         );
