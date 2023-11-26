@@ -25,13 +25,14 @@ import utils.CloseablePooledExecutor;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+@SuppressWarnings("unused")
 public class Extension implements BurpExtension {
     private static final String TAB_TITLE = "BCheck Helper";
 
     @Override
     public void initialize(MontoyaApi api) {
         Persistence persistence = api.persistence();
-        SettingsController settingsController = new SettingsController(persistence);
+        SettingsController settingsController = new SettingsController(persistence.preferences());
 
         Logger logger = new Logger(api.logging(), settingsController.debugSettings());
         RequestSender requestSender = new RequestSender(api.http(), logger);

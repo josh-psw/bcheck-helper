@@ -1,22 +1,20 @@
 package settings.debug;
 
-import burp.api.montoya.persistence.Persistence;
+import burp.api.montoya.persistence.Preferences;
+import settings.AbstractSettings;
 
-public class DebugSettings {
+public class DebugSettings extends AbstractSettings {
     static final String LOGGING_KEY = "logging";
 
-    private final Persistence persistence;
-
-    public DebugSettings(Persistence persistence) {
-        this.persistence = persistence;
+    public DebugSettings(Preferences preferences) {
+        super(preferences);
     }
 
     public boolean logging() {
-        Boolean logging = persistence.preferences().getBoolean(LOGGING_KEY);
-        return logging != null && logging;
+        return loadBooleanFromPreferences(LOGGING_KEY, false);
     }
 
     public void setLogging(boolean logging) {
-        persistence.preferences().setBoolean(LOGGING_KEY, logging);
+        saveBooleanToPreferences(LOGGING_KEY, logging);
     }
 }
