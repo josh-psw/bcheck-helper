@@ -12,10 +12,11 @@ class GitHubSettingsComponent implements SettingsComponent {
     private final JPanel component = new JPanel();
     private final JLabel descriptionLabelSecondLine = new JLabel("If the repo isn't public, you'll need to specify an API key too. You can look at GitHub's documentation to find out how to create one.");
     private final JLabel descriptionLabelThirdLine = new JLabel("If you're using the same API key across multiple applications, you might exceed GitHub's rate limit, meaning that this extension will no longer work until the rate limit resets.");
-    private final JLabel descriptionLabelFourthLine = new JLabel("Once you've changed these settings, you'll need to refresh the store for them to take effect.");
     private final JLabel repoNameDescription = new JLabel("Repo name (in owner/repo format e.g. portswigger/bchecks)");
+    private final JLabel repoUrlDescription = new JLabel("GitHub API URL");
     private final JLabel apiKeyDescription = new JLabel("API key (only needed if it is a private repo)");
     private final JTextField repoNameField = new JTextField();
+    private final JTextField repoUrlField = new JTextField();
     private final JTextField apiKeyField = new JTextField();
 
     private final GitHubSettings gitHubSettings;
@@ -30,6 +31,7 @@ class GitHubSettingsComponent implements SettingsComponent {
         setupLayout();
 
         setupRepoNameField();
+        setupRepoURLField();
         setupApiKeyField();
 
         addElements();
@@ -38,16 +40,24 @@ class GitHubSettingsComponent implements SettingsComponent {
     private void setupLayout() {
         GridBagLayout layout = new GridBagLayout();
         layout.columnWidths = new int[]{0, 20, 0};
-        layout.rowHeights = new int[]{0, 5, 0, 5, 0, 30, 0, 5, 0};
+        layout.rowHeights = new int[]{0, 5, 0, 30, 0, 15, 0, 15, 0};
 
         component.setLayout(layout);
     }
 
     private void setupRepoNameField() {
         repoNameField.setText(gitHubSettings.repositoryName());
-        repoNameField.setColumns(25);
+        repoNameField.setColumns(40);
         repoNameField.getDocument().addDocumentListener(
                 new SingleHandlerDocumentListener(e -> gitHubSettings.setRepositoryName(repoNameField.getText()))
+        );
+    }
+
+    private void setupRepoURLField() {
+        repoUrlField.setText(gitHubSettings.repositoryUrl());
+        repoUrlField.setColumns(40);
+        repoUrlField.getDocument().addDocumentListener(
+                new SingleHandlerDocumentListener(e -> gitHubSettings.setRepositoryUrl(repoUrlField.getText()))
         );
     }
 
@@ -75,8 +85,14 @@ class GitHubSettingsComponent implements SettingsComponent {
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 4;
-        constraints.gridwidth = 3;
-        component.add(descriptionLabelFourthLine, constraints);
+        component.add(repoUrlDescription, constraints);
+
+        constraints = new GridBagConstraints();
+        constraints.anchor = FIRST_LINE_START;
+        constraints.gridx = 2;
+        constraints.gridy = 4;
+        constraints.weightx = 1;
+        component.add(repoUrlField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
@@ -111,7 +127,7 @@ class GitHubSettingsComponent implements SettingsComponent {
 
     @Override
     public String description() {
-        return "Use these settings to define which GitHub repo the extension looks at to find BChecks.";
+        return "Use these settings to define which GitHub repo the extension looks at to find BChecks. Once you've changed these settings, you'll need to refresh the store for them to take effect.";
     }
 
     @Override

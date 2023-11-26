@@ -110,8 +110,8 @@ enabling the checkbox within the 'Default save location for BChecks' panel and c
 By default, *BCheck Helper* will retrieve BChecks from PortSwigger's [curated repository](https://github.com/portswigger/bchecks),
 where Burp users can share their BChecks.
 The 'Repo name' setting within the 'GitHub configuration' panel can be used to point to a different repository.
-Note that this still has to be hosted on [GitHub](https://github.com/). If this restriction is too onerous,
-please open an issue to make this configurable.
+By default, this should be hosted on [GitHub](https://github.com/), but the 'Repo URL' setting can be used to fetch BChecks from
+alternative GitHub servers.
 
 If the repository is private, then you will need to provide an API key within the 'API key' field.
 
