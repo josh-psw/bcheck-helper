@@ -16,7 +16,11 @@ public class Settings extends JPanel {
 
         List<SettingsComponent> settingsComponentList = List.of(
                 new DefaultSaveLocationSettingsComponent(settingsController.defaultSaveLocationSettings()),
-                new GitHubSettingsComponent(settingsController.gitHubSettings()),
+                new RepositorySettingsComponent(
+                        settingsController.repositorySettings(),
+                        settingsController.gitHubSettings(),
+                        settingsController.fileSystemRepositorySettings()
+                ),
                 new DebugSettingsComponent(settingsController.debugSettings())
         );
 
