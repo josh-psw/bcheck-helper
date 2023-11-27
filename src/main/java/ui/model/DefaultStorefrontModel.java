@@ -82,8 +82,8 @@ public class DefaultStorefrontModel implements StorefrontModel {
         String status = switch (state) {
             case START -> "Loading";
             case INITIAL_LOAD -> "Loaded %d BCheck scripts".formatted(allAvailableBChecks.size());
-            case REFRESH -> "Refreshed";
-            case ERROR -> "Error contacting GitHub repository";
+            case REFRESH -> "Refreshed. Loaded %d BCheck scripts".formatted(allAvailableBChecks.size());
+            case ERROR -> "Error loading BChecks from repository";
         };
 
         setStatus(status);

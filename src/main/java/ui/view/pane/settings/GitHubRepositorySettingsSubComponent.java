@@ -8,8 +8,7 @@ import java.awt.*;
 
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 
-class GitHubSettingsComponent implements SettingsComponent {
-    private final JPanel component = new JPanel();
+class GitHubRepositorySettingsSubComponent extends JPanel {
     private final JLabel descriptionLabelSecondLine = new JLabel("If the repo isn't public, you'll need to specify an API key too. You can look at GitHub's documentation to find out how to create one.");
     private final JLabel descriptionLabelThirdLine = new JLabel("If you're using the same API key across multiple applications, you might exceed GitHub's rate limit, meaning that this extension will no longer work until the rate limit resets.");
     private final JLabel repoNameDescription = new JLabel("Repo name (in owner/repo format e.g. portswigger/bchecks)");
@@ -21,7 +20,7 @@ class GitHubSettingsComponent implements SettingsComponent {
 
     private final GitHubSettings gitHubSettings;
 
-    GitHubSettingsComponent(GitHubSettings gitHubSettings) {
+    GitHubRepositorySettingsSubComponent(GitHubSettings gitHubSettings) {
         this.gitHubSettings = gitHubSettings;
 
         initialiseUi();
@@ -42,7 +41,7 @@ class GitHubSettingsComponent implements SettingsComponent {
         layout.columnWidths = new int[]{0, 20, 0};
         layout.rowHeights = new int[]{0, 5, 0, 30, 0, 15, 0, 15, 0};
 
-        component.setLayout(layout);
+        setLayout(layout);
     }
 
     private void setupRepoNameField() {
@@ -74,42 +73,42 @@ class GitHubSettingsComponent implements SettingsComponent {
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 0;
         constraints.gridwidth = 3;
-        component.add(descriptionLabelSecondLine, constraints);
+        add(descriptionLabelSecondLine, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 2;
         constraints.gridwidth = 3;
-        component.add(descriptionLabelThirdLine, constraints);
+        add(descriptionLabelThirdLine, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 4;
-        component.add(repoUrlDescription, constraints);
+        add(repoUrlDescription, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridx = 2;
         constraints.gridy = 4;
         constraints.weightx = 1;
-        component.add(repoUrlField, constraints);
+        add(repoUrlField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 6;
-        component.add(repoNameDescription, constraints);
+        add(repoNameDescription, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridx = 2;
         constraints.gridy = 6;
         constraints.weightx = 1;
-        component.add(repoNameField, constraints);
+        add(repoNameField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 8;
-        component.add(apiKeyDescription, constraints);
+        add(apiKeyDescription, constraints);
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
@@ -117,21 +116,6 @@ class GitHubSettingsComponent implements SettingsComponent {
         constraints.gridy = 8;
         constraints.insets = new Insets(0, 0, 10, 0);
 
-        component.add(apiKeyField, constraints);
-    }
-
-    @Override
-    public String title() {
-        return "GitHub configuration";
-    }
-
-    @Override
-    public String description() {
-        return "Use these settings to define which GitHub repo the extension looks at to find BChecks. Once you've changed these settings, you'll need to refresh the store for them to take effect.";
-    }
-
-    @Override
-    public JComponent component() {
-        return component;
+        add(apiKeyField, constraints);
     }
 }
