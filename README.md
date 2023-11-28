@@ -1,5 +1,5 @@
 # BCheck Helper
-*BCheck Helper* makes finding and importing BChecks scripts into Burp easier by loading them from a remote GitHub or local Git repository.
+*BCheck Helper* makes finding and importing BChecks scripts into Burp easier by loading them from either a remote GitHub or local Git repository.
 
 Relevant BChecks can be found by searching for keywords or tags within the scripts.
 These can then be exported to the filesystem or copied to the clipboard to facilitate their import and subsequent
@@ -106,9 +106,12 @@ By default, you are prompted for a location when saving BChecks. Alternatively, 
 enabling the checkbox within the 'Default save location for BChecks' panel and clicking the 'Choose directory' button.
 
 ### Configuring the BCheck repository
-BChecks can either be loaded from GitHub or a local Git repository. By default, they will be loaded from 
+By default, BChecks will be loaded from 
 PortSwigger's [curated GitHub repository](https://github.com/portswigger/bchecks), where Burp users can share their
-BChecks. If you want to change this, you can toggle the 'Repository type' option between 'GitHub' and 'Filesystem' under the
+BChecks. 
+
+In general, BChecks can either be loaded from either a GitHub server or a local Git repository. 
+You can choose between these options by toggling the 'Repository type' option between 'GitHub' and 'Filesystem' under the
 'Repository configuration' section of the settings tab, and then change the respective settings that appear. 
 
 #### Configuring a different GitHub repository
@@ -124,7 +127,7 @@ Once the repository name has been changed, clicking the 'Refresh' button on the 
 
 #### Configuring a local repository
 Change the 'Repository type' option to 'Filesystem', and then set the 'Repository root directory' setting to the location
-of your local Git repo.
+of your local Git repository.
 
 ### Logging
 Enable the checkbox within the 'Logging' panel to obtain additional logging. Mostly, this relates to the
