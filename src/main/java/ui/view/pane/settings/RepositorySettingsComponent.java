@@ -40,7 +40,7 @@ class RepositorySettingsComponent implements SettingsComponent {
         constraints.insets = new Insets(20, 0, 0, 10);
         component.add(typeDescriptionLine, constraints);
 
-        JLabel repositoryTypeNameDescription = new JLabel("Repository Type:");
+        JLabel repositoryTypeNameDescription = new JLabel("Repository type:");
 
         constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;

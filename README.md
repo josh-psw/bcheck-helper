@@ -1,5 +1,5 @@
 # BCheck Helper
-*BCheck Helper* makes finding and importing BChecks scripts into Burp easier by loading them from a remote GitHub repository.
+*BCheck Helper* makes finding and importing BChecks scripts into Burp easier by loading them from a remote GitHub or local Git repository.
 
 Relevant BChecks can be found by searching for keywords or tags within the scripts.
 These can then be exported to the filesystem or copied to the clipboard to facilitate their import and subsequent
@@ -105,10 +105,15 @@ These settings are persistent between Burp sessions.
 By default, you are prompted for a location when saving BChecks. Alternatively, a default location can be set by
 enabling the checkbox within the 'Default save location for BChecks' panel and clicking the 'Choose directory' button.
 
+### Configuring the BCheck repository
+BChecks can either be loaded from GitHub or a local Git repository. By default, they will be loaded from 
+PortSwigger's [curated GitHub repository](https://github.com/portswigger/bchecks), where Burp users can share their
+BChecks. If you want to change this, you can toggle the 'Repository type' option between 'GitHub' and 'Filesystem' under the
+'Repository configuration' section of the settings tab, and then change the respective settings that appear. 
 
-### Configuring a different GitHub repository
-By default, *BCheck Helper* will retrieve BChecks from PortSwigger's [curated repository](https://github.com/portswigger/bchecks),
-where Burp users can share their BChecks.
+#### Configuring a different GitHub repository
+Change the 'Repository type' option to 'GitHub'.
+
 The 'Repo name' setting within the 'GitHub configuration' panel can be used to point to a different repository.
 By default, this should be hosted on [GitHub](https://github.com/), but the 'Repo URL' setting can be used to fetch BChecks from
 alternative GitHub servers.
@@ -117,6 +122,9 @@ If the repository is private, then you will need to provide an API key within th
 
 Once the repository name has been changed, clicking the 'Refresh' button on the table panel will update the BChecks using the new configuration.
 
+#### Configuring a local repository
+Change the 'Repository type' option to 'Filesystem', and then set the 'Repository root directory' setting to the location
+of your local Git repo.
 
 ### Logging
 Enable the checkbox within the 'Logging' panel to obtain additional logging. Mostly, this relates to the
