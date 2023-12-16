@@ -1,28 +1,9 @@
 plugins {
     id("java")
-    id("maven-publish")
 }
 
 repositories {
     mavenCentral()
-}
-
-publishing {
-  publications {
-    create<MavenPublication>("bcheck-helper") {
-        from(components["java"])
-    }
-  }
-  repositories {
-    maven {
-      name = "GitHubPackages"
-      url = uri("https://maven.pkg.github.com/portswigger-josh/bcheck-helper")
-      credentials {
-        username = System.getenv("GITHUB_ACTOR")
-        password = System.getenv("GITHUB_TOKEN")
-      }
-    }
-  }
 }
 
 dependencies {
