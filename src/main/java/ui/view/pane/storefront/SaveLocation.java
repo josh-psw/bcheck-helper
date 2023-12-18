@@ -7,7 +7,7 @@ import ui.view.component.filechooser.FileChooser;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
+import static ui.view.component.filechooser.ChooseMode.SAVE_DIRECTORIES_ONLY;
 
 class SaveLocation {
     private final DefaultSaveLocationSettingsReader saveLocationSettingsReader;
@@ -17,7 +17,7 @@ class SaveLocation {
     }
 
     Optional<Path> find() {
-        return find(DIRECTORIES_ONLY, null);
+        return find(SAVE_DIRECTORIES_ONLY, null);
     }
 
     Optional<Path> find(ChooseMode chooseMode, String defaultFileName) {

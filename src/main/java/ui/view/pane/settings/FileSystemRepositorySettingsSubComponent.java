@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
-import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
+import static ui.view.component.filechooser.ChooseMode.OPEN_DIRECTORIES_ONLY;
 
 class FileSystemRepositorySettingsSubComponent extends JPanel {
 
@@ -43,7 +43,7 @@ class FileSystemRepositorySettingsSubComponent extends JPanel {
         JButton chooseRootButton = new JButton("Choose directory");
 
         chooseRootButton.addActionListener(e -> {
-            Optional<Path> selectedDirectory = new FileChooser(DIRECTORIES_ONLY).prompt();
+            Optional<Path> selectedDirectory = new FileChooser(OPEN_DIRECTORIES_ONLY).prompt();
 
             selectedDirectory.ifPresent(file -> {
                 String pathToDirectory = file.toAbsolutePath().toString();

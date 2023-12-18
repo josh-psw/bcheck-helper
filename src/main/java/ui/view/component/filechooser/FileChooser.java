@@ -20,7 +20,6 @@ public class FileChooser {
 
     public Optional<Path> prompt(String defaultFileName) {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(chooseMode.jFileChooserMode);
 
         if (defaultFileName != null) {
             String homeDirectory = getProperty("user.home");
@@ -29,12 +28,8 @@ public class FileChooser {
             fileChooser.setSelectedFile(defaultPath.toFile());
         }
 
-        int response = fileChooser.showSaveDialog(null);
-
-        if (response == APPROVE_OPTION) {
-            return Optional.of(fileChooser.getSelectedFile().toPath().toAbsolutePath());
-        }
-
-        return Optional.empty();
+        return chooseMode.showDialog(fileChooser) == APPROVE_OPTION
+                ? Optional.of(fileChooser.getSelectedFile().toPath().toAbsolutePath())
+                : Optional.empty();
     }
 }
