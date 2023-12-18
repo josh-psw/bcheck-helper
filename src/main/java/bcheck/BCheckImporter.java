@@ -24,7 +24,7 @@ public interface BCheckImporter {
 
         @Override
         public void importBCheck(BCheck bCheck) {
-            BCheckImportResult importResult = bChecks.importBCheck(bCheck.script());
+            BCheckImportResult importResult = bChecks.importBCheck(bCheck.script(), true);
 
             if (!importResult.importErrors().isEmpty()) {
                 StringBuilder sb = new StringBuilder("Error importing: ")
