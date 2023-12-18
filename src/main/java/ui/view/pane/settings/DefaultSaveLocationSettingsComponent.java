@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
-import static ui.view.component.filechooser.ChooseMode.DIRECTORIES_ONLY;
+import static ui.view.component.filechooser.ChooseMode.SAVE_DIRECTORIES_ONLY;
 
 class DefaultSaveLocationSettingsComponent implements SettingsComponent {
     private final JPanel component = new JPanel();
@@ -57,7 +57,7 @@ class DefaultSaveLocationSettingsComponent implements SettingsComponent {
         chooseFileButton.setVisible(potentialDefaultSaveLocation.isPresent());
         chooseFileButton.addActionListener(e -> {
             if (e.getSource() == chooseFileButton) {
-                Optional<Path> selectedDirectory = new FileChooser(DIRECTORIES_ONLY).prompt();
+                Optional<Path> selectedDirectory = new FileChooser(SAVE_DIRECTORIES_ONLY).prompt();
 
                 selectedDirectory.ifPresent(file -> {
                     String pathToDirectory = file.toAbsolutePath().toString();
