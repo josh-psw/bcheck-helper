@@ -1,5 +1,6 @@
 package ui.view.pane.storefront;
 
+import burp.Burp;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
@@ -20,6 +21,7 @@ import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 public class Storefront extends JPanel {
     public Storefront(StoreController storeController,
                       StorefrontModel storefrontModel,
+                      Burp burp,
                       DefaultSaveLocationSettingsReader saveLocationSettingsReader,
                       Executor executor,
                       IconFactory iconFactory,
@@ -35,12 +37,13 @@ public class Storefront extends JPanel {
                 logger
         );
 
-        JPanel previewPanel = new PreviewPanel(storefrontModel, actionController);
+        JPanel previewPanel = new PreviewPanel(storefrontModel, actionController, burp);
 
         TablePanelController panelController = new DefaultTablePanelController(storeController);
         JPanel tablePanel = new TablePanel(
                 panelController,
                 storefrontModel,
+                burp,
                 executor,
                 iconFactory,
                 actionController,

@@ -31,6 +31,10 @@ class ActionController {
         this.logger = logger;
     }
 
+    public void importSelectedBCheck() {
+        storeController.importBCheck(model.getSelectedBCheck());
+    }
+
     void copySelectedBCheck() {
         BCheck selectedBCheck = model.getSelectedBCheck();
         storeController.copyBCheck(selectedBCheck);
