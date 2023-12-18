@@ -1,3 +1,6 @@
+import bcheck.BCheckImporter;
+import bcheck.BCheckImporterFactory;
+import burp.Burp;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
@@ -38,9 +41,13 @@ public class Extension implements BurpExtension {
 
         AtomicReference<StorefrontModel> modelReference = new AtomicReference<>();
         StorefrontModel lateInitializationStorefrontModel = new LateInitializationStorefrontModel(modelReference::get);
+        Burp burp = new Burp(api.burpSuite().version());
+        BCheckImporter bCheckImporter = BCheckImporterFactory.from(api, burp, logger);
+
         StoreController storeController = new StoreController(
                 lateInitializationStorefrontModel,
                 repository,
+                bCheckImporter,
                 clipboardManager,
                 fileSystem
         );
@@ -53,6 +60,7 @@ public class Extension implements BurpExtension {
         Storefront storefront = new Storefront(
                 storeController,
                 storefrontModel,
+                burp,
                 settingsController.defaultSaveLocationSettings(),
                 executor,
                 iconFactory,
