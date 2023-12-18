@@ -48,6 +48,14 @@ The filter performs a case-insensitive match on BChecks containing the search te
 * Tags
 
 ## Importing BChecks
+
+### Importing a single BCheck directly (Burp 2023.12 onwards)
+1. Select the relevant BCheck within the table
+2. Click the 'Import' button
+
+The BCheck should now be listed and enabled within Burp's BCheck table and ready for use by the Scanner.
+
+
 ### Importing a single BCheck using the clipboard
 1. Select the relevant BCheck within the table
 2. Click the 'Copy to Clipboard' button
