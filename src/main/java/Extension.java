@@ -15,8 +15,9 @@ import ui.icons.IconFactory;
 import ui.model.DefaultStorefrontModel;
 import ui.model.LateInitializationStorefrontModel;
 import ui.model.StorefrontModel;
-import ui.view.BCheckStore;
+import ui.view.Store;
 import ui.view.pane.settings.Settings;
+import ui.view.pane.storefront.BCheckStorefront;
 import ui.view.pane.storefront.Storefront;
 import utils.CloseablePooledExecutor;
 
@@ -24,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("unused")
 public class Extension implements BurpExtension {
-    private static final String TAB_TITLE = "BCheck Helper";
+    public static final String EXTENSION_NAME = "Extensibility Helper";
 
     @Override
     public void initialize(MontoyaApi api) {
@@ -57,7 +58,8 @@ public class Extension implements BurpExtension {
 
         Settings settings = new Settings(settingsController);
 
-        Storefront storefront = new Storefront(
+        Storefront bCheckStorefront = new BCheckStorefront(
+                "BCheck Store",
                 storeController,
                 storefrontModel,
                 burp,
@@ -68,9 +70,10 @@ public class Extension implements BurpExtension {
                 () -> api.userInterface().currentDisplayFont()
         );
 
-        BCheckStore bcheckStore = new BCheckStore(settings, storefront);
+        Store store = new Store(settings, bCheckStorefront);
 
-        api.userInterface().registerSuiteTab(TAB_TITLE, bcheckStore);
+        api.extension().setName(EXTENSION_NAME);
+        api.userInterface().registerSuiteTab(EXTENSION_NAME, store);
         api.extension().registerUnloadingHandler(executor::close);
     }
 }

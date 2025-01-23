@@ -11,14 +11,15 @@ import java.util.concurrent.Executor;
 import static ui.view.component.filechooser.ChooseMode.SAVE_FILES_ONLY;
 import static ui.view.pane.storefront.ActionCallbacks.INERT_CALLBACKS;
 
-class ActionController {
+class BCheckActionController
+{
     private final StorefrontModel model;
     private final StoreController storeController;
     private final SaveLocation saveLocation;
     private final Executor executor;
     private final Logger logger;
 
-    ActionController(
+    BCheckActionController(
             StorefrontModel model,
             StoreController storeController,
             SaveLocation saveLocation,

@@ -8,7 +8,7 @@ import static burp.Burp.Capability.BCHECK_IMPORT;
 
 class BCheckPopupMenu extends JPopupMenu {
 
-    BCheckPopupMenu(ActionController actionController, Burp burp) {
+    BCheckPopupMenu(BCheckActionController actionController, Burp burp) {
         if (burp.hasCapability(BCHECK_IMPORT)) {
             JMenuItem importBCheckMenuItem = new JMenuItem("Import BCheck");
             importBCheckMenuItem.addActionListener(l -> actionController.importSelectedBCheck());

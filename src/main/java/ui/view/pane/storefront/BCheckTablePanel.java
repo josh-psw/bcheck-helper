@@ -27,7 +27,7 @@ import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.SwingUtilities.invokeLater;
 import static ui.model.StorefrontModel.SEARCH_FILTER_CHANGED;
 
-class TablePanel extends JPanel {
+class BCheckTablePanel extends JPanel {
     private final TablePanelController panelController;
     private final JTable bCheckTable = new JTable();
     private final BCheckTableModel tableModel = new BCheckTableModel();
@@ -36,16 +36,16 @@ class TablePanel extends JPanel {
     private final Executor executor;
     private final JComponent searchBar;
     private final StorefrontModel model;
-    private final ActionController actionController;
+    private final BCheckActionController actionController;
     private final Supplier<Font> fontSupplier;
 
-    TablePanel(TablePanelController panelController,
-               StorefrontModel storefrontModel,
-               Burp burp,
-               Executor executor,
-               IconFactory iconFactory,
-               ActionController actionController,
-               Supplier<Font> fontSupplier) {
+    BCheckTablePanel(TablePanelController panelController,
+                     StorefrontModel storefrontModel,
+                     Burp burp,
+                     Executor executor,
+                     IconFactory iconFactory,
+                     BCheckActionController actionController,
+                     Supplier<Font> fontSupplier) {
         super(new BorderLayout());
 
         this.panelController = panelController;

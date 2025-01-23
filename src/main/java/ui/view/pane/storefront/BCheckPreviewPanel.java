@@ -15,9 +15,9 @@ import static java.awt.FlowLayout.LEADING;
 import static javax.swing.SwingConstants.VERTICAL;
 import static ui.model.StorefrontModel.*;
 
-class PreviewPanel extends JPanel {
+class BCheckPreviewPanel extends JPanel {
     private final StorefrontModel model;
-    private final ActionController actionController;
+    private final BCheckActionController actionController;
     private final Burp burp;
     private final JLabel statusLabel;
     private final JButton importButton;
@@ -25,7 +25,7 @@ class PreviewPanel extends JPanel {
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    PreviewPanel(StorefrontModel storefrontModel, ActionController actionController, Burp burp) {
+    BCheckPreviewPanel(StorefrontModel storefrontModel, BCheckActionController actionController, Burp burp) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
