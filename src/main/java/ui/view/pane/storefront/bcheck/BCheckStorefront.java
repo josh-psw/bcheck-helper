@@ -7,6 +7,7 @@ import ui.controller.StoreController;
 import ui.controller.TablePanelController.DefaultTablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
+import ui.view.pane.storefront.ActionController;
 import ui.view.pane.storefront.SaveLocation;
 import ui.view.pane.storefront.Storefront;
 import ui.view.pane.storefront.StorefrontPanel;
@@ -32,7 +33,7 @@ public class BCheckStorefront implements Storefront
                             Supplier<Font> fontSupplier) {
         this.title = title;
 
-        BCheckActionController actionController = new BCheckActionController(
+        ActionController actionController = new BCheckActionController(
                 storefrontModel,
                 storeController,
                 new SaveLocation(saveLocationSettingsReader),

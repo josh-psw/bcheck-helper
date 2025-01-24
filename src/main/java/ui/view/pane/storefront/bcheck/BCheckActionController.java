@@ -5,6 +5,7 @@ import logging.Logger;
 import ui.controller.StoreController;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks;
+import ui.view.pane.storefront.ActionController;
 import ui.view.pane.storefront.SaveLocation;
 
 import java.nio.file.Path;
@@ -13,7 +14,7 @@ import java.util.concurrent.Executor;
 import static ui.view.component.filechooser.ChooseMode.SAVE_FILES_ONLY;
 import static ui.view.pane.storefront.ActionCallbacks.INERT_CALLBACKS;
 
-class BCheckActionController
+class BCheckActionController implements ActionController
 {
     private final StorefrontModel model;
     private final StoreController storeController;
@@ -34,21 +35,25 @@ class BCheckActionController
         this.logger = logger;
     }
 
+    @Override
     public void importSelectedBCheck() {
         storeController.importBCheck(model.getSelectedBCheck());
     }
 
-    void copySelectedBCheck() {
+    @Override
+    public void copySelectedBCheck() {
         BCheck selectedBCheck = model.getSelectedBCheck();
         storeController.copyBCheck(selectedBCheck);
         model.setStatus("Copied BCheck " + selectedBCheck.name() + " to clipboard");
     }
 
-    void saveSelectedBCheck() {
+    @Override
+    public void saveSelectedBCheck() {
         saveSelectedBCheck(INERT_CALLBACKS);
     }
 
-    void saveSelectedBCheck(ActionCallbacks actionCallbacks) {
+    @Override
+    public void saveSelectedBCheck(ActionCallbacks actionCallbacks) {
         BCheck selectedBCheck = model.getSelectedBCheck();
 
         saveLocation.find(SAVE_FILES_ONLY, selectedBCheck.filename())
@@ -72,7 +77,8 @@ class BCheckActionController
                 });
     }
 
-    void saveAllVisibleBChecks(ActionCallbacks actionCallbacks) {
+    @Override
+    public void saveAllVisibleBChecks(ActionCallbacks actionCallbacks) {
         saveLocation.find().ifPresent(path -> {
             actionCallbacks.actionBegun();
             model.setStatus("");

@@ -9,6 +9,7 @@ import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.model.table.BCheckTableModel;
 import ui.view.listener.InertPopupMenuListener;
+import ui.view.pane.storefront.ActionController;
 import ui.view.pane.storefront.SearchBar;
 import ui.view.utils.TagRenderer;
 
@@ -37,7 +38,7 @@ class BCheckTablePanel extends JPanel {
     private final Executor executor;
     private final JComponent searchBar;
     private final StorefrontModel model;
-    private final BCheckActionController actionController;
+    private final ActionController actionController;
     private final Supplier<Font> fontSupplier;
 
     BCheckTablePanel(TablePanelController panelController,
@@ -45,7 +46,7 @@ class BCheckTablePanel extends JPanel {
                      Burp burp,
                      Executor executor,
                      IconFactory iconFactory,
-                     BCheckActionController actionController,
+                     ActionController actionController,
                      Supplier<Font> fontSupplier) {
         super(new BorderLayout());
 

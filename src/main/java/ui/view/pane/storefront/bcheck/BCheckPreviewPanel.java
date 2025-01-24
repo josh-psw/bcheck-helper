@@ -4,6 +4,7 @@ import bcheck.BCheck;
 import burp.Burp;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
+import ui.view.pane.storefront.ActionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ import static ui.model.StorefrontModel.*;
 
 class BCheckPreviewPanel extends JPanel {
     private final StorefrontModel model;
-    private final BCheckActionController actionController;
+    private final ActionController actionController;
     private final Burp burp;
     private final JLabel statusLabel;
     private final JButton importButton;
@@ -25,7 +26,7 @@ class BCheckPreviewPanel extends JPanel {
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    BCheckPreviewPanel(StorefrontModel storefrontModel, BCheckActionController actionController, Burp burp) {
+    BCheckPreviewPanel(StorefrontModel storefrontModel, ActionController actionController, Burp burp) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
