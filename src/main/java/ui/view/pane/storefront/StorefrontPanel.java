@@ -7,8 +7,8 @@ import static java.awt.BorderLayout.CENTER;
 import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.JSplitPane.HORIZONTAL_SPLIT;
 
-class StorefrontPanel extends JPanel {
-    StorefrontPanel(JPanel previewPanel, JPanel tablePanel) {
+public class StorefrontPanel extends JPanel {
+    public StorefrontPanel(JPanel previewPanel, JPanel tablePanel) {
         super(new BorderLayout());
 
         JSplitPane splitPane = new JSplitPane(HORIZONTAL_SPLIT);

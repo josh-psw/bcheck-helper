@@ -1,9 +1,11 @@
-package ui.view.pane.storefront;
+package ui.view.pane.storefront.bcheck;
 
 import bcheck.BCheck;
 import logging.Logger;
 import ui.controller.StoreController;
 import ui.model.StorefrontModel;
+import ui.view.pane.storefront.ActionCallbacks;
+import ui.view.pane.storefront.SaveLocation;
 
 import java.nio.file.Path;
 import java.util.concurrent.Executor;

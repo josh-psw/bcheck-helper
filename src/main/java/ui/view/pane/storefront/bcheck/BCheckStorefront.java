@@ -1,4 +1,4 @@
-package ui.view.pane.storefront;
+package ui.view.pane.storefront.bcheck;
 
 import burp.Burp;
 import logging.Logger;
@@ -7,13 +7,17 @@ import ui.controller.StoreController;
 import ui.controller.TablePanelController.DefaultTablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
+import ui.view.pane.storefront.SaveLocation;
+import ui.view.pane.storefront.Storefront;
+import ui.view.pane.storefront.StorefrontPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-public class BCheckStorefront implements Storefront {
+public class BCheckStorefront implements Storefront
+{
     private final String title;
     private final JPanel panel;
 

@@ -17,7 +17,7 @@ import ui.model.LateInitializationStorefrontModel;
 import ui.model.StorefrontModel;
 import ui.view.Store;
 import ui.view.pane.settings.Settings;
-import ui.view.pane.storefront.BCheckStorefront;
+import ui.view.pane.storefront.bcheck.BCheckStorefront;
 import ui.view.pane.storefront.Storefront;
 import utils.CloseablePooledExecutor;
 

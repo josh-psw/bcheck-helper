@@ -9,18 +9,18 @@ import java.util.Optional;
 
 import static ui.view.component.filechooser.ChooseMode.SAVE_DIRECTORIES_ONLY;
 
-class SaveLocation {
+public class SaveLocation {
     private final DefaultSaveLocationSettingsReader saveLocationSettingsReader;
 
-    SaveLocation(DefaultSaveLocationSettingsReader saveLocationSettingsReader) {
+    public SaveLocation(DefaultSaveLocationSettingsReader saveLocationSettingsReader) {
         this.saveLocationSettingsReader = saveLocationSettingsReader;
     }
 
-    Optional<Path> find() {
+    public Optional<Path> find() {
         return find(SAVE_DIRECTORIES_ONLY, null);
     }
 
-    Optional<Path> find(ChooseMode chooseMode, String defaultFileName) {
+    public Optional<Path> find(ChooseMode chooseMode, String defaultFileName) {
         return saveLocationSettingsReader
                 .defaultSaveLocation()
                 .or(() -> new FileChooser(chooseMode).prompt(defaultFileName));

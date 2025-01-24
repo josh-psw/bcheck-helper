@@ -1,4 +1,4 @@
-package ui.view.pane.storefront;
+package ui.view.pane.storefront.bcheck;
 
 import bcheck.BCheck;
 import bcheck.BCheck.Tags;
@@ -9,6 +9,7 @@ import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.model.table.BCheckTableModel;
 import ui.view.listener.InertPopupMenuListener;
+import ui.view.pane.storefront.SearchBar;
 import ui.view.utils.TagRenderer;
 
 import javax.swing.*;

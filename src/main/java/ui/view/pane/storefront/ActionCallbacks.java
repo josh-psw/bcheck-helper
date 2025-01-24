@@ -2,7 +2,7 @@ package ui.view.pane.storefront;
 
 import javax.swing.*;
 
-interface ActionCallbacks {
+public interface ActionCallbacks {
     void actionBegun();
 
     void actionComplete();
@@ -20,7 +20,7 @@ interface ActionCallbacks {
     class ButtonTogglingActionCallbacks implements ActionCallbacks {
         private final JButton button;
 
-        ButtonTogglingActionCallbacks(JButton button) {
+        public ButtonTogglingActionCallbacks(JButton button) {
             this.button = button;
         }
 

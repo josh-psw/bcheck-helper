@@ -1,4 +1,4 @@
-package ui.view.pane.storefront;
+package ui.view.pane.storefront.bcheck;
 
 import bcheck.BCheck;
 import burp.Burp;
