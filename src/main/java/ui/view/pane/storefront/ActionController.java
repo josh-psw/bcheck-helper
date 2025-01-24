@@ -2,13 +2,13 @@ package ui.view.pane.storefront;
 
 public interface ActionController
 {
-    void importSelectedBCheck();
+    void importSelected();
 
-    void copySelectedBCheck();
+    void copySelected();
 
-    void saveSelectedBCheck();
+    void saveSelected();
 
-    void saveSelectedBCheck(ActionCallbacks actionCallbacks);
+    void saveSelected(ActionCallbacks actionCallbacks);
 
-    void saveAllVisibleBChecks(ActionCallbacks actionCallbacks);
+    void saveAllVisible(ActionCallbacks actionCallbacks);
 }

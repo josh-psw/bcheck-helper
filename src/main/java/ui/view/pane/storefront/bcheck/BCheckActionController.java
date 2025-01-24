@@ -36,24 +36,24 @@ class BCheckActionController implements ActionController
     }
 
     @Override
-    public void importSelectedBCheck() {
+    public void importSelected() {
         storeController.importBCheck(model.getSelectedBCheck());
     }
 
     @Override
-    public void copySelectedBCheck() {
+    public void copySelected() {
         BCheck selectedBCheck = model.getSelectedBCheck();
         storeController.copyBCheck(selectedBCheck);
         model.setStatus("Copied BCheck " + selectedBCheck.name() + " to clipboard");
     }
 
     @Override
-    public void saveSelectedBCheck() {
-        saveSelectedBCheck(INERT_CALLBACKS);
+    public void saveSelected() {
+        saveSelected(INERT_CALLBACKS);
     }
 
     @Override
-    public void saveSelectedBCheck(ActionCallbacks actionCallbacks) {
+    public void saveSelected(ActionCallbacks actionCallbacks) {
         BCheck selectedBCheck = model.getSelectedBCheck();
 
         saveLocation.find(SAVE_FILES_ONLY, selectedBCheck.filename())
@@ -78,7 +78,7 @@ class BCheckActionController implements ActionController
     }
 
     @Override
-    public void saveAllVisibleBChecks(ActionCallbacks actionCallbacks) {
+    public void saveAllVisible(ActionCallbacks actionCallbacks) {
         saveLocation.find().ifPresent(path -> {
             actionCallbacks.actionBegun();
             model.setStatus("");

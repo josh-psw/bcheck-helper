@@ -86,10 +86,10 @@ class BCheckPreviewPanel extends JPanel {
     private JComponent buildActionPanel() {
         JPanel actionPanel = new JPanel(new FlowLayout(LEADING));
 
-        importButton.addActionListener(e -> actionController.importSelectedBCheck());
-        copyButton.addActionListener(e -> actionController.copySelectedBCheck());
-        saveButton.addActionListener(e -> actionController.saveSelectedBCheck(new ButtonTogglingActionCallbacks(saveButton)));
-        saveAllButton.addActionListener(e -> actionController.saveAllVisibleBChecks(new ButtonTogglingActionCallbacks(saveAllButton)));
+        importButton.addActionListener(e -> actionController.importSelected());
+        copyButton.addActionListener(e -> actionController.copySelected());
+        saveButton.addActionListener(e -> actionController.saveSelected(new ButtonTogglingActionCallbacks(saveButton)));
+        saveAllButton.addActionListener(e -> actionController.saveAllVisible(new ButtonTogglingActionCallbacks(saveAllButton)));
 
         if (burp.hasCapability(BCHECK_IMPORT)) {
             actionPanel.add(importButton);
