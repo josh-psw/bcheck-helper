@@ -4,6 +4,7 @@ import burp.Burp;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
+import ui.controller.TablePanelController.DefaultTablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 
@@ -26,15 +27,28 @@ public class BCheckStorefront implements Storefront {
                             Logger logger,
                             Supplier<Font> fontSupplier) {
         this.title = title;
-        this.panel = new BCheckStorefrontPanel(
+
+        BCheckActionController actionController = new BCheckActionController(
+                storefrontModel,
                 storeController,
+                new SaveLocation(saveLocationSettingsReader),
+                executor,
+                logger
+        );
+
+        BCheckPreviewPanel previewPanel = new BCheckPreviewPanel(storefrontModel, actionController, burp);
+
+        BCheckTablePanel tablePanel = new BCheckTablePanel(
+                new DefaultTablePanelController(storeController),
                 storefrontModel,
                 burp,
-                saveLocationSettingsReader,
                 executor,
                 iconFactory,
-                logger,
-                fontSupplier);
+                actionController,
+                fontSupplier
+        );
+
+        this.panel = new StorefrontPanel(previewPanel, tablePanel);
     }
 
     @Override
