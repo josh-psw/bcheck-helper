@@ -7,9 +7,8 @@ import javax.swing.*;
 
 public class Store extends JTabbedPane {
     public Store(Settings settings, Storefront... storefronts) {
-        for (Storefront storefront : storefronts)
-        {
-            add(storefront.title(), storefront.panel());
+        for (Storefront storefront : storefronts) {
+            add(storefront.title(), storefront.component());
         }
 
         add("Settings", settings);

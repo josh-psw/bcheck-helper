@@ -12,8 +12,7 @@ import java.awt.*;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-public class BCheckStorefront implements Storefront
-{
+public class BCheckStorefront implements Storefront {
     private final String title;
     private final JPanel panel;
 
@@ -25,8 +24,7 @@ public class BCheckStorefront implements Storefront
                             Executor executor,
                             IconFactory iconFactory,
                             Logger logger,
-                            Supplier<Font> fontSupplier)
-    {
+                            Supplier<Font> fontSupplier) {
         this.title = title;
         this.panel = new BCheckStorefrontPanel(
                 storeController,
@@ -40,14 +38,12 @@ public class BCheckStorefront implements Storefront
     }
 
     @Override
-    public String title()
-    {
+    public String title() {
         return title;
     }
 
     @Override
-    public JPanel panel()
-    {
+    public Component component() {
         return panel;
     }
 }

@@ -1,9 +1,9 @@
 package ui.view.pane.storefront;
 
-import javax.swing.*;
+import java.awt.*;
 
 public interface Storefront {
     String title();
 
-    JPanel panel();
+    Component component();
 }

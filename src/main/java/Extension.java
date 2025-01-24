@@ -21,11 +21,13 @@ import ui.view.pane.storefront.BCheckStorefront;
 import ui.view.pane.storefront.Storefront;
 import utils.CloseablePooledExecutor;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("unused")
 public class Extension implements BurpExtension {
-    public static final String EXTENSION_NAME = "Extensibility Helper";
+    private static final String EXTENSION_NAME = "Extensibility Helper";
 
     @Override
     public void initialize(MontoyaApi api) {
@@ -70,7 +72,19 @@ public class Extension implements BurpExtension {
                 () -> api.userInterface().currentDisplayFont()
         );
 
-        Store store = new Store(settings, bCheckStorefront);
+        Storefront bambdaStorefront = new Storefront() {
+            @Override
+            public String title() {
+                return "Bambda Store";
+            }
+
+            @Override
+            public Component component() {
+                return new JPanel();
+            }
+        };
+
+        Store store = new Store(settings, bCheckStorefront, bambdaStorefront);
 
         api.extension().setName(EXTENSION_NAME);
         api.userInterface().registerSuiteTab(EXTENSION_NAME, store);
