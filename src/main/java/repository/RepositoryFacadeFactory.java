@@ -1,7 +1,6 @@
 package repository;
 
 import bcheck.BCheckFactory;
-import burp.Burp;
 import burp.api.montoya.http.Http;
 import client.GitHubClient;
 import file.finder.BCheckFileFinder;
@@ -13,8 +12,8 @@ import settings.controller.SettingsController;
 
 public class RepositoryFacadeFactory {
 
-    public static Repository from(Logger logger, Http http, SettingsController settingsController, Burp burp) {
-        RequestSender requestSender = new RequestSender(http, logger, burp);
+    public static Repository from(Logger logger, Http http, SettingsController settingsController) {
+        RequestSender requestSender = new RequestSender(http, logger);
         BCheckFactory bCheckFactory = new BCheckFactory(logger);
         GitHubClient gitHubClient = new GitHubClient(requestSender);
         TempFileCreator tempFileCreator = new TempFileCreator(logger);

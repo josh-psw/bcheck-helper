@@ -7,12 +7,6 @@ import logging.Logger;
 public interface BCheckImporter {
     void importBCheck(BCheck bCheck);
 
-    class NullBCheckImporter implements BCheckImporter {
-        @Override
-        public void importBCheck(BCheck bCheck) {
-        }
-    }
-
     class DefaultBCheckImporter implements BCheckImporter {
         private final BChecks bChecks;
         private final Logger logger;
