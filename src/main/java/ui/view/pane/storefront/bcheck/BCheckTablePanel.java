@@ -2,7 +2,6 @@ package ui.view.pane.storefront.bcheck;
 
 import bcheck.BCheck;
 import bcheck.BCheck.Tags;
-import burp.Burp;
 import settings.tags.TagColors;
 import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
@@ -34,7 +33,6 @@ class BCheckTablePanel extends JPanel {
     private final JTable bCheckTable = new JTable();
     private final BCheckTableModel tableModel = new BCheckTableModel();
     private final JButton refreshButton = new JButton("Refresh");
-    private final Burp burp;
     private final Executor executor;
     private final JComponent searchBar;
     private final StorefrontModel model;
@@ -43,7 +41,6 @@ class BCheckTablePanel extends JPanel {
 
     BCheckTablePanel(TablePanelController panelController,
                      StorefrontModel storefrontModel,
-                     Burp burp,
                      Executor executor,
                      IconFactory iconFactory,
                      ActionController actionController,
@@ -51,7 +48,6 @@ class BCheckTablePanel extends JPanel {
         super(new BorderLayout());
 
         this.panelController = panelController;
-        this.burp = burp;
         this.executor = executor;
         this.model = storefrontModel;
         this.actionController = actionController;
@@ -86,7 +82,7 @@ class BCheckTablePanel extends JPanel {
         model.setSearchFilter("");
         tableModel.setBChecks(model.getFilteredBChecks());
 
-        JPopupMenu popupMenu = new BCheckPopupMenu(actionController, burp);
+        JPopupMenu popupMenu = new BCheckPopupMenu(actionController);
         popupMenu.addPopupMenuListener(new InertPopupMenuListener()
         {
             @Override

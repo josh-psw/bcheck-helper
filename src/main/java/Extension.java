@@ -17,8 +17,8 @@ import ui.model.LateInitializationStorefrontModel;
 import ui.model.StorefrontModel;
 import ui.view.Store;
 import ui.view.pane.settings.Settings;
-import ui.view.pane.storefront.bcheck.BCheckStorefront;
 import ui.view.pane.storefront.Storefront;
+import ui.view.pane.storefront.bcheck.BCheckStorefront;
 import utils.CloseablePooledExecutor;
 
 import javax.swing.*;
@@ -64,7 +64,6 @@ public class Extension implements BurpExtension {
                 "BCheck Store",
                 storeController,
                 storefrontModel,
-                burp,
                 settingsController.defaultSaveLocationSettings(),
                 executor,
                 iconFactory,

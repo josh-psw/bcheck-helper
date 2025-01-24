@@ -1,7 +1,6 @@
 package ui.view.pane.storefront.bcheck;
 
 import bcheck.BCheck;
-import burp.Burp;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
 import ui.view.pane.storefront.ActionController;
@@ -9,7 +8,6 @@ import ui.view.pane.storefront.ActionController;
 import javax.swing.*;
 import java.awt.*;
 
-import static burp.Burp.Capability.BCHECK_IMPORT;
 import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.SOUTH;
 import static java.awt.FlowLayout.LEADING;
@@ -19,19 +17,17 @@ import static ui.model.StorefrontModel.*;
 class BCheckPreviewPanel extends JPanel {
     private final StorefrontModel model;
     private final ActionController actionController;
-    private final Burp burp;
     private final JLabel statusLabel;
     private final JButton importButton;
     private final JButton copyButton;
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    BCheckPreviewPanel(StorefrontModel storefrontModel, ActionController actionController, Burp burp) {
+    BCheckPreviewPanel(StorefrontModel storefrontModel, ActionController actionController) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
         this.actionController = actionController;
-        this.burp = burp;
 
         this.statusLabel = new JLabel();
         this.importButton = new JButton("Import");
@@ -78,7 +74,7 @@ class BCheckPreviewPanel extends JPanel {
         codePreview.setEditable(false);
         codePreview.setFont(monospacedFont);
         codePreview.setWrapStyleWord(true);
-        codePreview.setComponentPopupMenu(new BCheckPopupMenu(actionController, burp));
+        codePreview.setComponentPopupMenu(new BCheckPopupMenu(actionController));
 
         return codePreview;
     }
@@ -91,10 +87,7 @@ class BCheckPreviewPanel extends JPanel {
         saveButton.addActionListener(e -> actionController.saveSelected(new ButtonTogglingActionCallbacks(saveButton)));
         saveAllButton.addActionListener(e -> actionController.saveAllVisible(new ButtonTogglingActionCallbacks(saveAllButton)));
 
-        if (burp.hasCapability(BCHECK_IMPORT)) {
-            actionPanel.add(importButton);
-        }
-
+        actionPanel.add(importButton);
         actionPanel.add(copyButton);
         actionPanel.add(saveButton);
         actionPanel.add(new JSeparator(VERTICAL));

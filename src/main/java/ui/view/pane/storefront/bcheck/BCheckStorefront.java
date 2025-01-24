@@ -1,6 +1,5 @@
 package ui.view.pane.storefront.bcheck;
 
-import burp.Burp;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
@@ -25,7 +24,6 @@ public class BCheckStorefront implements Storefront
     public BCheckStorefront(String title,
                             StoreController storeController,
                             StorefrontModel storefrontModel,
-                            Burp burp,
                             DefaultSaveLocationSettingsReader saveLocationSettingsReader,
                             Executor executor,
                             IconFactory iconFactory,
@@ -41,12 +39,11 @@ public class BCheckStorefront implements Storefront
                 logger
         );
 
-        BCheckPreviewPanel previewPanel = new BCheckPreviewPanel(storefrontModel, actionController, burp);
+        BCheckPreviewPanel previewPanel = new BCheckPreviewPanel(storefrontModel, actionController);
 
         BCheckTablePanel tablePanel = new BCheckTablePanel(
                 new DefaultTablePanelController(storeController),
                 storefrontModel,
-                burp,
                 executor,
                 iconFactory,
                 actionController,
