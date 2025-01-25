@@ -2,6 +2,8 @@ plugins {
     id("java")
 }
 
+version = "1.0"
+
 repositories {
     mavenCentral()
 }
@@ -25,8 +27,10 @@ tasks.test {
 }
 
 tasks.jar {
+    archiveVersion.set(version.toString())
+    
     from(rootDir) {
         include("LICENSE")
         into("META-INF")
-    }
+    }   
 }
