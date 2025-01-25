@@ -28,4 +28,9 @@ tasks.test {
 
 tasks.jar {
     archiveVersion.set(version.toString())
+    
+    from(rootDir) {
+        include("LICENSE")
+        into("META-INF")
+    }   
 }
