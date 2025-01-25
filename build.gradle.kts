@@ -23,3 +23,10 @@ java {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.jar {
+    from(rootDir) {
+        include("LICENSE")
+        into("META-INF")
+    }
+}
