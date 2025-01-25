@@ -21,7 +21,7 @@ Alternatively, *BCheck Helper* can be built from source.
 
 * Ensure that Java JDK 17 or newer is installed
 * From the root of the project, run the command `./gradlew jar`
-* This should place the JAR file `bcheck-helper.jar` within the `build/libs` directory
+* This should place the JAR file `bcheck-helper-1.0.jar` within the `build/libs` directory
 * This can be loaded into Burp by navigating to the 'Extensions' tab, 'Installed' sub-tab, clicking the 'Add' button and loading the JAR file
 
 ## Requirements

@@ -2,6 +2,8 @@ plugins {
     id("java")
 }
 
+version = "1.0"
+
 repositories {
     mavenCentral()
 }
@@ -22,4 +24,8 @@ java {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.jar {
+    archiveVersion.set(version.toString())
 }
