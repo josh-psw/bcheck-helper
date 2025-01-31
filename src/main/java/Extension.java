@@ -1,3 +1,4 @@
+import bcheck.BCheck;
 import bcheck.BCheckImporter;
 import bcheck.BCheckImporterFactory;
 import burp.Burp;
@@ -43,8 +44,8 @@ public class Extension implements BurpExtension {
         ClipboardManager clipboardManager = new ClipboardManager();
         FileSystem fileSystem = new FileSystem(logger);
 
-        AtomicReference<StorefrontModel> modelReference = new AtomicReference<>();
-        StorefrontModel lateInitializationStorefrontModel = new LateInitializationStorefrontModel(modelReference::get);
+        AtomicReference<StorefrontModel<BCheck>> modelReference = new AtomicReference<>();
+        StorefrontModel<BCheck> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
         BCheckImporter bCheckImporter = BCheckImporterFactory.from(api, burp, logger);
 
         StoreController storeController = new StoreController(
@@ -55,7 +56,7 @@ public class Extension implements BurpExtension {
                 fileSystem
         );
 
-        StorefrontModel storefrontModel = new DefaultStorefrontModel(storeController);
+        StorefrontModel<BCheck> storefrontModel = new DefaultStorefrontModel(storeController);
         modelReference.set(storefrontModel);
 
         Settings settings = new Settings(settingsController);
