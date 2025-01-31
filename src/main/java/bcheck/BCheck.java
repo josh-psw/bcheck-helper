@@ -80,8 +80,7 @@ public class BCheck {
         return Objects.hash(name, description, author, tags, path, filename, script);
     }
 
-    public static class Tags
-    {
+    public static class Tags {
         private final List<String> tags;
 
         private Tags(List<String> tags) {
