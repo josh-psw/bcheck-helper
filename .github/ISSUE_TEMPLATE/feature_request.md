@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an enhancement for JWT Editor
+about: Suggest an enhancement for BCheck Helper
 title: "[FEATURE]"
 labels: enhancement
 assignees: ''
