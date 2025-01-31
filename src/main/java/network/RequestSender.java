@@ -1,6 +1,5 @@
 package network;
 
-import burp.Burp;
 import burp.api.montoya.http.Http;
 import burp.api.montoya.http.message.requests.HttpRequest;
 import burp.api.montoya.http.message.responses.HttpResponse;
@@ -8,7 +7,6 @@ import logging.Logger;
 
 import java.util.Map;
 
-import static burp.Burp.Capability.TLS_VERIFICATION;
 import static burp.api.montoya.http.RequestOptions.requestOptions;
 import static burp.api.montoya.http.message.StatusCodeClass.*;
 import static burp.api.montoya.http.message.requests.HttpRequest.httpRequestFromUrl;
@@ -16,12 +14,10 @@ import static burp.api.montoya.http.message.requests.HttpRequest.httpRequestFrom
 public class RequestSender {
     private final Http http;
     private final Logger logger;
-    private final Burp burp;
 
-    public RequestSender(Http http, Logger logger, Burp burp) {
+    public RequestSender(Http http, Logger logger) {
         this.http = http;
         this.logger = logger;
-        this.burp = burp;
     }
 
     public HttpResponse sendRequest(String url, Map<String, String> headers) {
@@ -33,9 +29,7 @@ public class RequestSender {
 
         logger.logDebug("Requesting " + url);
 
-        HttpResponse response = burp.hasCapability(TLS_VERIFICATION)
-                ? http.sendRequest(request, requestOptions().withUpstreamTLSVerification()).response()
-                : http.sendRequest(request).response();
+        HttpResponse response = http.sendRequest(request, requestOptions().withUpstreamTLSVerification()).response();
 
         if (response.isStatusCodeClass(CLASS_4XX_CLIENT_ERRORS) || response.isStatusCodeClass(CLASS_5XX_SERVER_ERRORS)) {
             String responseBody = response.bodyToString();

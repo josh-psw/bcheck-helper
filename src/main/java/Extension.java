@@ -1,7 +1,6 @@
 import bcheck.BCheck;
-import bcheck.BCheckImporterFactory;
 import bcheck.ItemImporter;
-import burp.Burp;
+import bcheck.ItemImporter.BCheckItemImporter;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
@@ -36,8 +35,7 @@ public class Extension implements BurpExtension {
         SettingsController settingsController = new SettingsController(persistence.preferences());
         Logger logger = new Logger(api.logging(), settingsController.debugSettings());
 
-        Burp burp = new Burp(api.burpSuite().version());
-        Repository repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController, burp);
+        Repository repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController);
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
         IconFactory iconFactory = new IconFactory(api.userInterface());
@@ -46,7 +44,7 @@ public class Extension implements BurpExtension {
 
         AtomicReference<StorefrontModel<BCheck>> modelReference = new AtomicReference<>();
         StorefrontModel<BCheck> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
-        ItemImporter<BCheck> bCheckImporter = BCheckImporterFactory.from(api, burp, logger);
+        ItemImporter<BCheck> bCheckImporter = new BCheckItemImporter(api.scanner().bChecks(), logger);
 
         StoreController storeController = new StoreController(
                 lateInitializationStorefrontModel,

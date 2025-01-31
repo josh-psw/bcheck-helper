@@ -7,11 +7,6 @@ import logging.Logger;
 public interface ItemImporter<T> {
     void importItem(T item);
 
-    class NullItemImporter<T> implements ItemImporter<T> {
-        public void importItem(T item) {
-        }
-    }
-
     class BCheckItemImporter implements ItemImporter<BCheck> {
         private final BChecks bChecks;
         private final Logger logger;
