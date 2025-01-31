@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a bug report to help JWT Editor improve
+about: Create a bug report to help BCheck Helper improve
 title: "[BUG]"
 labels: bug
 assignees: ''
