@@ -8,5 +8,6 @@
             <property name="option" value="eol" />
             <property name="tokens" value="CLASS_DEF, METHOD_DEF" />
         </module>
+        <module name="UnusedImports"/>
     </module>
 </module>
