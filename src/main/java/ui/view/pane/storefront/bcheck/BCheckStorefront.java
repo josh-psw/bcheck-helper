@@ -1,5 +1,6 @@
 package ui.view.pane.storefront.bcheck;
 
+import bcheck.BCheck;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
@@ -23,7 +24,7 @@ public class BCheckStorefront implements Storefront
 
     public BCheckStorefront(String title,
                             StoreController storeController,
-                            StorefrontModel storefrontModel,
+                            StorefrontModel<BCheck> storefrontModel,
                             DefaultSaveLocationSettingsReader saveLocationSettingsReader,
                             Executor executor,
                             IconFactory iconFactory,
