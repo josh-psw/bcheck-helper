@@ -35,12 +35,12 @@ class BCheckTablePanel extends JPanel {
     private final JButton refreshButton = new JButton("Refresh");
     private final Executor executor;
     private final JComponent searchBar;
-    private final StorefrontModel model;
+    private final StorefrontModel<BCheck> model;
     private final ActionController actionController;
     private final Supplier<Font> fontSupplier;
 
     BCheckTablePanel(TablePanelController panelController,
-                     StorefrontModel storefrontModel,
+                     StorefrontModel<BCheck> storefrontModel,
                      Executor executor,
                      IconFactory iconFactory,
                      ActionController actionController,
@@ -62,15 +62,15 @@ class BCheckTablePanel extends JPanel {
 
         model.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals(SEARCH_FILTER_CHANGED)) {
-                List<BCheck> filteredBChecks = model.getFilteredBChecks();
+                List<BCheck> filteredBChecks = model.getFilteredItems();
                 tableModel.setBChecks(filteredBChecks);
 
                 String script = filteredBChecks.size() == 1 ? "script" : "scripts";
                 String message = "Showing %d %s".formatted(filteredBChecks.size(), script);
                 model.setStatus(message);
 
-                if (!filteredBChecks.contains(model.getSelectedBCheck())) {
-                    model.setSelectedBCheck(null);
+                if (!filteredBChecks.contains(model.getSelectedItem())) {
+                    model.setSelectedItem(null);
                 }
             }
         });
@@ -80,7 +80,7 @@ class BCheckTablePanel extends JPanel {
 
     private void setupTablePanel() {
         model.setSearchFilter("");
-        tableModel.setBChecks(model.getFilteredBChecks());
+        tableModel.setBChecks(model.getFilteredItems());
 
         JPopupMenu popupMenu = new BCheckPopupMenu(actionController);
         popupMenu.addPopupMenuListener(new InertPopupMenuListener()
@@ -138,7 +138,7 @@ class BCheckTablePanel extends JPanel {
 
         executor.execute(() -> {
             panelController.loadData();
-            tableModel.setBChecks(model.getFilteredBChecks());
+            tableModel.setBChecks(model.getFilteredItems());
 
             if (tableModel.getRowCount() > 0) {
                 bCheckTable.addRowSelectionInterval(0, 0);
@@ -157,9 +157,9 @@ class BCheckTablePanel extends JPanel {
 
         if (selectedRow >= 0) {
             BCheck newSelectedBCheck = tableModel.getBCheckAtRow(bCheckTable.convertRowIndexToModel(selectedRow));
-            model.setSelectedBCheck(newSelectedBCheck);
+            model.setSelectedItem(newSelectedBCheck);
         } else {
-            BCheck previouslySelectedBCheck = model.getSelectedBCheck();
+            BCheck previouslySelectedBCheck = model.getSelectedItem();
             int modelRow = tableModel.getBCheckRow(previouslySelectedBCheck);
 
             if (modelRow >= 0) {

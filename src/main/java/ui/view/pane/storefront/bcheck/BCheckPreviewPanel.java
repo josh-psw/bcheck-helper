@@ -15,7 +15,7 @@ import static javax.swing.SwingConstants.VERTICAL;
 import static ui.model.StorefrontModel.*;
 
 class BCheckPreviewPanel extends JPanel {
-    private final StorefrontModel model;
+    private final StorefrontModel<BCheck> model;
     private final ActionController actionController;
     private final JLabel statusLabel;
     private final JButton importButton;
@@ -23,7 +23,7 @@ class BCheckPreviewPanel extends JPanel {
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    BCheckPreviewPanel(StorefrontModel storefrontModel, ActionController actionController) {
+    BCheckPreviewPanel(StorefrontModel<BCheck> storefrontModel, ActionController actionController) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
@@ -43,8 +43,8 @@ class BCheckPreviewPanel extends JPanel {
         model.addPropertyChangeListener(evt -> {
             switch (evt.getPropertyName()) {
                 case STATUS_CHANGED -> statusLabel.setText((String) evt.getNewValue());
-                case SELECTED_BCHECK_CHANGED -> {
-                    BCheck selectedBCheck = model.getSelectedBCheck();
+                case SELECTED_ITEM_CHANGED -> {
+                    BCheck selectedBCheck = model.getSelectedItem();
                     boolean bCheckSelected = selectedBCheck != null;
 
                     copyButton.setEnabled(bCheckSelected);
@@ -55,8 +55,8 @@ class BCheckPreviewPanel extends JPanel {
                     codePreview.setText(previewText);
                     codePreview.setCaretPosition(0);
                 }
-                case SEARCH_FILTER_CHANGED, BCHECKS_UPDATED -> {
-                    boolean bChecksEmpty = model.getFilteredBChecks().isEmpty();
+                case SEARCH_FILTER_CHANGED, ITEMS_UPDATED -> {
+                    boolean bChecksEmpty = model.getFilteredItems().isEmpty();
                     saveAllButton.setEnabled(!bChecksEmpty);
                 }
             }

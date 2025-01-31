@@ -11,7 +11,7 @@ import java.util.List;
 import static java.util.Collections.synchronizedList;
 import static java.util.Comparator.comparing;
 
-public class DefaultStorefrontModel implements StorefrontModel {
+public class DefaultStorefrontModel implements StorefrontModel<BCheck> {
     private final StoreController controller;
     private final List<BCheck> allAvailableBChecks;
     private final PropertyChangeSupport propertyChangeSupport;
@@ -30,14 +30,14 @@ public class DefaultStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public void setSelectedBCheck(BCheck selectedBCheck) {
+    public void setSelectedItem(BCheck selectedItem) {
         BCheck oldselectedBCheck = this.selectedBCheck;
-        this.selectedBCheck = selectedBCheck;
-        propertyChangeSupport.firePropertyChange(SELECTED_BCHECK_CHANGED, oldselectedBCheck, selectedBCheck);
+        this.selectedBCheck = selectedItem;
+        propertyChangeSupport.firePropertyChange(SELECTED_ITEM_CHANGED, oldselectedBCheck, selectedItem);
     }
 
     @Override
-    public BCheck getSelectedBCheck() {
+    public BCheck getSelectedItem() {
         return selectedBCheck;
     }
 
@@ -56,12 +56,12 @@ public class DefaultStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public List<BCheck> getAvailableBChecks() {
+    public List<BCheck> getAvailableItems() {
         return allAvailableBChecks;
     }
 
     @Override
-    public List<BCheck> getFilteredBChecks() {
+    public List<BCheck> getFilteredItems() {
         return controller.findMatchingBChecks(searchFilter);
     }
 
@@ -71,13 +71,13 @@ public class DefaultStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public void updateModel(List<BCheck> bChecks, State state) {
+    public void updateModel(List<BCheck> items, State state) {
         this.state = state;
 
         allAvailableBChecks.clear();
-        allAvailableBChecks.addAll(bChecks);
+        allAvailableBChecks.addAll(items);
         allAvailableBChecks.sort(comparing(BCheck::name));
-        propertyChangeSupport.firePropertyChange(BCHECKS_UPDATED, null, allAvailableBChecks);
+        propertyChangeSupport.firePropertyChange(ITEMS_UPDATED, null, allAvailableBChecks);
 
         String status = switch (state) {
             case START -> "Loading";
@@ -89,7 +89,7 @@ public class DefaultStorefrontModel implements StorefrontModel {
         setStatus(status);
 
         if (!allAvailableBChecks.contains(selectedBCheck)) {
-            setSelectedBCheck(null);
+            setSelectedItem(null);
         }
     }
 

@@ -16,14 +16,14 @@ import static ui.view.pane.storefront.ActionCallbacks.INERT_CALLBACKS;
 
 class BCheckActionController implements ActionController
 {
-    private final StorefrontModel model;
+    private final StorefrontModel<BCheck> model;
     private final StoreController storeController;
     private final SaveLocation saveLocation;
     private final Executor executor;
     private final Logger logger;
 
     BCheckActionController(
-            StorefrontModel model,
+            StorefrontModel<BCheck> model,
             StoreController storeController,
             SaveLocation saveLocation,
             Executor executor,
@@ -37,12 +37,12 @@ class BCheckActionController implements ActionController
 
     @Override
     public void importSelected() {
-        storeController.importBCheck(model.getSelectedBCheck());
+        storeController.importBCheck(model.getSelectedItem());
     }
 
     @Override
     public void copySelected() {
-        BCheck selectedBCheck = model.getSelectedBCheck();
+        BCheck selectedBCheck = model.getSelectedItem();
         storeController.copyBCheck(selectedBCheck);
         model.setStatus("Copied BCheck " + selectedBCheck.name() + " to clipboard");
     }
@@ -54,7 +54,7 @@ class BCheckActionController implements ActionController
 
     @Override
     public void saveSelected(ActionCallbacks actionCallbacks) {
-        BCheck selectedBCheck = model.getSelectedBCheck();
+        BCheck selectedBCheck = model.getSelectedItem();
 
         saveLocation.find(SAVE_FILES_ONLY, selectedBCheck.filename())
                 .ifPresent(path -> {
@@ -85,7 +85,7 @@ class BCheckActionController implements ActionController
 
             executor.execute(() -> {
                 try {
-                    model.getFilteredBChecks().forEach(bCheck -> storeController.saveBCheck(bCheck, path.resolve(bCheck.filename())));
+                    model.getFilteredItems().forEach(bCheck -> storeController.saveBCheck(bCheck, path.resolve(bCheck.filename())));
                     model.setStatus("Saved all BChecks to " + path);
                 } catch (RuntimeException e) {
                     logger.logError(e);

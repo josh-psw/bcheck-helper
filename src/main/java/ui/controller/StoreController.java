@@ -15,14 +15,14 @@ import static java.util.Collections.emptyList;
 import static ui.model.State.ERROR;
 
 public class StoreController {
-    private final StorefrontModel model;
+    private final StorefrontModel<BCheck> model;
     private final Repository repository;
     private final BCheckImporter bCheckImporter;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
 
     public StoreController(
-            StorefrontModel model,
+            StorefrontModel<BCheck> model,
             Repository repository,
             BCheckImporter bCheckImporter,
             ClipboardManager clipboardManager,
@@ -48,7 +48,7 @@ public class StoreController {
     public List<BCheck> findMatchingBChecks(String searchText) {
         Predicate<BCheck> filter = searchText.isBlank() ? bCheck -> true : new BCheckFilterPredicate(searchText);
 
-        return model.getAvailableBChecks().stream().filter(filter).toList();
+        return model.getAvailableItems().stream().filter(filter).toList();
     }
 
     public void importBCheck(BCheck bCheck) {
