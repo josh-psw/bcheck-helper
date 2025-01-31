@@ -4,26 +4,25 @@ import burp.api.montoya.scanner.bchecks.BCheckImportResult;
 import burp.api.montoya.scanner.bchecks.BChecks;
 import logging.Logger;
 
-public interface BCheckImporter {
-    void importBCheck(BCheck bCheck);
+public interface ItemImporter<T> {
+    void importItem(T item);
 
-    class NullBCheckImporter implements BCheckImporter {
-        @Override
-        public void importBCheck(BCheck bCheck) {
+    class NullItemImporter<T> implements ItemImporter<T> {
+        public void importItem(T item) {
         }
     }
 
-    class DefaultBCheckImporter implements BCheckImporter {
+    class BCheckItemImporter implements ItemImporter<BCheck> {
         private final BChecks bChecks;
         private final Logger logger;
 
-        public DefaultBCheckImporter(BChecks bChecks, Logger logger) {
+        public BCheckItemImporter(BChecks bChecks, Logger logger) {
             this.bChecks = bChecks;
             this.logger = logger;
         }
 
         @Override
-        public void importBCheck(BCheck bCheck) {
+        public void importItem(BCheck bCheck) {
             BCheckImportResult importResult = bChecks.importBCheck(bCheck.script(), true);
 
             if (!importResult.importErrors().isEmpty()) {

@@ -1,7 +1,7 @@
 package ui.controller;
 
 import bcheck.BCheck;
-import bcheck.BCheckImporter;
+import bcheck.ItemImporter;
 import file.system.FileSystem;
 import repository.Repository;
 import ui.clipboard.ClipboardManager;
@@ -17,14 +17,14 @@ import static ui.model.State.ERROR;
 public class StoreController {
     private final StorefrontModel<BCheck> model;
     private final Repository repository;
-    private final BCheckImporter bCheckImporter;
+    private final ItemImporter<BCheck> bCheckImporter;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
 
     public StoreController(
             StorefrontModel<BCheck> model,
             Repository repository,
-            BCheckImporter bCheckImporter,
+            ItemImporter<BCheck> bCheckImporter,
             ClipboardManager clipboardManager,
             FileSystem fileSystem
     ) {
@@ -53,7 +53,7 @@ public class StoreController {
 
     public void importBCheck(BCheck bCheck) {
         try {
-            bCheckImporter.importBCheck(bCheck);
+            bCheckImporter.importItem(bCheck);
             model.setStatus("Successfully imported BCheck: " + bCheck.name());
         } catch (IllegalStateException e) {
             model.setStatus("Error imported BCheck: " + bCheck.name());
