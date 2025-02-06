@@ -1,6 +1,5 @@
 package ui.model.table;
 
-import bcheck.BCheck;
 import bcheck.Item;
 
 import javax.swing.table.AbstractTableModel;
@@ -10,14 +9,14 @@ import java.util.function.Function;
 
 import static ui.model.table.TableColumnMetadata.*;
 
-public class BCheckTableModel extends AbstractTableModel {
+public class ItemTableModel<T extends Item> extends AbstractTableModel {
     private static final TableColumnMetadata[] TABLE_HEADERS = {
         NAME,
         DESCRIPTION,
         TAGS
     };
 
-    private final List<BCheck> tableData = new ArrayList<>();
+    private final List<T> tableData = new ArrayList<>();
 
     @Override
     public int getRowCount() {
@@ -45,17 +44,17 @@ public class BCheckTableModel extends AbstractTableModel {
         return renderableTableDataFetcher.apply(tableData.get(rowIndex));
     }
 
-    public BCheck getBCheckAtRow(int row) {
+    public T getItemAtRow(int row) {
         return tableData.get(row);
     }
 
-    public int getBCheckRow(BCheck bCheck) {
-        return bCheck == null ? -1 : tableData.indexOf(bCheck);
+    public int getItemRow(T item) {
+        return item == null ? -1 : tableData.indexOf(item);
     }
 
-    public void setBChecks(List<BCheck> bChecks) {
+    public void setItems(List<T> items) {
         tableData.clear();
-        tableData.addAll(bChecks);
+        tableData.addAll(items);
 
         fireTableDataChanged();
     }
