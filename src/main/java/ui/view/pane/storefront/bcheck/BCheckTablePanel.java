@@ -9,6 +9,7 @@ import ui.model.StorefrontModel;
 import ui.model.table.ItemTableModel;
 import ui.view.listener.InertPopupMenuListener;
 import ui.view.pane.storefront.ActionController;
+import ui.view.pane.storefront.ItemPopupMenu;
 import ui.view.pane.storefront.SearchBar;
 import ui.view.utils.TagRenderer;
 
@@ -85,7 +86,7 @@ class BCheckTablePanel extends JPanel {
         model.setSearchFilter("");
         tableModel.setItems(model.getFilteredItems());
 
-        JPopupMenu popupMenu = new BCheckPopupMenu(actionController);
+        JPopupMenu popupMenu = new ItemPopupMenu(actionController);
         popupMenu.addPopupMenuListener(new InertPopupMenuListener()
         {
             @Override

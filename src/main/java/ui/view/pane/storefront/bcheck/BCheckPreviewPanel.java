@@ -4,6 +4,7 @@ import bcheck.BCheck;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
 import ui.view.pane.storefront.ActionController;
+import ui.view.pane.storefront.ItemPopupMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,7 +75,7 @@ class BCheckPreviewPanel extends JPanel {
         codePreview.setEditable(false);
         codePreview.setFont(monospacedFont);
         codePreview.setWrapStyleWord(true);
-        codePreview.setComponentPopupMenu(new BCheckPopupMenu(actionController));
+        codePreview.setComponentPopupMenu(new ItemPopupMenu(actionController));
 
         return codePreview;
     }
