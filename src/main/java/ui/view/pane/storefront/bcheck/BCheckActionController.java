@@ -14,8 +14,7 @@ import java.util.concurrent.Executor;
 import static ui.view.component.filechooser.ChooseMode.SAVE_FILES_ONLY;
 import static ui.view.pane.storefront.ActionCallbacks.INERT_CALLBACKS;
 
-class BCheckActionController implements ActionController
-{
+class BCheckActionController implements ActionController {
     private final StorefrontModel<BCheck> model;
     private final StoreController storeController;
     private final SaveLocation saveLocation;

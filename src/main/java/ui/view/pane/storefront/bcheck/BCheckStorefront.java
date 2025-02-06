@@ -17,8 +17,7 @@ import java.awt.*;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-public class BCheckStorefront implements Storefront
-{
+public class BCheckStorefront implements Storefront {
     private final String title;
     private final JPanel panel;
 
