@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("checkstyle")
 }
 
 version = "1.0"
@@ -19,6 +20,17 @@ dependencies {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+checkstyle {
+    toolVersion = "10.12.4"
+}
+
+tasks.withType<Checkstyle> {
+    reports {
+        xml.required = false
+        html.required = true
     }
 }
 
