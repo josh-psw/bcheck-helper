@@ -18,6 +18,7 @@ import ui.model.StorefrontModel;
 import ui.view.Store;
 import ui.view.pane.settings.Settings;
 import ui.view.pane.storefront.Storefront;
+import ui.view.pane.storefront.StorefrontPanel;
 import ui.view.pane.storefront.bcheck.BCheckStorefront;
 import utils.CloseablePooledExecutor;
 
@@ -78,7 +79,7 @@ public class Extension implements BurpExtension {
 
             @Override
             public Component component() {
-                return new JPanel();
+                return new StorefrontPanel(new JPanel(), new JPanel());
             }
         };
 
