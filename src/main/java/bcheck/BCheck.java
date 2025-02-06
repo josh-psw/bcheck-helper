@@ -8,7 +8,7 @@ import java.util.Objects;
 import static java.nio.file.Files.readString;
 import static java.util.Collections.unmodifiableList;
 
-public class BCheck {
+public class BCheck implements Item {
     private final String name;
     private final String description;
     private final String author;
@@ -28,10 +28,12 @@ public class BCheck {
         this.tags = new Tags(tags);
     }
 
+    @Override
     public String name() {
         return name;
     }
 
+    @Override
     public String description() {
         return description;
     }
@@ -48,6 +50,7 @@ public class BCheck {
         return filename;
     }
 
+    @Override
     public Tags tags() {
         return tags;
     }

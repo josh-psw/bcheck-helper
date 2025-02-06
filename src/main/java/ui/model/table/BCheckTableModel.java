@@ -1,6 +1,7 @@
 package ui.model.table;
 
 import bcheck.BCheck;
+import bcheck.Item;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class BCheckTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Function<BCheck, Object> renderableTableDataFetcher = TABLE_HEADERS[columnIndex].renderableTableData;
+        Function<Item, Object> renderableTableDataFetcher = TABLE_HEADERS[columnIndex].renderableTableData;
         return renderableTableDataFetcher.apply(tableData.get(rowIndex));
     }
 
