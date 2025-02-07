@@ -1,7 +1,7 @@
 package ui.view.pane.storefront.bcheck;
 
 import bcheck.BCheck;
-import bcheck.BCheck.Tags;
+import bcheck.Tags;
 import settings.tags.TagColors;
 import ui.controller.TablePanelController;
 import ui.icons.IconFactory;

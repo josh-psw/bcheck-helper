@@ -5,5 +5,5 @@ public interface Item {
 
     String description();
 
-    BCheck.Tags tags();
+    Tags tags();
 }
