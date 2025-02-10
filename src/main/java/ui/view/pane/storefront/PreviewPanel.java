@@ -1,10 +1,8 @@
-package ui.view.pane.storefront.bcheck;
+package ui.view.pane.storefront;
 
-import bcheck.BCheck;
+import bcheck.Item;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
-import ui.view.pane.storefront.ActionController;
-import ui.view.pane.storefront.ItemPopupMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +13,8 @@ import static java.awt.FlowLayout.LEADING;
 import static javax.swing.SwingConstants.VERTICAL;
 import static ui.model.StorefrontModel.*;
 
-class BCheckPreviewPanel extends JPanel {
-    private final StorefrontModel<BCheck> model;
+public class PreviewPanel<T extends Item> extends JPanel {
+    private final StorefrontModel<T> model;
     private final ActionController actionController;
     private final JLabel statusLabel;
     private final JButton importButton;
@@ -24,7 +22,7 @@ class BCheckPreviewPanel extends JPanel {
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    BCheckPreviewPanel(StorefrontModel<BCheck> storefrontModel, ActionController actionController) {
+    public PreviewPanel(StorefrontModel<T> storefrontModel, ActionController actionController) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
@@ -34,7 +32,7 @@ class BCheckPreviewPanel extends JPanel {
         this.importButton = new JButton("Import");
         this.copyButton = new JButton("Copy to clipboard");
         this.saveButton = new JButton("Save to file");
-        this.saveAllButton = new JButton("Save all BChecks to disk");
+        this.saveAllButton = new JButton("Save all items to disk");
 
         JTextArea codePreview = buildCodePreview();
 
@@ -45,20 +43,20 @@ class BCheckPreviewPanel extends JPanel {
             switch (evt.getPropertyName()) {
                 case STATUS_CHANGED -> statusLabel.setText((String) evt.getNewValue());
                 case SELECTED_ITEM_CHANGED -> {
-                    BCheck selectedBCheck = model.getSelectedItem();
-                    boolean bCheckSelected = selectedBCheck != null;
+                    T selectedItem = model.getSelectedItem();
+                    boolean itemSelected = selectedItem != null;
 
-                    copyButton.setEnabled(bCheckSelected);
-                    saveButton.setEnabled(bCheckSelected);
+                    copyButton.setEnabled(itemSelected);
+                    saveButton.setEnabled(itemSelected);
 
-                    String previewText = bCheckSelected ? selectedBCheck.content() : "";
+                    String previewText = itemSelected ? selectedItem.content() : "";
 
                     codePreview.setText(previewText);
                     codePreview.setCaretPosition(0);
                 }
                 case SEARCH_FILTER_CHANGED, ITEMS_UPDATED -> {
-                    boolean bChecksEmpty = model.getFilteredItems().isEmpty();
-                    saveAllButton.setEnabled(!bChecksEmpty);
+                    boolean itemsEmpty = model.getFilteredItems().isEmpty();
+                    saveAllButton.setEnabled(!itemsEmpty);
                 }
             }
         });

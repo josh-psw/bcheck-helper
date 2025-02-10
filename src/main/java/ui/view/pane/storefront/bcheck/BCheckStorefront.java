@@ -7,10 +7,7 @@ import ui.controller.StoreController;
 import ui.controller.TablePanelController.DefaultTablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
-import ui.view.pane.storefront.ActionController;
-import ui.view.pane.storefront.SaveLocation;
-import ui.view.pane.storefront.Storefront;
-import ui.view.pane.storefront.StorefrontPanel;
+import ui.view.pane.storefront.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +36,7 @@ public class BCheckStorefront implements Storefront {
                 logger
         );
 
-        BCheckPreviewPanel previewPanel = new BCheckPreviewPanel(storefrontModel, actionController);
+        PreviewPanel<BCheck> previewPanel = new PreviewPanel<>(storefrontModel, actionController);
 
         BCheckTablePanel tablePanel = new BCheckTablePanel(
                 new DefaultTablePanelController(storeController),
