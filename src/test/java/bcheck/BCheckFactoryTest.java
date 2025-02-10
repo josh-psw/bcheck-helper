@@ -88,7 +88,7 @@ class BCheckFactoryTest {
         assertThat(bCheck.tags().tags()).containsExactly("log4shell", "cve-2021-44228", "cve");
         assertThat(bCheck.path()).isEqualTo(saveLocation.toString());
         assertThat(bCheck.filename()).isEqualTo(fileName);
-        assertThat(bCheck.script()).isEqualTo(contents);
+        assertThat(bCheck.content()).isEqualTo(contents);
     }
 
     @Test
@@ -149,7 +149,7 @@ class BCheckFactoryTest {
         assertThat(bCheck.tags().tags()).isEmpty();
         assertThat(bCheck.path()).isEqualTo(saveLocation.toString());
         assertThat(bCheck.filename()).isEqualTo(fileName);
-        assertThat(bCheck.script()).isEqualTo(contents);
+        assertThat(bCheck.content()).isEqualTo(contents);
     }
 
     @Test
@@ -211,6 +211,6 @@ class BCheckFactoryTest {
         assertThat(bCheck.tags().tags()).containsExactly("log4shell", "cve-2021-44228", "cve");
         assertThat(bCheck.path()).isEqualTo(saveLocation.toString());
         assertThat(bCheck.filename()).isEqualTo(fileName);
-        assertThat(bCheck.script()).isEqualTo(contents);
+        assertThat(bCheck.content()).isEqualTo(contents);
     }
 }

@@ -6,4 +6,6 @@ public interface Item {
     String description();
 
     Tags tags();
+
+    String content();
 }

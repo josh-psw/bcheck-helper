@@ -15,7 +15,7 @@ public class BCheck implements Item {
     private final String path;
     private final String filename;
 
-    private String script;
+    private String content;
 
     BCheck(String name, String description, String author, List<String> tags, String path, String filename) {
         this.name = name;
@@ -54,16 +54,17 @@ public class BCheck implements Item {
         return tags;
     }
 
-    public String script() {
-        if (script == null) {
+    @Override
+    public String content() {
+        if (content == null) {
             try {
-                script = readString(Path.of(path));
+                content = readString(Path.of(path));
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         }
 
-        return script;
+        return content;
     }
 
     @Override
@@ -74,11 +75,11 @@ public class BCheck implements Item {
         return Objects.equals(name, bCheck.name) && Objects.equals(description, bCheck.description) &&
                 Objects.equals(author, bCheck.author) && Objects.equals(tags, bCheck.tags) &&
                 Objects.equals(path, bCheck.path) && Objects.equals(filename, bCheck.filename) &&
-                Objects.equals(script, bCheck.script);
+                Objects.equals(content, bCheck.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, author, tags, path, filename, script);
+        return Objects.hash(name, description, author, tags, path, filename, content);
     }
 }

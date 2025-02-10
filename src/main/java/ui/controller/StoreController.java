@@ -61,11 +61,11 @@ public class StoreController {
     }
 
     public void copyBCheck(BCheck bCheck) {
-        clipboardManager.copy(bCheck.script());
+        clipboardManager.copy(bCheck.content());
     }
 
     public void saveBCheck(BCheck bCheck, Path savePath) {
-        fileSystem.saveFile(bCheck.script(), savePath);
+        fileSystem.saveFile(bCheck.content(), savePath);
     }
 
     private static class BCheckFilterPredicate implements Predicate<BCheck> {

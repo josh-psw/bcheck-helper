@@ -51,7 +51,7 @@ class BCheckPreviewPanel extends JPanel {
                     copyButton.setEnabled(bCheckSelected);
                     saveButton.setEnabled(bCheckSelected);
 
-                    String previewText = bCheckSelected ? selectedBCheck.script() : "";
+                    String previewText = bCheckSelected ? selectedBCheck.content() : "";
 
                     codePreview.setText(previewText);
                     codePreview.setCaretPosition(0);

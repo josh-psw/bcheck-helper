@@ -18,7 +18,7 @@ public interface ItemImporter<T> {
 
         @Override
         public void importItem(BCheck bCheck) {
-            BCheckImportResult importResult = bChecks.importBCheck(bCheck.script(), true);
+            BCheckImportResult importResult = bChecks.importBCheck(bCheck.content(), true);
 
             if (!importResult.importErrors().isEmpty()) {
                 StringBuilder sb = new StringBuilder("Error importing: ")
