@@ -1,4 +1,5 @@
 import bcheck.BCheck;
+import bcheck.BCheckFilter;
 import bcheck.ItemImporter;
 import bcheck.ItemImporter.BCheckItemImporter;
 import burp.api.montoya.BurpExtension;
@@ -52,7 +53,8 @@ public class Extension implements BurpExtension {
                 repository,
                 bCheckImporter,
                 clipboardManager,
-                fileSystem
+                fileSystem,
+                new BCheckFilter()
         );
 
         StorefrontModel<BCheck> storefrontModel = new DefaultStorefrontModel(storeController);

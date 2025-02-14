@@ -1,6 +1,7 @@
 package ui.controller;
 
 import bcheck.BCheck;
+import bcheck.ItemFilter;
 import bcheck.ItemImporter;
 import file.system.FileSystem;
 import repository.Repository;
@@ -20,19 +21,22 @@ public class StoreController {
     private final ItemImporter<BCheck> bCheckImporter;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
+    private final ItemFilter<BCheck> itemFilter;
 
     public StoreController(
             StorefrontModel<BCheck> model,
             Repository repository,
             ItemImporter<BCheck> bCheckImporter,
             ClipboardManager clipboardManager,
-            FileSystem fileSystem
+            FileSystem fileSystem,
+            ItemFilter<BCheck> itemFilter
     ) {
         this.model = model;
         this.repository = repository;
         this.bCheckImporter = bCheckImporter;
         this.clipboardManager = clipboardManager;
         this.fileSystem = fileSystem;
+        this.itemFilter = itemFilter;
     }
 
     public void loadData() {
@@ -46,7 +50,9 @@ public class StoreController {
     }
 
     public List<BCheck> findMatchingBChecks(String searchText) {
-        Predicate<BCheck> filter = searchText.isBlank() ? bCheck -> true : new BCheckFilterPredicate(searchText);
+        Predicate<BCheck> filter = searchText.isBlank()
+                ? item -> true
+                : item -> itemFilter.filter(item, searchText);
 
         return model.getAvailableItems().stream().filter(filter).toList();
     }
@@ -66,21 +72,5 @@ public class StoreController {
 
     public void saveBCheck(BCheck bCheck, Path savePath) {
         fileSystem.saveFile(bCheck.content(), savePath);
-    }
-
-    private static class BCheckFilterPredicate implements Predicate<BCheck> {
-        private final String searchText;
-
-        private BCheckFilterPredicate(String searchText) {
-            this.searchText = searchText.toLowerCase();
-        }
-
-        @Override
-        public boolean test(BCheck bCheck) {
-            return bCheck.name().toLowerCase().contains(searchText) ||
-                    bCheck.author().toLowerCase().contains(searchText) ||
-                    bCheck.description().toLowerCase().contains(searchText) ||
-                    bCheck.tags().contains(searchText);
-        }
     }
 }
