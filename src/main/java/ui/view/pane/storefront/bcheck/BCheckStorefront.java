@@ -28,7 +28,7 @@ public class BCheckStorefront implements Storefront {
                             Supplier<Font> fontSupplier) {
         this.title = title;
 
-        ActionController actionController = new BCheckActionController(
+        ActionController actionController = new DefaultActionController<>(
                 storefrontModel,
                 storeController,
                 new SaveLocation(saveLocationSettingsReader),

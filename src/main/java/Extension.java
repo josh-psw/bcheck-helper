@@ -57,7 +57,7 @@ public class Extension implements BurpExtension {
                 new BCheckFilter()
         );
 
-        StorefrontModel<BCheck> storefrontModel = new DefaultStorefrontModel(storeController);
+        StorefrontModel<BCheck> storefrontModel = new DefaultStorefrontModel<>(storeController);
         modelReference.set(storefrontModel);
 
         Settings settings = new Settings(settingsController);
