@@ -16,14 +16,14 @@ import static ui.view.pane.storefront.ActionCallbacks.INERT_CALLBACKS;
 
 class BCheckActionController implements ActionController {
     private final StorefrontModel<BCheck> model;
-    private final StoreController storeController;
+    private final StoreController<BCheck> storeController;
     private final SaveLocation saveLocation;
     private final Executor executor;
     private final Logger logger;
 
     BCheckActionController(
             StorefrontModel<BCheck> model,
-            StoreController storeController,
+            StoreController<BCheck> storeController,
             SaveLocation saveLocation,
             Executor executor,
             Logger logger) {
@@ -36,13 +36,13 @@ class BCheckActionController implements ActionController {
 
     @Override
     public void importSelected() {
-        storeController.importBCheck(model.getSelectedItem());
+        storeController.importItem(model.getSelectedItem());
     }
 
     @Override
     public void copySelected() {
         BCheck selectedBCheck = model.getSelectedItem();
-        storeController.copyBCheck(selectedBCheck);
+        storeController.copyItem(selectedBCheck);
         model.setStatus("Copied BCheck " + selectedBCheck.name() + " to clipboard");
     }
 
@@ -64,7 +64,7 @@ class BCheckActionController implements ActionController {
                         Path savePath = path.toFile().isDirectory() ? path.resolve(selectedBCheck.filename()) : path;
 
                         try {
-                            storeController.saveBCheck(selectedBCheck, savePath);
+                            storeController.saveItem(selectedBCheck, savePath);
                             model.setStatus("Saved BCheck to " + savePath);
                         } catch (RuntimeException e) {
                             logger.logError(e);
@@ -84,7 +84,7 @@ class BCheckActionController implements ActionController {
 
             executor.execute(() -> {
                 try {
-                    model.getFilteredItems().forEach(bCheck -> storeController.saveBCheck(bCheck, path.resolve(bCheck.filename())));
+                    model.getFilteredItems().forEach(bCheck -> storeController.saveItem(bCheck, path.resolve(bCheck.filename())));
                     model.setStatus("Saved all BChecks to " + path);
                 } catch (RuntimeException e) {
                     logger.logError(e);

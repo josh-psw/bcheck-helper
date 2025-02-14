@@ -4,7 +4,7 @@ import burp.api.montoya.scanner.bchecks.BCheckImportResult;
 import burp.api.montoya.scanner.bchecks.BChecks;
 import logging.Logger;
 
-public interface ItemImporter<T> {
+public interface ItemImporter<T extends Item> {
     void importItem(T item);
 
     class BCheckItemImporter implements ItemImporter<BCheck> {

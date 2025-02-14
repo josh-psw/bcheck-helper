@@ -1,6 +1,7 @@
 package ui.controller;
 
 import bcheck.BCheck;
+import bcheck.Item;
 import bcheck.ItemFilter;
 import bcheck.ItemImporter;
 import file.system.FileSystem;
@@ -15,10 +16,10 @@ import java.util.function.Predicate;
 import static java.util.Collections.emptyList;
 import static ui.model.State.ERROR;
 
-public class StoreController {
+public class StoreController<T extends Item> {
     private final StorefrontModel<BCheck> model;
     private final Repository repository;
-    private final ItemImporter<BCheck> bCheckImporter;
+    private final ItemImporter<T> itemImporter;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
     private final ItemFilter<BCheck> itemFilter;
@@ -26,14 +27,14 @@ public class StoreController {
     public StoreController(
             StorefrontModel<BCheck> model,
             Repository repository,
-            ItemImporter<BCheck> bCheckImporter,
+            ItemImporter<T> itemImporter,
             ClipboardManager clipboardManager,
             FileSystem fileSystem,
             ItemFilter<BCheck> itemFilter
     ) {
         this.model = model;
         this.repository = repository;
-        this.bCheckImporter = bCheckImporter;
+        this.itemImporter = itemImporter;
         this.clipboardManager = clipboardManager;
         this.fileSystem = fileSystem;
         this.itemFilter = itemFilter;
@@ -57,20 +58,20 @@ public class StoreController {
         return model.getAvailableItems().stream().filter(filter).toList();
     }
 
-    public void importBCheck(BCheck bCheck) {
+    public void importItem(T item) {
         try {
-            bCheckImporter.importItem(bCheck);
-            model.setStatus("Successfully imported BCheck: " + bCheck.name());
+            itemImporter.importItem(item);
+            model.setStatus("Successfully imported item: " + item.name());
         } catch (IllegalStateException e) {
-            model.setStatus("Error imported BCheck: " + bCheck.name());
+            model.setStatus("Error imported item: " + item.name());
         }
     }
 
-    public void copyBCheck(BCheck bCheck) {
-        clipboardManager.copy(bCheck.content());
+    public void copyItem(T item) {
+        clipboardManager.copy(item.content());
     }
 
-    public void saveBCheck(BCheck bCheck, Path savePath) {
-        fileSystem.saveFile(bCheck.content(), savePath);
+    public void saveItem(T item, Path savePath) {
+        fileSystem.saveFile(item.content(), savePath);
     }
 }
