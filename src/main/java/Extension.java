@@ -37,7 +37,7 @@ public class Extension implements BurpExtension {
         SettingsController settingsController = new SettingsController(persistence.preferences());
         Logger logger = new Logger(api.logging(), settingsController.debugSettings());
 
-        Repository repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController);
+        Repository<BCheck> repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController);
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
         IconFactory iconFactory = new IconFactory(api.userInterface());
@@ -48,7 +48,7 @@ public class Extension implements BurpExtension {
         StorefrontModel<BCheck> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
         ItemImporter<BCheck> bCheckImporter = new BCheckItemImporter(api.scanner().bChecks(), logger);
 
-        StoreController storeController = new StoreController(
+        StoreController<BCheck> storeController = new StoreController<>(
                 lateInitializationStorefrontModel,
                 repository,
                 bCheckImporter,

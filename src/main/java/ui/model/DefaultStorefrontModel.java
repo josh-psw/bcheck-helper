@@ -12,7 +12,7 @@ import static java.util.Collections.synchronizedList;
 import static java.util.Comparator.comparing;
 
 public class DefaultStorefrontModel implements StorefrontModel<BCheck> {
-    private final StoreController controller;
+    private final StoreController<BCheck> controller;
     private final List<BCheck> allAvailableBChecks;
     private final PropertyChangeSupport propertyChangeSupport;
 
@@ -21,7 +21,7 @@ public class DefaultStorefrontModel implements StorefrontModel<BCheck> {
     private String status;
     private BCheck selectedBCheck;
 
-    public DefaultStorefrontModel(StoreController controller) {
+    public DefaultStorefrontModel(StoreController<BCheck> controller) {
         this.controller = controller;
 
         this.state = State.START;
@@ -62,7 +62,7 @@ public class DefaultStorefrontModel implements StorefrontModel<BCheck> {
 
     @Override
     public List<BCheck> getFilteredItems() {
-        return controller.findMatchingBChecks(searchFilter);
+        return controller.findMatchingItems(searchFilter);
     }
 
     @Override

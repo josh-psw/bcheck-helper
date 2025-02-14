@@ -1,6 +1,5 @@
 package ui.controller;
 
-import bcheck.BCheck;
 import bcheck.Item;
 import bcheck.ItemFilter;
 import bcheck.ItemImporter;
@@ -17,20 +16,20 @@ import static java.util.Collections.emptyList;
 import static ui.model.State.ERROR;
 
 public class StoreController<T extends Item> {
-    private final StorefrontModel<BCheck> model;
-    private final Repository repository;
+    private final StorefrontModel<T> model;
+    private final Repository<T> repository;
     private final ItemImporter<T> itemImporter;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
-    private final ItemFilter<BCheck> itemFilter;
+    private final ItemFilter<T> itemFilter;
 
     public StoreController(
-            StorefrontModel<BCheck> model,
-            Repository repository,
+            StorefrontModel<T> model,
+            Repository<T> repository,
             ItemImporter<T> itemImporter,
             ClipboardManager clipboardManager,
             FileSystem fileSystem,
-            ItemFilter<BCheck> itemFilter
+            ItemFilter<T> itemFilter
     ) {
         this.model = model;
         this.repository = repository;
@@ -44,14 +43,14 @@ public class StoreController<T extends Item> {
         model.setStatus("");
 
         try {
-            model.updateModel(repository.loadAllBChecks(), model.state().nextState());
+            model.updateModel(repository.loadAllItems(), model.state().nextState());
         } catch (Exception e) {
             model.updateModel(emptyList(), ERROR);
         }
     }
 
-    public List<BCheck> findMatchingBChecks(String searchText) {
-        Predicate<BCheck> filter = searchText.isBlank()
+    public List<T> findMatchingItems(String searchText) {
+        Predicate<T> filter = searchText.isBlank()
                 ? item -> true
                 : item -> itemFilter.filter(item, searchText);
 

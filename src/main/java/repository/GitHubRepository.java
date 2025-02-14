@@ -11,7 +11,7 @@ import settings.repository.github.GitHubSettingsReader;
 import java.nio.file.Path;
 import java.util.List;
 
-public class GitHubRepository implements Repository {
+public class GitHubRepository implements Repository<BCheck> {
     private final GitHubClient gitHubClient;
     private final TempFileCreator tempFileCreator;
     private final ZipExtractor zipExtractor;
@@ -36,7 +36,7 @@ public class GitHubRepository implements Repository {
     }
 
     @Override
-    public List<BCheck> loadAllBChecks() {
+    public List<BCheck> loadAllItems() {
         Path bCheckDownloadLocation = tempFileCreator.createTempDirectory("bcheck-store");
         byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(
                 gitHubSettings.repositoryUrl(),

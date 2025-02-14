@@ -9,7 +9,7 @@ import settings.repository.filesystem.FileSystemRepositorySettingsReader;
 import java.io.File;
 import java.util.List;
 
-public class FileSystemRepository implements Repository {
+public class FileSystemRepository implements Repository<BCheck> {
     private static final String EMPTY_LOCATION_MESSAGE = "Empty filesystem repository location";
     private static final String INVALID_LOCATION_MESSAGE = "Invalid filesystem repository location: ";
 
@@ -29,7 +29,7 @@ public class FileSystemRepository implements Repository {
     }
 
     @Override
-    public List<BCheck> loadAllBChecks() {
+    public List<BCheck> loadAllItems() {
         if (settings.repositoryLocation().isEmpty()) {
             logger.logError(EMPTY_LOCATION_MESSAGE);
             throw new IllegalStateException(EMPTY_LOCATION_MESSAGE);

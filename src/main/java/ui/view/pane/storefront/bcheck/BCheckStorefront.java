@@ -19,7 +19,7 @@ public class BCheckStorefront implements Storefront {
     private final JPanel panel;
 
     public BCheckStorefront(String title,
-                            StoreController storeController,
+                            StoreController<BCheck> storeController,
                             StorefrontModel<BCheck> storefrontModel,
                             DefaultSaveLocationSettingsReader saveLocationSettingsReader,
                             Executor executor,
