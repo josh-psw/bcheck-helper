@@ -4,6 +4,8 @@ import data.Item;
 import data.Tags;
 
 public class Bambda implements Item {
+    public static final String FILE_EXTENSION = ".bambda";
+
     @Override
     public String name() {
         return "";

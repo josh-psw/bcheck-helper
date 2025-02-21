@@ -43,7 +43,7 @@ public class FileSystemRepository implements Repository<BCheck> {
             throw new IllegalStateException(message);
         }
 
-        return bCheckFileFinder.find(location.toPath(), ".bcheck")
+        return bCheckFileFinder.find(location.toPath(), BCheck.FILE_EXTENSION)
                 .stream()
                 .map(bCheckFactory::fromFile)
                 .toList();

@@ -46,7 +46,7 @@ public class GitHubRepository implements Repository<BCheck> {
 
         zipExtractor.extractZip(bChecksAsZip, bCheckDownloadLocation);
 
-        return bCheckFileFinder.find(bCheckDownloadLocation, ".bcheck")
+        return bCheckFileFinder.find(bCheckDownloadLocation, BCheck.FILE_EXTENSION)
                 .stream()
                 .map(bCheckFactory::fromFile)
                 .toList();

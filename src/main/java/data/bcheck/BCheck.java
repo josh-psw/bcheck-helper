@@ -11,6 +11,8 @@ import java.util.Objects;
 import static java.nio.file.Files.readString;
 
 public class BCheck implements Item {
+    public static final String FILE_EXTENSION = ".bcheck";
+
     private final String name;
     private final String description;
     private final String author;
