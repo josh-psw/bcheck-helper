@@ -1,4 +1,6 @@
-package data;
+package data.bcheck;
+
+import data.ItemFilter;
 
 public class BCheckFilter implements ItemFilter<BCheck> {
     @Override

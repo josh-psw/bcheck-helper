@@ -1,4 +1,4 @@
-package data;
+package data.bcheck;
 
 import logging.Logger;
 

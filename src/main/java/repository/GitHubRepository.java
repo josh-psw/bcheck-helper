@@ -1,8 +1,8 @@
 package repository;
 
 import client.GitHubClient;
-import data.BCheck;
-import data.BCheckFactory;
+import data.bcheck.BCheck;
+import data.bcheck.BCheckFactory;
 import file.finder.BCheckFileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;

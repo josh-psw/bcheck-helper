@@ -8,7 +8,7 @@ import static java.util.Collections.unmodifiableList;
 public class Tags {
     private final List<String> tags;
 
-    Tags(List<String> tags) {
+    public Tags(List<String> tags) {
         this.tags = tags;
     }
 

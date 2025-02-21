@@ -2,6 +2,7 @@ package data;
 
 import burp.api.montoya.scanner.bchecks.BCheckImportResult;
 import burp.api.montoya.scanner.bchecks.BChecks;
+import data.bcheck.BCheck;
 import logging.Logger;
 
 public interface ItemImporter<T extends Item> {
