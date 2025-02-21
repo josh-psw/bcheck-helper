@@ -1,6 +1,6 @@
 package ui.view.pane.storefront.bcheck;
 
-import bcheck.BCheck;
+import bcheck.Item;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
@@ -14,18 +14,18 @@ import java.awt.*;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
-public class BCheckStorefront implements Storefront {
+public class ItemStorefront<T extends Item> implements Storefront {
     private final String title;
     private final JPanel panel;
 
-    public BCheckStorefront(String title,
-                            StoreController<BCheck> storeController,
-                            StorefrontModel<BCheck> storefrontModel,
-                            DefaultSaveLocationSettingsReader saveLocationSettingsReader,
-                            Executor executor,
-                            IconFactory iconFactory,
-                            Logger logger,
-                            Supplier<Font> fontSupplier) {
+    public ItemStorefront(String title,
+                          StoreController<T> storeController,
+                          StorefrontModel<T> storefrontModel,
+                          DefaultSaveLocationSettingsReader saveLocationSettingsReader,
+                          Executor executor,
+                          IconFactory iconFactory,
+                          Logger logger,
+                          Supplier<Font> fontSupplier) {
         this.title = title;
 
         ActionController actionController = new DefaultActionController<>(
@@ -36,9 +36,9 @@ public class BCheckStorefront implements Storefront {
                 logger
         );
 
-        PreviewPanel<BCheck> previewPanel = new PreviewPanel<>(storefrontModel, actionController);
+        PreviewPanel<T> previewPanel = new PreviewPanel<>(storefrontModel, actionController);
 
-        ItemTablePanel<BCheck> tablePanel = new ItemTablePanel<>(
+        ItemTablePanel<T> tablePanel = new ItemTablePanel<>(
                 new DefaultTablePanelController<>(storeController),
                 storefrontModel,
                 executor,

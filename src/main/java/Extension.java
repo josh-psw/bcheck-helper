@@ -20,7 +20,7 @@ import ui.view.Store;
 import ui.view.pane.settings.Settings;
 import ui.view.pane.storefront.Storefront;
 import ui.view.pane.storefront.StorefrontPanel;
-import ui.view.pane.storefront.bcheck.BCheckStorefront;
+import ui.view.pane.storefront.bcheck.ItemStorefront;
 import utils.CloseablePooledExecutor;
 
 import javax.swing.*;
@@ -62,7 +62,7 @@ public class Extension implements BurpExtension {
 
         Settings settings = new Settings(settingsController);
 
-        Storefront bCheckStorefront = new BCheckStorefront(
+        Storefront bCheckStorefront = new ItemStorefront<>(
                 "BCheck Store",
                 storeController,
                 storefrontModel,
