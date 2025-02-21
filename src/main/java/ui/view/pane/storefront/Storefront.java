@@ -7,7 +7,6 @@ import ui.controller.StoreController;
 import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
-import ui.view.pane.storefront.bcheck.DefaultActionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +27,7 @@ public class Storefront<T extends Item> {
                       Supplier<Font> fontSupplier) {
         this.title = title;
 
-        ActionController actionController = new DefaultActionController<>(
+        ActionController<T> actionController = new ActionController<>(
                 storefrontModel,
                 storeController,
                 new SaveLocation(saveLocationSettingsReader),
