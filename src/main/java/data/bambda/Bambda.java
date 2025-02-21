@@ -3,35 +3,29 @@ package data.bambda;
 import data.Item;
 import data.Tags;
 
-public class Bambda implements Item
-{
+public class Bambda implements Item {
     @Override
-    public String name()
-    {
+    public String name() {
         return "";
     }
 
     @Override
-    public String description()
-    {
+    public String description() {
         return "";
     }
 
     @Override
-    public Tags tags()
-    {
+    public Tags tags() {
         return null;
     }
 
     @Override
-    public String content()
-    {
+    public String content() {
         return "";
     }
 
     @Override
-    public String filename()
-    {
+    public String filename() {
         return "";
     }
 }
