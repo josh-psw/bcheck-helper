@@ -1,9 +1,9 @@
 package repository;
 
-import bcheck.BCheck;
-import bcheck.BCheckFactory;
 import burp.api.montoya.http.Http;
 import client.GitHubClient;
+import data.BCheck;
+import data.BCheckFactory;
 import file.finder.BCheckFileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;

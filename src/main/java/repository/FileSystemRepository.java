@@ -1,7 +1,7 @@
 package repository;
 
-import bcheck.BCheck;
-import bcheck.BCheckFactory;
+import data.BCheck;
+import data.BCheckFactory;
 import file.finder.BCheckFileFinder;
 import logging.Logger;
 import settings.repository.filesystem.FileSystemRepositorySettingsReader;

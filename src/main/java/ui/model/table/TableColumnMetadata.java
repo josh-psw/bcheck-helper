@@ -1,7 +1,7 @@
 package ui.model.table;
 
-import bcheck.Item;
-import bcheck.Tags;
+import data.Item;
+import data.Tags;
 
 import java.util.function.Function;
 

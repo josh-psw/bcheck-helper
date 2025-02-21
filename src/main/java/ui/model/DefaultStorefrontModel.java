@@ -1,6 +1,6 @@
 package ui.model;
 
-import bcheck.Item;
+import data.Item;
 import ui.controller.StoreController;
 
 import java.beans.PropertyChangeListener;

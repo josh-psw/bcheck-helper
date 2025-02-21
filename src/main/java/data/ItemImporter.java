@@ -1,4 +1,4 @@
-package bcheck;
+package data;
 
 import burp.api.montoya.scanner.bchecks.BCheckImportResult;
 import burp.api.montoya.scanner.bchecks.BChecks;

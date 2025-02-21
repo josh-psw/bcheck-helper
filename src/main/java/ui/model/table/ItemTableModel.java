@@ -1,6 +1,6 @@
 package ui.model.table;
 
-import bcheck.Item;
+import data.Item;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

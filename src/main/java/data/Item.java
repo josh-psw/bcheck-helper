@@ -1,4 +1,4 @@
-package bcheck;
+package data;
 
 public interface Item {
     String name();

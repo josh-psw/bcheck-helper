@@ -1,6 +1,6 @@
 package ui.view.pane.storefront;
 
-import bcheck.Item;
+import data.Item;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
 
@@ -15,14 +15,14 @@ import static ui.model.StorefrontModel.*;
 
 public class PreviewPanel<T extends Item> extends JPanel {
     private final StorefrontModel<T> model;
-    private final ActionController actionController;
+    private final ActionController<T> actionController;
     private final JLabel statusLabel;
     private final JButton importButton;
     private final JButton copyButton;
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    public PreviewPanel(StorefrontModel<T> storefrontModel, ActionController actionController) {
+    public PreviewPanel(StorefrontModel<T> storefrontModel, ActionController<T> actionController) {
         super(new BorderLayout());
 
         this.model = storefrontModel;

@@ -1,9 +1,9 @@
-import bcheck.BCheck;
-import bcheck.BCheckFilter;
-import bcheck.ItemImporter.BCheckItemImporter;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
+import data.BCheck;
+import data.BCheckFilter;
+import data.ItemImporter.BCheckItemImporter;
 import logging.Logger;
 import repository.Repository;
 import repository.RepositoryFacadeFactory;

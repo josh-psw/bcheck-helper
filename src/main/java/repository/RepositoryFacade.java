@@ -1,6 +1,6 @@
 package repository;
 
-import bcheck.BCheck;
+import data.BCheck;
 import settings.repository.RepositorySettingsReader;
 
 import java.util.List;

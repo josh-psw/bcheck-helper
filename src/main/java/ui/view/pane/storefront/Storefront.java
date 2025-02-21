@@ -1,6 +1,6 @@
 package ui.view.pane.storefront;
 
-import bcheck.Item;
+import data.Item;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;

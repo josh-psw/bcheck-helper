@@ -1,4 +1,4 @@
-package bcheck;
+package data;
 
 import logging.Logger;
 import org.junit.jupiter.api.Test;

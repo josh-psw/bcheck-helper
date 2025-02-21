@@ -1,6 +1,6 @@
 package repository;
 
-import bcheck.Item;
+import data.Item;
 
 import java.util.List;
 

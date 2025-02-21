@@ -1,7 +1,7 @@
 package ui.view.pane.storefront;
 
-import bcheck.Item;
-import bcheck.Tags;
+import data.Item;
+import data.Tags;
 import settings.tags.TagColors;
 import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
@@ -27,21 +27,21 @@ import static javax.swing.SwingUtilities.invokeLater;
 import static ui.model.StorefrontModel.SEARCH_FILTER_CHANGED;
 
 public class ItemTablePanel<T extends Item> extends JPanel {
-    private final TablePanelController panelController;
+    private final TablePanelController<T> panelController;
     private final JTable itemTable;
     private final ItemTableModel<T> tableModel;
     private final JButton refreshButton;
     private final Executor executor;
     private final JComponent searchBar;
     private final StorefrontModel<T> model;
-    private final ActionController actionController;
+    private final ActionController<T> actionController;
     private final Supplier<Font> fontSupplier;
 
-    public ItemTablePanel(TablePanelController panelController,
+    public ItemTablePanel(TablePanelController<T> panelController,
                    StorefrontModel<T> storefrontModel,
                    Executor executor,
                    IconFactory iconFactory,
-                   ActionController actionController,
+                   ActionController<T> actionController,
                    Supplier<Font> fontSupplier) {
         super(new BorderLayout());
 

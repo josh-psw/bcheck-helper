@@ -1,6 +1,6 @@
 package ui.controller;
 
-import bcheck.Item;
+import data.Item;
 
 public class TablePanelController<T extends Item> {
     private final StoreController<T> storeController;

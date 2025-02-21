@@ -1,6 +1,6 @@
 package ui.view.pane.storefront;
 
-import bcheck.Item;
+import data.Item;
 import logging.Logger;
 import ui.controller.StoreController;
 import ui.model.StorefrontModel;
