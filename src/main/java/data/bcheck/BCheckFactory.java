@@ -1,5 +1,6 @@
 package data.bcheck;
 
+import data.ItemFactory;
 import logging.Logger;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.regex.Pattern.compile;
 
-public class BCheckFactory {
+public class BCheckFactory implements ItemFactory {
     private static final Pattern BCHECK_NAME_EXTRACTING_REGEX_PATTERN = compile("name:\\s\"(.+)\"");
     private static final Pattern BCHECK_AUTHOR_EXTRACTING_REGEX_PATTERN = compile("author:\\s\"(.+)\"");
     private static final Pattern BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN = compile("description:\\s\"(.+)\"");
@@ -25,26 +26,28 @@ public class BCheckFactory {
         this.logger = logger;
     }
 
-    public BCheck fromFile(Path bCheckFilePath) {
-        if (!bCheckFilePath.toFile().isFile()) {
-            throw new IllegalArgumentException(bCheckFilePath + " is not a path");
+    @Override
+    public BCheck fromFile(Path filePath) {
+        if (!filePath.toFile().isFile()) {
+            throw new IllegalArgumentException(filePath + " is not a path");
         }
 
         try {
-            String fileContents = readString(bCheckFilePath);
+            String fileContents = readString(filePath);
 
-            return parseFileContents(bCheckFilePath, fileContents);
+            return parseFileContents(filePath, fileContents);
         } catch (IOException e) {
-            logger.logError("Couldn't read BCheck file " + bCheckFilePath + ": " + e);
+            logger.logError("Couldn't read file " + filePath + ": " + e);
             throw new IllegalStateException(e);
         }
     }
 
-    private BCheck parseFileContents(Path bCheckFilePath, String fileContents) {
-        Matcher bCheckNameMatcher = BCHECK_NAME_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
-        Matcher bCheckAuthorMatcher = BCHECK_AUTHOR_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
-        Matcher bCheckDescriptionMatcher = BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
-        Matcher bCheckTagMatcher = BCHECK_TAG_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
+    @Override
+    public BCheck parseFileContents(Path filePath, String fileContents) {
+        Matcher bCheckNameMatcher = BCheckFactory.BCHECK_NAME_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
+        Matcher bCheckAuthorMatcher = BCheckFactory.BCHECK_AUTHOR_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
+        Matcher bCheckDescriptionMatcher = BCheckFactory.BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
+        Matcher bCheckTagMatcher = BCheckFactory.BCHECK_TAG_EXTRACTING_REGEX_PATTERN.matcher(fileContents);
 
         String name = bCheckNameMatcher.find() ?
                 bCheckNameMatcher.group(1) :
@@ -66,8 +69,8 @@ public class BCheckFactory {
                         .toList() :
                 emptyList();
 
-        String bCheckFilename = bCheckFilePath.getFileName().toString();
+        String bCheckFilename = filePath.getFileName().toString();
 
-        return new BCheck(name, description, author, tags, bCheckFilePath.toFile().getAbsolutePath(), bCheckFilename);
+        return new BCheck(name, description, author, tags, filePath.toFile().getAbsolutePath(), bCheckFilename);
     }
 }
