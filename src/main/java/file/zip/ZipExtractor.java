@@ -24,21 +24,21 @@ public class ZipExtractor {
 
             while ((entry = zipStream.getNextEntry()) != null)
             {
-                Path bCheckCopyPath = extractLocation.resolve(entry.getName());
+                Path itemCopyPath = extractLocation.resolve(entry.getName());
 
                 if (entry.isDirectory()) {
-                    logger.logDebug("Creating directory: " + bCheckCopyPath);
-                    createDirectory(bCheckCopyPath);
+                    logger.logDebug("Creating directory: " + itemCopyPath);
+                    createDirectory(itemCopyPath);
                 } else {
-                    logger.logDebug("Copying file: " + bCheckCopyPath);
-                    copy(zipStream, bCheckCopyPath);
+                    logger.logDebug("Copying file: " + itemCopyPath);
+                    copy(zipStream, itemCopyPath);
                 }
             }
         } catch (IOException e) {
-            logger.logError("Failed to deserialise ZIP response. Exception: " + e);
+            logger.logError("Failed to deserialize ZIP response. Exception: " + e);
             throw new IllegalStateException(e);
         }
 
-        logger.logInfo("Successfully extracted BChecks");
+        logger.logInfo("Successfully extracted items.");
     }
 }
