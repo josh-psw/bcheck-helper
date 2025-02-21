@@ -14,14 +14,14 @@ import java.util.concurrent.Executor;
 import static ui.view.component.filechooser.ChooseMode.SAVE_FILES_ONLY;
 import static ui.view.pane.storefront.ActionCallbacks.INERT_CALLBACKS;
 
-class DefaultActionController<T extends Item> implements ActionController {
+public class DefaultActionController<T extends Item> implements ActionController {
     private final StorefrontModel<T> model;
     private final StoreController<T> storeController;
     private final SaveLocation saveLocation;
     private final Executor executor;
     private final Logger logger;
 
-    DefaultActionController(
+    public DefaultActionController(
             StorefrontModel<T> model,
             StoreController<T> storeController,
             SaveLocation saveLocation,

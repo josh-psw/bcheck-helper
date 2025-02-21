@@ -19,12 +19,8 @@ import ui.model.StorefrontModel;
 import ui.view.Store;
 import ui.view.pane.settings.Settings;
 import ui.view.pane.storefront.Storefront;
-import ui.view.pane.storefront.StorefrontPanel;
-import ui.view.pane.storefront.bcheck.ItemStorefront;
 import utils.CloseablePooledExecutor;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("unused")
@@ -62,7 +58,7 @@ public class Extension implements BurpExtension {
 
         Settings settings = new Settings(settingsController);
 
-        Storefront bCheckStorefront = new ItemStorefront<>(
+        Storefront<BCheck> bCheckStorefront = new Storefront<>(
                 "BCheck Store",
                 storeController,
                 storefrontModel,
@@ -73,19 +69,7 @@ public class Extension implements BurpExtension {
                 () -> api.userInterface().currentDisplayFont()
         );
 
-        Storefront bambdaStorefront = new Storefront() {
-            @Override
-            public String title() {
-                return "Bambda Store";
-            }
-
-            @Override
-            public Component component() {
-                return new StorefrontPanel(new JPanel(), new JPanel());
-            }
-        };
-
-        Store store = new Store(settings, bCheckStorefront, bambdaStorefront);
+        Store store = new Store(settings, bCheckStorefront);
 
         api.extension().setName(EXTENSION_NAME);
         api.userInterface().registerSuiteTab(EXTENSION_NAME, store);
