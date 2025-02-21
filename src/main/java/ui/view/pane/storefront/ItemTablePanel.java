@@ -1,6 +1,6 @@
-package ui.view.pane.storefront.bcheck;
+package ui.view.pane.storefront;
 
-import bcheck.BCheck;
+import bcheck.Item;
 import bcheck.Tags;
 import settings.tags.TagColors;
 import ui.controller.TablePanelController;
@@ -8,9 +8,6 @@ import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.model.table.ItemTableModel;
 import ui.view.listener.InertPopupMenuListener;
-import ui.view.pane.storefront.ActionController;
-import ui.view.pane.storefront.ItemPopupMenu;
-import ui.view.pane.storefront.SearchBar;
 import ui.view.utils.TagRenderer;
 
 import javax.swing.*;
@@ -29,23 +26,23 @@ import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.SwingUtilities.invokeLater;
 import static ui.model.StorefrontModel.SEARCH_FILTER_CHANGED;
 
-class BCheckTablePanel extends JPanel {
+public class ItemTablePanel<T extends Item> extends JPanel {
     private final TablePanelController panelController;
-    private final JTable bCheckTable;
-    private final ItemTableModel<BCheck> tableModel;
+    private final JTable itemTable;
+    private final ItemTableModel<T> tableModel;
     private final JButton refreshButton;
     private final Executor executor;
     private final JComponent searchBar;
-    private final StorefrontModel<BCheck> model;
+    private final StorefrontModel<T> model;
     private final ActionController actionController;
     private final Supplier<Font> fontSupplier;
 
-    BCheckTablePanel(TablePanelController panelController,
-                     StorefrontModel<BCheck> storefrontModel,
-                     Executor executor,
-                     IconFactory iconFactory,
-                     ActionController actionController,
-                     Supplier<Font> fontSupplier) {
+    public ItemTablePanel(TablePanelController panelController,
+                   StorefrontModel<T> storefrontModel,
+                   Executor executor,
+                   IconFactory iconFactory,
+                   ActionController actionController,
+                   Supplier<Font> fontSupplier) {
         super(new BorderLayout());
 
         this.panelController = panelController;
@@ -55,7 +52,7 @@ class BCheckTablePanel extends JPanel {
         this.fontSupplier = fontSupplier;
         this.searchBar = new SearchBar(iconFactory, storefrontModel);
         this.tableModel = new ItemTableModel<>();
-        this.bCheckTable = new JTable();
+        this.itemTable = new JTable();
         this.refreshButton = new JButton("Refresh");
 
         BorderLayout borderLayout = new BorderLayout();
@@ -66,20 +63,20 @@ class BCheckTablePanel extends JPanel {
 
         model.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals(SEARCH_FILTER_CHANGED)) {
-                List<BCheck> filteredBChecks = model.getFilteredItems();
-                tableModel.setItems(filteredBChecks);
+                List<T> filteredItems = model.getFilteredItems();
+                tableModel.setItems(filteredItems);
 
-                String script = filteredBChecks.size() == 1 ? "script" : "scripts";
-                String message = "Showing %d %s".formatted(filteredBChecks.size(), script);
+                String script = filteredItems.size() == 1 ? "script" : "scripts";
+                String message = "Showing %d %s".formatted(filteredItems.size(), script);
                 model.setStatus(message);
 
-                if (!filteredBChecks.contains(model.getSelectedItem())) {
+                if (!filteredItems.contains(model.getSelectedItem())) {
                     model.setSelectedItem(null);
                 }
             }
         });
 
-        loadBChecks();
+        loadItems();
     }
 
     private void setupTablePanel() {
@@ -92,30 +89,30 @@ class BCheckTablePanel extends JPanel {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 invokeLater(() -> {
-                    int rowAtPoint = bCheckTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), bCheckTable));
+                    int rowAtPoint = itemTable.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), itemTable));
                     if (rowAtPoint > -1) {
-                        bCheckTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+                        itemTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
                     }
                 });
             }
         });
 
-        bCheckTable.setComponentPopupMenu(popupMenu);
+        itemTable.setComponentPopupMenu(popupMenu);
 
-        bCheckTable.setModel(tableModel);
-        bCheckTable.setAutoCreateRowSorter(true);
-        bCheckTable.setSelectionMode(SINGLE_SELECTION);
-        bCheckTable.getTableHeader().setReorderingAllowed(false);
-        bCheckTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
-        bCheckTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
+        itemTable.setModel(tableModel);
+        itemTable.setAutoCreateRowSorter(true);
+        itemTable.setSelectionMode(SINGLE_SELECTION);
+        itemTable.getTableHeader().setReorderingAllowed(false);
+        itemTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
+        itemTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
 
         int rowHeight = (int) (fontSupplier.get().getSize() * 1.5);
-        bCheckTable.setRowHeight(rowHeight);
+        itemTable.setRowHeight(rowHeight);
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());
 
-        refreshButton.addActionListener(e -> loadBChecks());
+        refreshButton.addActionListener(e -> loadItems());
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = 0;
@@ -133,11 +130,11 @@ class BCheckTablePanel extends JPanel {
         topPanel.add(refreshButton, constraints);
 
         add(topPanel, NORTH);
-        add(new JScrollPane(bCheckTable), CENTER);
+        add(new JScrollPane(itemTable), CENTER);
         setBorder(createEmptyBorder(0, 0, 5, 5));
     }
 
-    private void loadBChecks() {
+    private void loadItems() {
         refreshButton.setEnabled(false);
 
         executor.execute(() -> {
@@ -145,30 +142,30 @@ class BCheckTablePanel extends JPanel {
             tableModel.setItems(model.getFilteredItems());
 
             if (tableModel.getRowCount() > 0) {
-                bCheckTable.addRowSelectionInterval(0, 0);
+                itemTable.addRowSelectionInterval(0, 0);
             }
 
             refreshButton.setEnabled(true);
         });
     }
 
-    private void handleTableRowChange(ListSelectionEvent selectionEvent, ItemTableModel<BCheck> tableModel) {
+    private void handleTableRowChange(ListSelectionEvent selectionEvent, ItemTableModel<T> tableModel) {
         if (selectionEvent.getValueIsAdjusting()) {
             return;
         }
 
-        int selectedRow = bCheckTable.getSelectedRow();
+        int selectedRow = itemTable.getSelectedRow();
 
         if (selectedRow >= 0) {
-            BCheck newSelectedBCheck = tableModel.getItemAtRow(bCheckTable.convertRowIndexToModel(selectedRow));
-            model.setSelectedItem(newSelectedBCheck);
+            T newSelectedItem = tableModel.getItemAtRow(itemTable.convertRowIndexToModel(selectedRow));
+            model.setSelectedItem(newSelectedItem);
         } else {
-            BCheck previouslySelectedBCheck = model.getSelectedItem();
-            int modelRow = tableModel.getItemRow(previouslySelectedBCheck);
+            T previouslySelectedItem = model.getSelectedItem();
+            int modelRow = tableModel.getItemRow(previouslySelectedItem);
 
             if (modelRow >= 0) {
-                int viewRow = bCheckTable.convertRowIndexToView(modelRow);
-                bCheckTable.getSelectionModel().setSelectionInterval(viewRow, viewRow);
+                int viewRow = itemTable.convertRowIndexToView(modelRow);
+                itemTable.getSelectionModel().setSelectionInterval(viewRow, viewRow);
             }
         }
     }

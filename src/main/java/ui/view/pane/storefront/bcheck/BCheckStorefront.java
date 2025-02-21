@@ -38,7 +38,7 @@ public class BCheckStorefront implements Storefront {
 
         PreviewPanel<BCheck> previewPanel = new PreviewPanel<>(storefrontModel, actionController);
 
-        BCheckTablePanel tablePanel = new BCheckTablePanel(
+        ItemTablePanel<BCheck> tablePanel = new ItemTablePanel<>(
                 new DefaultTablePanelController<>(storeController),
                 storefrontModel,
                 executor,
