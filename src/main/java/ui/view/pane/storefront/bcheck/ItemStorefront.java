@@ -4,7 +4,7 @@ import bcheck.Item;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
 import ui.controller.StoreController;
-import ui.controller.TablePanelController.DefaultTablePanelController;
+import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.*;
@@ -39,7 +39,7 @@ public class ItemStorefront<T extends Item> implements Storefront {
         PreviewPanel<T> previewPanel = new PreviewPanel<>(storefrontModel, actionController);
 
         ItemTablePanel<T> tablePanel = new ItemTablePanel<>(
-                new DefaultTablePanelController<>(storeController),
+                new TablePanelController<>(storeController),
                 storefrontModel,
                 executor,
                 iconFactory,
