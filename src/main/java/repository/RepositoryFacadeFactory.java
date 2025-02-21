@@ -4,7 +4,7 @@ import burp.api.montoya.http.Http;
 import client.GitHubClient;
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
-import file.finder.BCheckFileFinder;
+import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
 import logging.Logger;
@@ -19,7 +19,7 @@ public class RepositoryFacadeFactory {
         GitHubClient gitHubClient = new GitHubClient(requestSender);
         TempFileCreator tempFileCreator = new TempFileCreator(logger);
         ZipExtractor zipExtractor = new ZipExtractor(logger);
-        BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
+        FileFinder bCheckFileFinder = new FileFinder();
 
         GitHubRepository gitHubRepository = new GitHubRepository(
                 bCheckFactory,

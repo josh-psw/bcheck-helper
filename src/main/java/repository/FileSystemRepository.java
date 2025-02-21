@@ -2,7 +2,7 @@ package repository;
 
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
-import file.finder.BCheckFileFinder;
+import file.finder.FileFinder;
 import logging.Logger;
 import settings.repository.filesystem.FileSystemRepositorySettingsReader;
 
@@ -13,13 +13,13 @@ public class FileSystemRepository implements Repository<BCheck> {
     private static final String EMPTY_LOCATION_MESSAGE = "Empty filesystem repository location";
     private static final String INVALID_LOCATION_MESSAGE = "Invalid filesystem repository location: ";
 
-    private final BCheckFileFinder bCheckFileFinder;
+    private final FileFinder bCheckFileFinder;
     private final FileSystemRepositorySettingsReader settings;
     private final BCheckFactory bCheckFactory;
     private final Logger logger;
 
     public FileSystemRepository(FileSystemRepositorySettingsReader settings,
-                                BCheckFileFinder bCheckFileFinder,
+                                FileFinder bCheckFileFinder,
                                 BCheckFactory bCheckFactory,
                                 Logger logger) {
         this.bCheckFileFinder = bCheckFileFinder;
@@ -43,7 +43,7 @@ public class FileSystemRepository implements Repository<BCheck> {
             throw new IllegalStateException(message);
         }
 
-        return bCheckFileFinder.find(location.toPath())
+        return bCheckFileFinder.find(location.toPath(), ".bcheck")
                 .stream()
                 .map(bCheckFactory::fromFile)
                 .toList();

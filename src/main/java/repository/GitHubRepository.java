@@ -3,7 +3,7 @@ package repository;
 import client.GitHubClient;
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
-import file.finder.BCheckFileFinder;
+import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
 import settings.repository.github.GitHubSettingsReader;
@@ -15,7 +15,7 @@ public class GitHubRepository implements Repository<BCheck> {
     private final GitHubClient gitHubClient;
     private final TempFileCreator tempFileCreator;
     private final ZipExtractor zipExtractor;
-    private final BCheckFileFinder bCheckFileFinder;
+    private final FileFinder bCheckFileFinder;
     private final GitHubSettingsReader gitHubSettings;
     private final BCheckFactory bCheckFactory;
 
@@ -24,7 +24,7 @@ public class GitHubRepository implements Repository<BCheck> {
             GitHubClient gitHubClient,
             TempFileCreator tempFileCreator,
             ZipExtractor zipExtractor,
-            BCheckFileFinder bCheckFileFinder,
+            FileFinder bCheckFileFinder,
             GitHubSettingsReader gitHubSettings
     ) {
         this.bCheckFactory = bCheckFactory;
@@ -46,7 +46,7 @@ public class GitHubRepository implements Repository<BCheck> {
 
         zipExtractor.extractZip(bChecksAsZip, bCheckDownloadLocation);
 
-        return bCheckFileFinder.find(bCheckDownloadLocation)
+        return bCheckFileFinder.find(bCheckDownloadLocation, ".bcheck")
                 .stream()
                 .map(bCheckFactory::fromFile)
                 .toList();
