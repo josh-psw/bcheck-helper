@@ -1,12 +1,14 @@
 package ui.controller;
 
+import bcheck.Item;
+
 public interface TablePanelController {
     void loadData();
 
-    class DefaultTablePanelController implements TablePanelController {
-        private final StoreController storeController;
+    class DefaultTablePanelController<T extends Item> implements TablePanelController {
+        private final StoreController<T> storeController;
 
-        public DefaultTablePanelController(StoreController storeController) {
+        public DefaultTablePanelController(StoreController<T> storeController) {
             this.storeController = storeController;
         }
 
