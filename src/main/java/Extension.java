@@ -1,27 +1,18 @@
 import bcheck.BCheck;
 import bcheck.BCheckFilter;
-import bcheck.ItemImporter;
 import bcheck.ItemImporter.BCheckItemImporter;
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
-import file.system.FileSystem;
 import logging.Logger;
 import repository.Repository;
 import repository.RepositoryFacadeFactory;
 import settings.controller.SettingsController;
-import ui.clipboard.ClipboardManager;
-import ui.controller.StoreController;
-import ui.icons.IconFactory;
-import ui.model.DefaultStorefrontModel;
-import ui.model.LateInitializationStorefrontModel;
-import ui.model.StorefrontModel;
 import ui.view.Store;
 import ui.view.pane.settings.Settings;
 import ui.view.pane.storefront.Storefront;
+import ui.view.pane.storefront.StorefrontFactory;
 import utils.CloseablePooledExecutor;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("unused")
 public class Extension implements BurpExtension {
@@ -30,44 +21,25 @@ public class Extension implements BurpExtension {
     @Override
     public void initialize(MontoyaApi api) {
         Persistence persistence = api.persistence();
+
         SettingsController settingsController = new SettingsController(persistence.preferences());
+
         Logger logger = new Logger(api.logging(), settingsController.debugSettings());
 
         Repository<BCheck> repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController);
+
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
-        IconFactory iconFactory = new IconFactory(api.userInterface());
-        ClipboardManager clipboardManager = new ClipboardManager();
-        FileSystem fileSystem = new FileSystem(logger);
+        StorefrontFactory storefrontFactory = new StorefrontFactory(logger, api.userInterface(), settingsController, executor);
 
-        AtomicReference<StorefrontModel<BCheck>> modelReference = new AtomicReference<>();
-        StorefrontModel<BCheck> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
-        ItemImporter<BCheck> bCheckImporter = new BCheckItemImporter(api.scanner().bChecks(), logger);
-
-        StoreController<BCheck> storeController = new StoreController<>(
-                lateInitializationStorefrontModel,
+        Storefront<BCheck> bCheckStorefront = storefrontFactory.build(
+                "BCheck Store",
+                new BCheckFilter(),
                 repository,
-                bCheckImporter,
-                clipboardManager,
-                fileSystem,
-                new BCheckFilter()
+                new BCheckItemImporter(api.scanner().bChecks(), logger)
         );
-
-        StorefrontModel<BCheck> storefrontModel = new DefaultStorefrontModel<>(storeController);
-        modelReference.set(storefrontModel);
 
         Settings settings = new Settings(settingsController);
-
-        Storefront<BCheck> bCheckStorefront = new Storefront<>(
-                "BCheck Store",
-                storeController,
-                storefrontModel,
-                settingsController.defaultSaveLocationSettings(),
-                executor,
-                iconFactory,
-                logger,
-                () -> api.userInterface().currentDisplayFont()
-        );
 
         Store store = new Store(settings, bCheckStorefront);
 
