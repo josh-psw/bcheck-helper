@@ -2,8 +2,8 @@ package data;
 
 import java.nio.file.Path;
 
-public interface ItemFactory {
-    Item fromFile(Path filePath);
+public interface ItemFactory<T extends Item> {
+    T fromFile(Path filePath);
 
-    Item parseFileContents(Path filePath, String fileContents);
+    T parseFileContents(Path filePath, String fileContents);
 }

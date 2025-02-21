@@ -14,7 +14,7 @@ import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.regex.Pattern.compile;
 
-public class BCheckFactory implements ItemFactory {
+public class BCheckFactory implements ItemFactory<BCheck> {
     private static final Pattern BCHECK_NAME_EXTRACTING_REGEX_PATTERN = compile("name:\\s\"(.+)\"");
     private static final Pattern BCHECK_AUTHOR_EXTRACTING_REGEX_PATTERN = compile("author:\\s\"(.+)\"");
     private static final Pattern BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN = compile("description:\\s\"(.+)\"");
