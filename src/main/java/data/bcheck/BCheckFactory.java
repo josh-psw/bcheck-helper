@@ -28,15 +28,10 @@ public class BCheckFactory implements ItemFactory<BCheck> {
         try {
             String fileContents = readString(filePath);
 
-            return parseFileContents(filePath, fileContents);
+            return parser.parse(filePath.getFileName().toString(), filePath.toFile().getAbsolutePath(), fileContents);
         } catch (IOException e) {
             logger.logError("Couldn't read file " + filePath + ": " + e);
             throw new IllegalStateException(e);
         }
-    }
-
-    @Override
-    public BCheck parseFileContents(Path filePath, String fileContents) {
-        return parser.parse(filePath.getFileName().toString(), filePath.toFile().getAbsolutePath(), fileContents);
     }
 }
