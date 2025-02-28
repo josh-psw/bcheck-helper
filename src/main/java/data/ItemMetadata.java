@@ -7,6 +7,9 @@ public enum ItemMetadata
             ".bcheck",
             "bcheck-store",
             "repository.type",
+            "github_settings.repo",
+            "github_settings.url",
+            "portswigger/bchecks",
             "default_save_location.use_setting",
             "default_save_location.save_location" ),
     BAMBDA(
@@ -14,6 +17,9 @@ public enum ItemMetadata
             ".bambda",
             "bambda-store",
             "bambda.repository.type",
+            "bambda.github_settings.repo",
+            "bambda.github_settings.url",
+            "portswigger/bambdas",
             "bambda.default_save_location.use_setting",
             "bambda.default_save_location.save_location");
 
@@ -22,6 +28,9 @@ public enum ItemMetadata
     public final String fileExtension;
     public final String tempDirectoryPrefix;
     public final String repositoryTypeKey;
+    public final String repositoryNameKey;
+    public final String repositoryUrlKey;
+    public final String defaultRepositoryNameValue;
     public final String useSettingKey;
     public final String saveLocationKey;
 
@@ -30,12 +39,18 @@ public enum ItemMetadata
             String fileExtension,
             String tempDirectoryPrefix,
             String repositoryTypeKey,
+            String repositoryNameKey,
+            String repositoryUrlKey,
+            String defaultRepositoryNameValue,
             String useSettingKey,
             String saveLocationKey) {
         this.name = name;
         this.fileExtension = fileExtension;
         this.tempDirectoryPrefix = tempDirectoryPrefix;
         this.repositoryTypeKey = repositoryTypeKey;
+        this.repositoryNameKey = repositoryNameKey;
+        this.repositoryUrlKey = repositoryUrlKey;
+        this.defaultRepositoryNameValue = defaultRepositoryNameValue;
         this.useSettingKey = useSettingKey;
         this.saveLocationKey = saveLocationKey;
     }

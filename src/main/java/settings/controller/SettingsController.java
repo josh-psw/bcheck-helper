@@ -19,7 +19,7 @@ public class SettingsController {
     public SettingsController(Preferences preferences) {
         this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, BCHECK);
         this.repositorySettings = new RepositorySettings(preferences, BCHECK);
-        this.gitHubSettings = new GitHubSettings(preferences);
+        this.gitHubSettings = new GitHubSettings(preferences, BCHECK);
         this.fileSystemRepositorySettings = new FileSystemRepositorySettings(preferences);
         this.debugSettings = new DebugSettings(preferences);
     }
