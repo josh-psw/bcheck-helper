@@ -10,34 +10,35 @@ import settings.repository.github.GitHubSettings;
 import static data.ItemMetadata.BCHECK;
 
 public class SettingsController {
-    private final DefaultSaveLocationSettings defaultSaveLocationSettings;
-    private final GitHubSettings gitHubSettings;
+    private final DefaultSaveLocationSettings bCheckDefaultSaveLocationSettings;
+    private final GitHubSettings bCheckGitHubSettings;
     private final DebugSettings debugSettings;
-    private final FileSystemRepositorySettings fileSystemRepositorySettings;
-    private final RepositorySettings repositorySettings;
+    private final FileSystemRepositorySettings bCheckFileSystemRepositorySettings;
+    private final RepositorySettings bCheckRepositorySettings;
 
     public SettingsController(Preferences preferences) {
-        this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, BCHECK);
-        this.repositorySettings = new RepositorySettings(preferences, BCHECK);
-        this.gitHubSettings = new GitHubSettings(preferences, BCHECK);
-        this.fileSystemRepositorySettings = new FileSystemRepositorySettings(preferences, BCHECK);
+        this.bCheckDefaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, BCHECK);
+        this.bCheckRepositorySettings = new RepositorySettings(preferences, BCHECK);
+        this.bCheckGitHubSettings = new GitHubSettings(preferences, BCHECK);
+        this.bCheckFileSystemRepositorySettings = new FileSystemRepositorySettings(preferences, BCHECK);
+
         this.debugSettings = new DebugSettings(preferences);
     }
 
-    public DefaultSaveLocationSettings defaultSaveLocationSettings() {
-        return defaultSaveLocationSettings;
+    public DefaultSaveLocationSettings bCheckDefaultSaveLocationSettings() {
+        return bCheckDefaultSaveLocationSettings;
     }
 
-    public RepositorySettings repositorySettings() {
-        return repositorySettings;
+    public RepositorySettings bCheckRepositorySettings() {
+        return bCheckRepositorySettings;
     }
 
-    public GitHubSettings gitHubSettings() {
-        return gitHubSettings;
+    public GitHubSettings bCheckGitHubSettings() {
+        return bCheckGitHubSettings;
     }
 
-    public FileSystemRepositorySettings fileSystemRepositorySettings() {
-        return fileSystemRepositorySettings;
+    public FileSystemRepositorySettings bCheckFileSystemRepositorySettings() {
+        return bCheckFileSystemRepositorySettings;
     }
 
     public DebugSettings debugSettings() {

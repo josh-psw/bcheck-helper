@@ -1,12 +1,12 @@
 package ui.view.pane.settings;
 
-import data.ItemMetadata;
 import settings.controller.SettingsController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static data.ItemMetadata.BCHECK;
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 
@@ -16,11 +16,11 @@ public class Settings extends JPanel {
         setLayout(new GridBagLayout());
 
         List<SettingsComponent> settingsComponentList = List.of(
-                new DefaultSaveLocationSettingsComponent(settingsController.defaultSaveLocationSettings(), ItemMetadata.BCHECK),
+                new DefaultSaveLocationSettingsComponent(settingsController.bCheckDefaultSaveLocationSettings(), BCHECK),
                 new RepositorySettingsComponent(
-                        settingsController.repositorySettings(),
-                        settingsController.gitHubSettings(),
-                        settingsController.fileSystemRepositorySettings()
+                        settingsController.bCheckRepositorySettings(),
+                        settingsController.bCheckGitHubSettings(),
+                        settingsController.bCheckFileSystemRepositorySettings()
                 ),
                 new DebugSettingsComponent(settingsController.debugSettings())
         );

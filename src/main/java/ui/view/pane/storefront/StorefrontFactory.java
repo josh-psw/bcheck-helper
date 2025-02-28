@@ -64,7 +64,7 @@ public class StorefrontFactory {
                 title,
                 storeController,
                 storefrontModel,
-                settingsController.defaultSaveLocationSettings(),
+                settingsController.bCheckDefaultSaveLocationSettings(),
                 executor,
                 iconFactory,
                 logger,

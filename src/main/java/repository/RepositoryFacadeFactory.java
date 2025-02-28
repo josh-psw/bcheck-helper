@@ -28,12 +28,12 @@ public class RepositoryFacadeFactory {
                 tempFileCreator,
                 zipExtractor,
                 bCheckFileFinder,
-                settingsController.gitHubSettings(),
+                settingsController.bCheckGitHubSettings(),
                 ItemMetadata.BCHECK
         );
 
         FileSystemRepository<BCheck> fileSystemRepository = new FileSystemRepository<>(
-                settingsController.fileSystemRepositorySettings(),
+                settingsController.bCheckFileSystemRepositorySettings(),
                 bCheckFileFinder,
                 bCheckFactory,
                 logger,
@@ -41,7 +41,7 @@ public class RepositoryFacadeFactory {
         );
 
         return new RepositoryFacade<>(
-                settingsController.repositorySettings(),
+                settingsController.bCheckRepositorySettings(),
                 gitHubRepository,
                 fileSystemRepository
         );
