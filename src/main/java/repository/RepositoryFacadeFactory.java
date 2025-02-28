@@ -40,7 +40,7 @@ public class RepositoryFacadeFactory {
                 ItemMetadata.BCHECK
         );
 
-        return new RepositoryFacade(
+        return new RepositoryFacade<>(
                 settingsController.repositorySettings(),
                 gitHubRepository,
                 fileSystemRepository
