@@ -1,5 +1,6 @@
 package ui.view.pane.settings;
 
+import data.ItemMetadata;
 import settings.controller.SettingsController;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class Settings extends JPanel {
         setLayout(new GridBagLayout());
 
         List<SettingsComponent> settingsComponentList = List.of(
-                new DefaultSaveLocationSettingsComponent(settingsController.defaultSaveLocationSettings()),
+                new DefaultSaveLocationSettingsComponent(settingsController.defaultSaveLocationSettings(), ItemMetadata.BCHECK),
                 new RepositorySettingsComponent(
                         settingsController.repositorySettings(),
                         settingsController.gitHubSettings(),

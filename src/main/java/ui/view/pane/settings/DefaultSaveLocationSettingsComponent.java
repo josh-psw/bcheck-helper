@@ -1,5 +1,6 @@
 package ui.view.pane.settings;
 
+import data.ItemMetadata;
 import settings.defaultsavelocation.DefaultSaveLocationSettings;
 import ui.view.component.filechooser.FileChooser;
 
@@ -17,9 +18,11 @@ class DefaultSaveLocationSettingsComponent implements SettingsComponent {
     private final JCheckBox useSettingCheckbox = new JCheckBox("Enabled");
     private final JTextField pathField = new JTextField();
     private final DefaultSaveLocationSettings defaultSaveLocationSettings;
+    private final ItemMetadata itemMetadata;
 
-    DefaultSaveLocationSettingsComponent(DefaultSaveLocationSettings defaultSaveLocationSettings) {
+    DefaultSaveLocationSettingsComponent(DefaultSaveLocationSettings defaultSaveLocationSettings, ItemMetadata itemMetadata) {
         this.defaultSaveLocationSettings = defaultSaveLocationSettings;
+        this.itemMetadata = itemMetadata;
 
         initialiseUi();
     }
@@ -110,12 +113,12 @@ class DefaultSaveLocationSettingsComponent implements SettingsComponent {
 
     @Override
     public String title() {
-        return "Default save location for BChecks";
+        return "Default save location - " + itemMetadata.name;
     }
 
     @Override
     public String description() {
-        return "Use this setting to define where BChecks should be saved to by default. If you don't use this setting, you'll be asked where to save the BCheck to every time that you save one";
+        return "Use this setting to define where "+ itemMetadata.name + "s should be saved to by default. If you don't use this setting, you'll be asked where to save the " + itemMetadata.name + " to every time that you save one";
     }
 
     @Override
