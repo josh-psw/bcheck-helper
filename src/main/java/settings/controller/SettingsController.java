@@ -7,6 +7,8 @@ import settings.repository.RepositorySettings;
 import settings.repository.filesystem.FileSystemRepositorySettings;
 import settings.repository.github.GitHubSettings;
 
+import static data.ItemMetadata.BCHECK;
+
 public class SettingsController {
     private final DefaultSaveLocationSettings defaultSaveLocationSettings;
     private final GitHubSettings gitHubSettings;
@@ -15,8 +17,8 @@ public class SettingsController {
     private final RepositorySettings repositorySettings;
 
     public SettingsController(Preferences preferences) {
-        this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences);
-        this.repositorySettings = new RepositorySettings(preferences);
+        this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, BCHECK);
+        this.repositorySettings = new RepositorySettings(preferences, BCHECK);
         this.gitHubSettings = new GitHubSettings(preferences);
         this.fileSystemRepositorySettings = new FileSystemRepositorySettings(preferences);
         this.debugSettings = new DebugSettings(preferences);
