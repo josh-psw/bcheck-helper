@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static data.ItemMetadata.BAMBDA;
 import static data.ItemMetadata.BCHECK;
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 import static java.awt.GridBagConstraints.HORIZONTAL;
@@ -21,6 +22,12 @@ public class Settings extends JPanel {
                         settingsController.bCheckRepositorySettings(),
                         settingsController.bCheckGitHubSettings(),
                         settingsController.bCheckFileSystemRepositorySettings()
+                ),
+                new DefaultSaveLocationSettingsComponent(settingsController.bambdaDefaultSaveLocationSettings(), BAMBDA),
+                new RepositorySettingsComponent(
+                        settingsController.bambdaRepositorySettings(),
+                        settingsController.bambdaGitHubSettings(),
+                        settingsController.bambdaFileSystemRepositorySettings()
                 ),
                 new DebugSettingsComponent(settingsController.debugSettings())
         );

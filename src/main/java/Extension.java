@@ -14,6 +14,8 @@ import ui.view.pane.storefront.Storefront;
 import ui.view.pane.storefront.StorefrontFactory;
 import utils.CloseablePooledExecutor;
 
+import javax.swing.*;
+
 @SuppressWarnings("unused")
 public class Extension implements BurpExtension {
     private static final String EXTENSION_NAME = "Extensibility Helper";
@@ -39,7 +41,7 @@ public class Extension implements BurpExtension {
                 new BCheckItemImporter(api.scanner().bChecks(), logger)
         );
 
-        Settings settings = new Settings(settingsController);
+        JScrollPane settings = new JScrollPane(new Settings(settingsController));
 
         Store store = new Store(settings, bCheckStorefront);
 
