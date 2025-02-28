@@ -1,8 +1,8 @@
 package repository;
 
+import data.Item;
+import data.ItemFactory;
 import data.ItemMetadata;
-import data.bcheck.BCheck;
-import data.bcheck.BCheckFactory;
 import file.finder.FileFinder;
 import logging.Logger;
 import settings.repository.filesystem.FileSystemRepositorySettingsReader;
@@ -10,30 +10,30 @@ import settings.repository.filesystem.FileSystemRepositorySettingsReader;
 import java.io.File;
 import java.util.List;
 
-public class FileSystemRepository implements Repository<BCheck> {
+public class FileSystemRepository<T extends Item> implements Repository<T> {
     private static final String EMPTY_LOCATION_MESSAGE = "Empty filesystem repository location";
     private static final String INVALID_LOCATION_MESSAGE = "Invalid filesystem repository location: ";
 
-    private final FileFinder bCheckFileFinder;
+    private final FileFinder fileFinder;
     private final FileSystemRepositorySettingsReader settings;
-    private final BCheckFactory bCheckFactory;
+    private final ItemFactory<T> itemFactory;
     private final Logger logger;
     private final ItemMetadata itemMetadata;
 
     public FileSystemRepository(FileSystemRepositorySettingsReader settings,
-                                FileFinder bCheckFileFinder,
-                                BCheckFactory bCheckFactory,
+                                FileFinder fileFinder,
+                                ItemFactory<T> itemFactory,
                                 Logger logger,
                                 ItemMetadata itemMetadata) {
-        this.bCheckFileFinder = bCheckFileFinder;
+        this.fileFinder = fileFinder;
         this.settings = settings;
-        this.bCheckFactory = bCheckFactory;
+        this.itemFactory = itemFactory;
         this.logger = logger;
         this.itemMetadata = itemMetadata;
     }
 
     @Override
-    public List<BCheck> loadAllItems() {
+    public List<T> loadAllItems() {
         if (settings.repositoryLocation().isEmpty()) {
             logger.logError(EMPTY_LOCATION_MESSAGE);
             throw new IllegalStateException(EMPTY_LOCATION_MESSAGE);
@@ -47,9 +47,9 @@ public class FileSystemRepository implements Repository<BCheck> {
             throw new IllegalStateException(message);
         }
 
-        return bCheckFileFinder.find(location.toPath(), itemMetadata.fileExtension)
+        return fileFinder.find(location.toPath(), itemMetadata.fileExtension)
                 .stream()
-                .map(bCheckFactory::fromFile)
+                .map(itemFactory::fromFile)
                 .toList();
     }
 }

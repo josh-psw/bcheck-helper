@@ -32,7 +32,7 @@ public class RepositoryFacadeFactory {
                 ItemMetadata.BCHECK
         );
 
-        FileSystemRepository fileSystemRepository = new FileSystemRepository(
+        FileSystemRepository<BCheck> fileSystemRepository = new FileSystemRepository<>(
                 settingsController.fileSystemRepositorySettings(),
                 bCheckFileFinder,
                 bCheckFactory,
