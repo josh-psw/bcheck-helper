@@ -2,8 +2,9 @@ package repository;
 
 import burp.api.montoya.http.Http;
 import client.GitHubClient;
-import data.bcheck.BCheck;
-import data.bcheck.BCheckFactory;
+import data.Item;
+import data.ItemFactory;
+import data.ItemMetadata;
 import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
@@ -11,34 +12,40 @@ import logging.Logger;
 import network.RequestSender;
 import settings.controller.ItemSettingsController;
 
-import static data.ItemMetadata.BCHECK;
-
 public class RepositoryFacadeFactory {
+    private final Logger logger;
+    private final Http http;
 
-    public static Repository<BCheck> from(Logger logger, Http http, ItemSettingsController settingsController) {
+    public RepositoryFacadeFactory(Logger logger, Http http) {
+        this.logger = logger;
+        this.http = http;
+    }
+
+    public <T extends Item> Repository<T> build(ItemSettingsController settingsController,
+                               ItemFactory<T> itemFactory,
+                               ItemMetadata itemMetadata) {
         RequestSender requestSender = new RequestSender(http, logger);
-        BCheckFactory bCheckFactory = new BCheckFactory(logger);
         GitHubClient gitHubClient = new GitHubClient(requestSender);
         TempFileCreator tempFileCreator = new TempFileCreator(logger);
         ZipExtractor zipExtractor = new ZipExtractor(logger);
-        FileFinder bCheckFileFinder = new FileFinder();
+        FileFinder fileFinder = new FileFinder();
 
-        GitHubRepository<BCheck> gitHubRepository = new GitHubRepository<>(
-                bCheckFactory,
+        GitHubRepository<T> gitHubRepository = new GitHubRepository<>(
+                itemFactory,
                 gitHubClient,
                 tempFileCreator,
                 zipExtractor,
-                bCheckFileFinder,
+                fileFinder,
                 settingsController.gitHubSettings(),
-                BCHECK
+                itemMetadata
         );
 
-        FileSystemRepository<BCheck> fileSystemRepository = new FileSystemRepository<>(
+        FileSystemRepository<T> fileSystemRepository = new FileSystemRepository<>(
                 settingsController.fileSystemRepositorySettings(),
-                bCheckFileFinder,
-                bCheckFactory,
+                fileFinder,
+                itemFactory,
                 logger,
-                BCHECK
+                itemMetadata
         );
 
         return new RepositoryFacade<>(

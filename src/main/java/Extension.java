@@ -2,6 +2,7 @@ import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
 import data.bcheck.BCheck;
+import data.bcheck.BCheckFactory;
 import data.bcheck.BCheckFilter;
 import data.bcheck.BCheckItemImporter;
 import logging.Logger;
@@ -14,6 +15,8 @@ import ui.view.pane.storefront.StorefrontFactory;
 import utils.CloseablePooledExecutor;
 
 import javax.swing.*;
+
+import static data.ItemMetadata.BCHECK;
 
 @SuppressWarnings("unused")
 public class Extension implements BurpExtension {
@@ -30,11 +33,15 @@ public class Extension implements BurpExtension {
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
         StorefrontFactory storefrontFactory = new StorefrontFactory(logger, api.userInterface(), executor);
+        RepositoryFacadeFactory repositoryFacadeFactory = new RepositoryFacadeFactory(logger, api.http());
 
         Storefront<BCheck> bCheckStorefront = storefrontFactory.build(
                 "BCheck Store",
                 new BCheckFilter(),
-                RepositoryFacadeFactory.from(logger, api.http(), settingsController.bCheckSettingsController()),
+                repositoryFacadeFactory.build(
+                        settingsController.bCheckSettingsController(),
+                        new BCheckFactory(logger),
+                        BCHECK),
                 new BCheckItemImporter(api.scanner().bChecks(), logger),
                 settingsController.bCheckSettingsController()
         );
