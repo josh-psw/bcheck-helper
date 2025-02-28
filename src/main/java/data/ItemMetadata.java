@@ -10,6 +10,7 @@ public enum ItemMetadata
             "github_settings.repo",
             "github_settings.url",
             "portswigger/bchecks",
+            "filesystem_repository.location",
             "default_save_location.use_setting",
             "default_save_location.save_location" ),
     BAMBDA(
@@ -20,6 +21,7 @@ public enum ItemMetadata
             "bambda.github_settings.repo",
             "bambda.github_settings.url",
             "portswigger/bambdas",
+            "bambda.filesystem_repository.location",
             "bambda.default_save_location.use_setting",
             "bambda.default_save_location.save_location");
 
@@ -31,6 +33,7 @@ public enum ItemMetadata
     public final String repositoryNameKey;
     public final String repositoryUrlKey;
     public final String defaultRepositoryNameValue;
+    public final String fileSystemRepositoryLocationKey;
     public final String useSettingKey;
     public final String saveLocationKey;
 
@@ -42,6 +45,7 @@ public enum ItemMetadata
             String repositoryNameKey,
             String repositoryUrlKey,
             String defaultRepositoryNameValue,
+            String fileSystemRepositoryLocationKey,
             String useSettingKey,
             String saveLocationKey) {
         this.name = name;
@@ -51,6 +55,7 @@ public enum ItemMetadata
         this.repositoryNameKey = repositoryNameKey;
         this.repositoryUrlKey = repositoryUrlKey;
         this.defaultRepositoryNameValue = defaultRepositoryNameValue;
+        this.fileSystemRepositoryLocationKey = fileSystemRepositoryLocationKey;
         this.useSettingKey = useSettingKey;
         this.saveLocationKey = saveLocationKey;
     }
