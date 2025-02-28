@@ -11,32 +11,32 @@ import static java.util.Collections.emptyList;
 import static java.util.regex.Pattern.compile;
 
 public class BCheckParser implements ItemParser<BCheck> {
-    private static final Pattern BCHECK_NAME_EXTRACTING_REGEX_PATTERN = compile("name:\\s\"(.+)\"");
-    private static final Pattern BCHECK_AUTHOR_EXTRACTING_REGEX_PATTERN = compile("author:\\s\"(.+)\"");
-    private static final Pattern BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN = compile("description:\\s\"(.+)\"");
-    private static final Pattern BCHECK_TAG_EXTRACTING_REGEX_PATTERN = compile("tags:\\s(.+)");
+    private static final Pattern NAME_EXTRACTING_REGEX_PATTERN = compile("name:\\s\"(.+)\"");
+    private static final Pattern AUTHOR_EXTRACTING_REGEX_PATTERN = compile("author:\\s\"(.+)\"");
+    private static final Pattern DESCRIPTION_EXTRACTING_REGEX_PATTERN = compile("description:\\s\"(.+)\"");
+    private static final Pattern TAG_EXTRACTING_REGEX_PATTERN = compile("tags:\\s(.+)");
 
     @Override
     public BCheck parse(String filename, String filePath, String fileContent) {
-        Matcher bCheckNameMatcher = BCHECK_NAME_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
-        Matcher bCheckAuthorMatcher = BCHECK_AUTHOR_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
-        Matcher bCheckDescriptionMatcher = BCHECK_DESCRIPTION_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
-        Matcher bCheckTagMatcher = BCHECK_TAG_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
+        Matcher nameMatcher = NAME_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
+        Matcher authorMatcher = AUTHOR_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
+        Matcher descriptionMatcher = DESCRIPTION_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
+        Matcher tagMatcher = TAG_EXTRACTING_REGEX_PATTERN.matcher(fileContent);
 
-        String name = bCheckNameMatcher.find() ?
-                bCheckNameMatcher.group(1) :
+        String name = nameMatcher.find() ?
+                nameMatcher.group(1) :
                 "No name";
 
-        String author = bCheckAuthorMatcher.find() ?
-                bCheckAuthorMatcher.group(1) :
+        String author = authorMatcher.find() ?
+                authorMatcher.group(1) :
                 "No author";
 
-        String description = bCheckDescriptionMatcher.find() ?
-                bCheckDescriptionMatcher.group(1) :
+        String description = descriptionMatcher.find() ?
+                descriptionMatcher.group(1) :
                 "No description";
 
-        List<String> tags = bCheckTagMatcher.find() ?
-                stream(bCheckTagMatcher.group(1).split(","))
+        List<String> tags = tagMatcher.find() ?
+                stream(tagMatcher.group(1).split(","))
                         .map(quotedTag -> quotedTag.replace("\"", ""))
                         .map(String::trim)
                         .map(String::toLowerCase)
