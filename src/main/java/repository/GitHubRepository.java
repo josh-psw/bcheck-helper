@@ -1,9 +1,9 @@
 package repository;
 
 import client.GitHubClient;
+import data.Item;
+import data.ItemFactory;
 import data.ItemMetadata;
-import data.bcheck.BCheck;
-import data.bcheck.BCheckFactory;
 import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
@@ -12,46 +12,46 @@ import settings.repository.github.GitHubSettingsReader;
 import java.nio.file.Path;
 import java.util.List;
 
-public class GitHubRepository implements Repository<BCheck> {
+public class GitHubRepository<T extends Item> implements Repository<T> {
     private final GitHubClient gitHubClient;
     private final TempFileCreator tempFileCreator;
     private final ZipExtractor zipExtractor;
-    private final FileFinder bCheckFileFinder;
+    private final FileFinder fileFinder;
     private final GitHubSettingsReader gitHubSettings;
     private final ItemMetadata itemMetadata;
-    private final BCheckFactory bCheckFactory;
+    private final ItemFactory<T> itemFactory;
 
     public GitHubRepository(
-            BCheckFactory bCheckFactory,
+            ItemFactory<T> itemFactory,
             GitHubClient gitHubClient,
             TempFileCreator tempFileCreator,
             ZipExtractor zipExtractor,
-            FileFinder bCheckFileFinder,
+            FileFinder fileFinder,
             GitHubSettingsReader gitHubSettings,
             ItemMetadata itemMetadata) {
-        this.bCheckFactory = bCheckFactory;
+        this.itemFactory = itemFactory;
         this.gitHubClient = gitHubClient;
         this.tempFileCreator = tempFileCreator;
         this.zipExtractor = zipExtractor;
-        this.bCheckFileFinder = bCheckFileFinder;
+        this.fileFinder = fileFinder;
         this.gitHubSettings = gitHubSettings;
         this.itemMetadata = itemMetadata;
     }
 
     @Override
-    public List<BCheck> loadAllItems() {
-        Path bCheckDownloadLocation = tempFileCreator.createTempDirectory(itemMetadata.tempDirectoryPrefix);
-        byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(
+    public List<T> loadAllItems() {
+        Path downloadLocation = tempFileCreator.createTempDirectory(itemMetadata.tempDirectoryPrefix);
+        byte[] itemsAsZip = gitHubClient.downloadRepoAsZip(
                 gitHubSettings.repositoryUrl(),
                 gitHubSettings.repositoryName(),
                 gitHubSettings.apiKey()
         );
 
-        zipExtractor.extractZip(bChecksAsZip, bCheckDownloadLocation);
+        zipExtractor.extractZip(itemsAsZip, downloadLocation);
 
-        return bCheckFileFinder.find(bCheckDownloadLocation, itemMetadata.fileExtension)
+        return fileFinder.find(downloadLocation, itemMetadata.fileExtension)
                 .stream()
-                .map(bCheckFactory::fromFile)
+                .map(itemFactory::fromFile)
                 .toList();
     }
 }

@@ -6,14 +6,14 @@ import settings.repository.RepositorySettingsReader;
 import java.util.List;
 
 public class RepositoryFacade implements Repository<BCheck> {
-    private final FileSystemRepository fileSystemRepository;
-    private final GitHubRepository gitHubBCheckRepository;
+    private final FileSystemRepository<BCheck> fileSystemRepository;
+    private final GitHubRepository<BCheck> gitHubBCheckRepository;
     private final RepositorySettingsReader repositorySettingsReader;
 
     public RepositoryFacade(
             RepositorySettingsReader repositorySettingsReader,
-            GitHubRepository gitHubBCheckRepository,
-            FileSystemRepository fileSystemRepository) {
+            GitHubRepository<BCheck> gitHubBCheckRepository,
+            FileSystemRepository<BCheck> fileSystemRepository) {
         this.fileSystemRepository = fileSystemRepository;
         this.gitHubBCheckRepository = gitHubBCheckRepository;
         this.repositorySettingsReader = repositorySettingsReader;

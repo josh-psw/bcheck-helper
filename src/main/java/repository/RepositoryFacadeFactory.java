@@ -22,7 +22,7 @@ public class RepositoryFacadeFactory {
         ZipExtractor zipExtractor = new ZipExtractor(logger);
         FileFinder bCheckFileFinder = new FileFinder();
 
-        GitHubRepository gitHubRepository = new GitHubRepository(
+        GitHubRepository<BCheck> gitHubRepository = new GitHubRepository<>(
                 bCheckFactory,
                 gitHubClient,
                 tempFileCreator,
