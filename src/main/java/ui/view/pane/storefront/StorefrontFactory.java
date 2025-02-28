@@ -7,7 +7,7 @@ import data.ItemImporter;
 import file.system.FileSystem;
 import logging.Logger;
 import repository.Repository;
-import settings.controller.SettingsController;
+import settings.controller.ItemSettingsController;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
 import ui.icons.IconFactory;
@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class StorefrontFactory {
     private final Logger logger;
-    private final SettingsController settingsController;
     private final UserInterface userInterface;
     private final Executor executor;
     private final IconFactory iconFactory;
@@ -30,11 +29,9 @@ public class StorefrontFactory {
     public StorefrontFactory(
             Logger logger,
             UserInterface userInterface,
-            SettingsController settingsController,
             Executor executor) {
         this.logger = logger;
         this.userInterface = userInterface;
-        this.settingsController = settingsController;
         this.executor = executor;
         this.iconFactory = new IconFactory(userInterface);
         this.clipboardManager = new ClipboardManager();
@@ -42,9 +39,11 @@ public class StorefrontFactory {
     }
 
     public <T extends Item> Storefront<T> build(
-            String title, ItemFilter<T> filter,
+            String title,
+            ItemFilter<T> filter,
             Repository<T> repository,
-            ItemImporter<T> itemImporter) {
+            ItemImporter<T> itemImporter,
+            ItemSettingsController settingsController) {
         AtomicReference<StorefrontModel<T>> modelReference = new AtomicReference<>();
         StorefrontModel<T> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
 
@@ -64,7 +63,7 @@ public class StorefrontFactory {
                 title,
                 storeController,
                 storefrontModel,
-                settingsController.bCheckDefaultSaveLocationSettings(),
+                settingsController.defaultSaveLocationSettings(),
                 executor,
                 iconFactory,
                 logger,

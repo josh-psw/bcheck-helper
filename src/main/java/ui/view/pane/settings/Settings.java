@@ -17,17 +17,21 @@ public class Settings extends JPanel {
         setLayout(new GridBagLayout());
 
         List<SettingsComponent> settingsComponentList = List.of(
-                new DefaultSaveLocationSettingsComponent(settingsController.bCheckDefaultSaveLocationSettings(), BCHECK),
+                new DefaultSaveLocationSettingsComponent(
+                        settingsController.bCheckSettingsController().defaultSaveLocationSettings(),
+                        BCHECK),
                 new RepositorySettingsComponent(
-                        settingsController.bCheckRepositorySettings(),
-                        settingsController.bCheckGitHubSettings(),
-                        settingsController.bCheckFileSystemRepositorySettings()
+                        settingsController.bCheckSettingsController().repositorySettings(),
+                        settingsController.bCheckSettingsController().gitHubSettings(),
+                        settingsController.bCheckSettingsController().fileSystemRepositorySettings()
                 ),
-                new DefaultSaveLocationSettingsComponent(settingsController.bambdaDefaultSaveLocationSettings(), BAMBDA),
+                new DefaultSaveLocationSettingsComponent(
+                        settingsController.bambdaSettingsController().defaultSaveLocationSettings(),
+                        BAMBDA),
                 new RepositorySettingsComponent(
-                        settingsController.bambdaRepositorySettings(),
-                        settingsController.bambdaGitHubSettings(),
-                        settingsController.bambdaFileSystemRepositorySettings()
+                        settingsController.bambdaSettingsController().repositorySettings(),
+                        settingsController.bambdaSettingsController().gitHubSettings(),
+                        settingsController.bambdaSettingsController().fileSystemRepositorySettings()
                 ),
                 new DebugSettingsComponent(settingsController.debugSettings())
         );

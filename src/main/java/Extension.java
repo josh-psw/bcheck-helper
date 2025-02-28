@@ -5,7 +5,6 @@ import data.bcheck.BCheck;
 import data.bcheck.BCheckFilter;
 import data.bcheck.BCheckItemImporter;
 import logging.Logger;
-import repository.Repository;
 import repository.RepositoryFacadeFactory;
 import settings.controller.SettingsController;
 import ui.view.Store;
@@ -28,17 +27,16 @@ public class Extension implements BurpExtension {
 
         Logger logger = new Logger(api.logging(), settingsController.debugSettings());
 
-        Repository<BCheck> repository = RepositoryFacadeFactory.from(logger, api.http(), settingsController);
-
         CloseablePooledExecutor executor = new CloseablePooledExecutor();
 
-        StorefrontFactory storefrontFactory = new StorefrontFactory(logger, api.userInterface(), settingsController, executor);
+        StorefrontFactory storefrontFactory = new StorefrontFactory(logger, api.userInterface(), executor);
 
         Storefront<BCheck> bCheckStorefront = storefrontFactory.build(
                 "BCheck Store",
                 new BCheckFilter(),
-                repository,
-                new BCheckItemImporter(api.scanner().bChecks(), logger)
+                RepositoryFacadeFactory.from(logger, api.http(), settingsController.bCheckSettingsController()),
+                new BCheckItemImporter(api.scanner().bChecks(), logger),
+                settingsController.bCheckSettingsController()
         );
 
         JScrollPane settings = new JScrollPane(new Settings(settingsController));
