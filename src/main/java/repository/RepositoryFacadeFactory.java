@@ -2,6 +2,7 @@ package repository;
 
 import burp.api.montoya.http.Http;
 import client.GitHubClient;
+import data.ItemMetadata;
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
 import file.finder.FileFinder;
@@ -27,14 +28,16 @@ public class RepositoryFacadeFactory {
                 tempFileCreator,
                 zipExtractor,
                 bCheckFileFinder,
-                settingsController.gitHubSettings()
+                settingsController.gitHubSettings(),
+                ItemMetadata.BCHECK
         );
 
         FileSystemRepository fileSystemRepository = new FileSystemRepository(
                 settingsController.fileSystemRepositorySettings(),
                 bCheckFileFinder,
                 bCheckFactory,
-                logger
+                logger,
+                ItemMetadata.BCHECK
         );
 
         return new RepositoryFacade(

@@ -1,6 +1,7 @@
 package repository;
 
 import client.GitHubClient;
+import data.ItemMetadata;
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
 import file.finder.FileFinder;
@@ -17,6 +18,7 @@ public class GitHubRepository implements Repository<BCheck> {
     private final ZipExtractor zipExtractor;
     private final FileFinder bCheckFileFinder;
     private final GitHubSettingsReader gitHubSettings;
+    private final ItemMetadata itemMetadata;
     private final BCheckFactory bCheckFactory;
 
     public GitHubRepository(
@@ -25,19 +27,20 @@ public class GitHubRepository implements Repository<BCheck> {
             TempFileCreator tempFileCreator,
             ZipExtractor zipExtractor,
             FileFinder bCheckFileFinder,
-            GitHubSettingsReader gitHubSettings
-    ) {
+            GitHubSettingsReader gitHubSettings,
+            ItemMetadata itemMetadata) {
         this.bCheckFactory = bCheckFactory;
         this.gitHubClient = gitHubClient;
         this.tempFileCreator = tempFileCreator;
         this.zipExtractor = zipExtractor;
         this.bCheckFileFinder = bCheckFileFinder;
         this.gitHubSettings = gitHubSettings;
+        this.itemMetadata = itemMetadata;
     }
 
     @Override
     public List<BCheck> loadAllItems() {
-        Path bCheckDownloadLocation = tempFileCreator.createTempDirectory("bcheck-store");
+        Path bCheckDownloadLocation = tempFileCreator.createTempDirectory(itemMetadata.tempDirectoryPrefix);
         byte[] bChecksAsZip = gitHubClient.downloadRepoAsZip(
                 gitHubSettings.repositoryUrl(),
                 gitHubSettings.repositoryName(),
@@ -46,7 +49,7 @@ public class GitHubRepository implements Repository<BCheck> {
 
         zipExtractor.extractZip(bChecksAsZip, bCheckDownloadLocation);
 
-        return bCheckFileFinder.find(bCheckDownloadLocation, BCheck.FILE_EXTENSION)
+        return bCheckFileFinder.find(bCheckDownloadLocation, itemMetadata.fileExtension)
                 .stream()
                 .map(bCheckFactory::fromFile)
                 .toList();

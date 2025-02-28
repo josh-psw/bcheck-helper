@@ -1,5 +1,6 @@
 package repository;
 
+import data.ItemMetadata;
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
 import file.finder.FileFinder;
@@ -17,15 +18,18 @@ public class FileSystemRepository implements Repository<BCheck> {
     private final FileSystemRepositorySettingsReader settings;
     private final BCheckFactory bCheckFactory;
     private final Logger logger;
+    private final ItemMetadata itemMetadata;
 
     public FileSystemRepository(FileSystemRepositorySettingsReader settings,
                                 FileFinder bCheckFileFinder,
                                 BCheckFactory bCheckFactory,
-                                Logger logger) {
+                                Logger logger,
+                                ItemMetadata itemMetadata) {
         this.bCheckFileFinder = bCheckFileFinder;
         this.settings = settings;
         this.bCheckFactory = bCheckFactory;
         this.logger = logger;
+        this.itemMetadata = itemMetadata;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class FileSystemRepository implements Repository<BCheck> {
             throw new IllegalStateException(message);
         }
 
-        return bCheckFileFinder.find(location.toPath(), BCheck.FILE_EXTENSION)
+        return bCheckFileFinder.find(location.toPath(), itemMetadata.fileExtension)
                 .stream()
                 .map(bCheckFactory::fromFile)
                 .toList();
