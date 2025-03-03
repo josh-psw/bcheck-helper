@@ -11,8 +11,7 @@ import static java.nio.file.Files.createDirectory;
 import static java.nio.file.Files.writeString;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FileFinderTest
-{
+class FileFinderTest {
     private final FileFinder bCheckFileFinder = new FileFinder();
 
     @Test

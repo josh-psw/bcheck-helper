@@ -1,6 +1,7 @@
 package settings.defaultsavelocation;
 
 import burp.api.montoya.persistence.Preferences;
+import data.ItemMetadata;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -11,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 class DefaultSaveLocationSettingsTest {
     private final Preferences preferences = mock(Preferences.class);
-    private final DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences);
+    private final DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, ItemMetadata.BCHECK);
 
     @Test
     void givenNullUseDefaultLocationSetting_whenGetDefaultSaveLocation_thenEmptyOptionalReturned() {

@@ -1,6 +1,7 @@
 package settings.repository;
 
 import burp.api.montoya.persistence.Preferences;
+import data.ItemMetadata;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -13,7 +14,7 @@ import static settings.repository.RepositorySettings.REPOSITORY_TYPE_KEY;
 
 class RepositorySettingsTest {
     private final Preferences preferences = mock(Preferences.class);
-    private final RepositorySettings repositorySettings = new RepositorySettings(preferences);
+    private final RepositorySettings repositorySettings = new RepositorySettings(preferences, ItemMetadata.BCHECK);
 
     @Test
     void givenNoRepositoryType_whenRepositoryType_thenGitHubReturned() {

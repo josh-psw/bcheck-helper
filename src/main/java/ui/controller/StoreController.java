@@ -62,7 +62,7 @@ public class StoreController<T extends Item> {
             itemImporter.importItem(item);
             model.setStatus("Successfully imported item: " + item.name());
         } catch (IllegalStateException e) {
-            model.setStatus("Error imported item: " + item.name());
+            model.setStatus("Error importing item: " + item.name());
         }
     }
 

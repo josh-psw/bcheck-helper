@@ -1,6 +1,7 @@
 package settings.repository.filesystem;
 
 import burp.api.montoya.persistence.Preferences;
+import data.ItemMetadata;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,7 +10,7 @@ import static settings.repository.filesystem.FileSystemRepositorySettings.REPOSI
 
 class FileSystemRepositorySettingsTest {
     private final Preferences preferences = mock(Preferences.class);
-    private final FileSystemRepositorySettings repositorySettings = new FileSystemRepositorySettings(preferences);
+    private final FileSystemRepositorySettings repositorySettings = new FileSystemRepositorySettings(preferences, ItemMetadata.BCHECK);
 
     @Test
     void givenNoLocationSet_whenRepositoryLocation_thenEmptyStringReturned() {

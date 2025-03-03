@@ -1,6 +1,7 @@
 package settings.repository.github;
 
 import burp.api.montoya.persistence.Preferences;
+import data.ItemMetadata;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -9,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 class GitHubSettingsTest {
     private final Preferences preferences = mock(Preferences.class);
-    private final GitHubSettings gitHubSettings = new GitHubSettings(preferences);
+    private final GitHubSettings gitHubSettings = new GitHubSettings(preferences, ItemMetadata.BCHECK);
 
     @Test
     void givenNoRepoSet_whenGetRepositoryName_thenDefaultRepoReturned() {
