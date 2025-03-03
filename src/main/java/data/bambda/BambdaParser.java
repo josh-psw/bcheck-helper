@@ -12,7 +12,7 @@ import static java.util.regex.Pattern.compile;
 
 public class BambdaParser implements ItemParser<Bambda> {
     private static final Pattern NAME_EXTRACTING_REGEX_PATTERN = compile("name: (.+)");
-    private static final Pattern AUTHOR_EXTRACTING_REGEX_PATTERN = compile("@author\\s+([^\\n\\(*]+)");
+    private static final Pattern AUTHOR_EXTRACTING_REGEX_PATTERN = compile("@author\\s+(.+)");
     private static final Pattern DESCRIPTION_EXTRACTING_REGEX_PATTERN = compile("\\*\\s*([^*\\n]+)\\s*\\n\\s*(?:\\*\\s*)*\\s*@author");
     private static final Pattern TAG_EXTRACTING_REGEX_PATTERN = compile("(?:function:|location:) (.+)");
 
