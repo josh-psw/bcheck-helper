@@ -1,6 +1,10 @@
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
+import data.bambda.Bambda;
+import data.bambda.BambdaFactory;
+import data.bambda.BambdaFilter;
+import data.bambda.BambdaItemImporter;
 import data.bcheck.BCheck;
 import data.bcheck.BCheckFactory;
 import data.bcheck.BCheckFilter;
@@ -16,6 +20,7 @@ import utils.CloseablePooledExecutor;
 
 import javax.swing.*;
 
+import static data.ItemMetadata.BAMBDA;
 import static data.ItemMetadata.BCHECK;
 
 @SuppressWarnings("unused")
@@ -46,9 +51,21 @@ public class Extension implements BurpExtension {
                 settingsController.bCheckSettingsController()
         );
 
+        Storefront<Bambda> bambdaStorefront = storefrontFactory.build(
+                "Bambda Store",
+                new BambdaFilter(),
+                repositoryFacadeFactory.build(
+                        settingsController.bambdaSettingsController(),
+                        new BambdaFactory(logger),
+                        BAMBDA
+                ),
+                new BambdaItemImporter(),
+                settingsController.bambdaSettingsController()
+        );
+
         JScrollPane settings = new JScrollPane(new Settings(settingsController));
 
-        Store store = new Store(settings, bCheckStorefront);
+        Store store = new Store(settings, bCheckStorefront, bambdaStorefront);
 
         api.extension().setName(EXTENSION_NAME);
         api.userInterface().registerSuiteTab(EXTENSION_NAME, store);
