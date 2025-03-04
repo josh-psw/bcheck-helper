@@ -59,7 +59,7 @@ public class Extension implements BurpExtension {
                         new BambdaFactory(logger),
                         BAMBDA
                 ),
-                new BambdaItemImporter(logger),
+                new BambdaItemImporter(logger, api.userInterface().swingUtils().suiteFrame()),
                 settingsController.bambdaSettingsController()
         );
 
