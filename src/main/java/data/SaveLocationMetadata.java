@@ -1,7 +1,6 @@
 package data;
 
-public interface SaveLocationMetadata
-{
+public interface SaveLocationMetadata {
     String getUseSettingKey();
 
     String getSaveLocationKey();

@@ -24,8 +24,7 @@ public class Settings extends JPanel {
                         settingsController.bCheckSettingsController().repositorySettings(),
                         settingsController.bCheckSettingsController().gitHubSettings(),
                         settingsController.bCheckSettingsController().fileSystemRepositorySettings(),
-                        BCHECK
-                ),
+                        BCHECK),
                 new DefaultSaveLocationSettingsComponent(
                         settingsController.bambdaSettingsController().defaultSaveLocationSettings(),
                         BAMBDA),
@@ -33,8 +32,7 @@ public class Settings extends JPanel {
                         settingsController.bambdaSettingsController().repositorySettings(),
                         settingsController.bambdaSettingsController().gitHubSettings(),
                         settingsController.bambdaSettingsController().fileSystemRepositorySettings(),
-                        BAMBDA
-                ),
+                        BAMBDA),
                 new DebugSettingsComponent(settingsController.debugSettings())
         );
 

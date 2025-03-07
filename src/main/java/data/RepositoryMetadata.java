@@ -1,7 +1,6 @@
 package data;
 
-public interface RepositoryMetadata
-{
+public interface RepositoryMetadata {
     String getRepositoryTypeKey();
 
     String getRepositoryNameKey();

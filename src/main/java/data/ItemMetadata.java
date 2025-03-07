@@ -1,7 +1,6 @@
 package data;
 
-public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata
-{
+public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, NameMetadata {
     BCHECK(
             "BCheck",
             ".bcheck",
@@ -26,8 +25,7 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata
             "bambda.default_save_location.save_location");
 
 
-    public final String name;
-
+    private final String name;
     private final String fileExtension;
     private final String tempDirectoryPrefix;
     private final String useSettingKey;
@@ -104,5 +102,10 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata
     @Override
     public String getTempDirectoryPrefix() {
         return tempDirectoryPrefix;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }
