@@ -1,35 +1,36 @@
 package settings.repository.github;
 
 import burp.api.montoya.persistence.Preferences;
-import data.ItemMetadata;
+import data.RepositoryMetadata;
 import settings.AbstractSettings;
 
 public class GitHubSettings extends AbstractSettings implements GitHubSettingsReader {
     private static final String GITHUB_API_URL = "https://api.github.com";
     private static final String API_KEY_KEY = "github_settings.api_key"; //TODO should this be shared across instances or unique?
-    private final ItemMetadata itemMetadata;
 
-    public GitHubSettings(Preferences preferences, ItemMetadata itemMetadata) {
+    private final RepositoryMetadata repositoryMetadata;
+
+    public GitHubSettings(Preferences preferences, RepositoryMetadata repositoryMetadata) {
         super(preferences);
-        this.itemMetadata = itemMetadata;
+        this.repositoryMetadata = repositoryMetadata;
     }
 
     @Override
     public String repositoryUrl() {
-        return loadStringFromPreferences(itemMetadata.repositoryUrlKey, GITHUB_API_URL);
+        return loadStringFromPreferences(repositoryMetadata.getRepositoryUrlKey(), GITHUB_API_URL);
     }
 
     public void setRepositoryUrl(String repositoryName) {
-        saveStringToPreferences(itemMetadata.repositoryUrlKey, repositoryName);
+        saveStringToPreferences(repositoryMetadata.getRepositoryUrlKey(), repositoryName);
     }
 
     @Override
     public String repositoryName() {
-        return loadStringFromPreferences(itemMetadata.repositoryNameKey, itemMetadata.defaultRepositoryNameValue);
+        return loadStringFromPreferences(repositoryMetadata.getRepositoryNameKey(), repositoryMetadata.getDefaultRepositoryNameValue());
     }
 
     public void setRepositoryName(String repositoryName) {
-        saveStringToPreferences(itemMetadata.repositoryNameKey, repositoryName);
+        saveStringToPreferences(repositoryMetadata.getRepositoryNameKey(), repositoryName);
     }
 
     @Override

@@ -1,24 +1,25 @@
 package settings.repository.filesystem;
 
 import burp.api.montoya.persistence.Preferences;
-import data.ItemMetadata;
+import data.RepositoryMetadata;
 import settings.AbstractSettings;
 
 public class FileSystemRepositorySettings extends AbstractSettings implements FileSystemRepositorySettingsReader {
     static final String REPOSITORY_LOCATION_KEY = "filesystem_repository.location";
-    private final ItemMetadata itemMetadata;
 
-    public FileSystemRepositorySettings(Preferences preferences, ItemMetadata itemMetadata) {
+    private final RepositoryMetadata repositoryMetadata;
+
+    public FileSystemRepositorySettings(Preferences preferences, RepositoryMetadata repositoryMetadata) {
         super(preferences);
-        this.itemMetadata = itemMetadata;
+        this.repositoryMetadata = repositoryMetadata;
     }
 
     @Override
     public String repositoryLocation() {
-        return loadStringFromPreferences(itemMetadata.fileSystemRepositoryLocationKey, "");
+        return loadStringFromPreferences(repositoryMetadata.getFileSystemRepositoryLocationKey(), "");
     }
 
     public void setRepositoryLocation(String location) {
-        saveStringToPreferences(itemMetadata.fileSystemRepositoryLocationKey, location);
+        saveStringToPreferences(repositoryMetadata.getFileSystemRepositoryLocationKey(), location);
     }
 }

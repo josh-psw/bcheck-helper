@@ -1,6 +1,6 @@
 package data;
 
-public enum ItemMetadata
+public enum ItemMetadata implements RepositoryMetadata
 {
     BCHECK(
             "BCheck",
@@ -28,14 +28,15 @@ public enum ItemMetadata
 
     public final String name;
     public final String fileExtension;
-    public final String tempDirectoryPrefix;
-    public final String repositoryTypeKey;
-    public final String repositoryNameKey;
-    public final String repositoryUrlKey;
-    public final String defaultRepositoryNameValue;
-    public final String fileSystemRepositoryLocationKey;
     public final String useSettingKey;
     public final String saveLocationKey;
+    public final String tempDirectoryPrefix;
+
+    private final String repositoryTypeKey;
+    private final String repositoryNameKey;
+    private final String repositoryUrlKey;
+    private final String defaultRepositoryNameValue;
+    private final String fileSystemRepositoryLocationKey;
 
     ItemMetadata(
             String name,
@@ -58,5 +59,35 @@ public enum ItemMetadata
         this.fileSystemRepositoryLocationKey = fileSystemRepositoryLocationKey;
         this.useSettingKey = useSettingKey;
         this.saveLocationKey = saveLocationKey;
+    }
+
+    @Override
+    public String getRepositoryTypeKey()
+    {
+        return repositoryTypeKey;
+    }
+
+    @Override
+    public String getRepositoryNameKey()
+    {
+        return repositoryNameKey;
+    }
+
+    @Override
+    public String getRepositoryUrlKey()
+    {
+        return repositoryUrlKey;
+    }
+
+    @Override
+    public String getDefaultRepositoryNameValue()
+    {
+        return defaultRepositoryNameValue;
+    }
+
+    @Override
+    public String getFileSystemRepositoryLocationKey()
+    {
+        return fileSystemRepositoryLocationKey;
     }
 }
