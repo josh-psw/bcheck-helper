@@ -2,7 +2,7 @@ package repository;
 
 import data.Item;
 import data.ItemFactory;
-import data.ItemMetadata;
+import data.RepositoryMetadata;
 import file.finder.FileFinder;
 import logging.Logger;
 import settings.repository.filesystem.FileSystemRepositorySettingsReader;
@@ -18,18 +18,18 @@ public class FileSystemRepository<T extends Item> implements Repository<T> {
     private final FileSystemRepositorySettingsReader settings;
     private final ItemFactory<T> itemFactory;
     private final Logger logger;
-    private final ItemMetadata itemMetadata;
+    private final RepositoryMetadata repositoryMetadata;
 
     public FileSystemRepository(FileSystemRepositorySettingsReader settings,
                                 FileFinder fileFinder,
                                 ItemFactory<T> itemFactory,
                                 Logger logger,
-                                ItemMetadata itemMetadata) {
+                                RepositoryMetadata repositoryMetadata) {
         this.fileFinder = fileFinder;
         this.settings = settings;
         this.itemFactory = itemFactory;
         this.logger = logger;
-        this.itemMetadata = itemMetadata;
+        this.repositoryMetadata = repositoryMetadata;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class FileSystemRepository<T extends Item> implements Repository<T> {
             throw new IllegalStateException(message);
         }
 
-        return fileFinder.find(location.toPath(), itemMetadata.fileExtension)
+        return fileFinder.find(location.toPath(), repositoryMetadata.getFileExtension())
                 .stream()
                 .map(itemFactory::fromFile)
                 .toList();

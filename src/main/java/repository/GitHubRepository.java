@@ -3,7 +3,7 @@ package repository;
 import client.GitHubClient;
 import data.Item;
 import data.ItemFactory;
-import data.ItemMetadata;
+import data.RepositoryMetadata;
 import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
@@ -18,7 +18,7 @@ public class GitHubRepository<T extends Item> implements Repository<T> {
     private final ZipExtractor zipExtractor;
     private final FileFinder fileFinder;
     private final GitHubSettingsReader gitHubSettings;
-    private final ItemMetadata itemMetadata;
+    private final RepositoryMetadata repositoryMetadata;
     private final ItemFactory<T> itemFactory;
 
     public GitHubRepository(
@@ -28,19 +28,19 @@ public class GitHubRepository<T extends Item> implements Repository<T> {
             ZipExtractor zipExtractor,
             FileFinder fileFinder,
             GitHubSettingsReader gitHubSettings,
-            ItemMetadata itemMetadata) {
+            RepositoryMetadata repositoryMetadata) {
         this.itemFactory = itemFactory;
         this.gitHubClient = gitHubClient;
         this.tempFileCreator = tempFileCreator;
         this.zipExtractor = zipExtractor;
         this.fileFinder = fileFinder;
         this.gitHubSettings = gitHubSettings;
-        this.itemMetadata = itemMetadata;
+        this.repositoryMetadata = repositoryMetadata;
     }
 
     @Override
     public List<T> loadAllItems() {
-        Path downloadLocation = tempFileCreator.createTempDirectory(itemMetadata.tempDirectoryPrefix);
+        Path downloadLocation = tempFileCreator.createTempDirectory(repositoryMetadata.getTempDirectoryPrefix());
         byte[] itemsAsZip = gitHubClient.downloadRepoAsZip(
                 gitHubSettings.repositoryUrl(),
                 gitHubSettings.repositoryName(),
@@ -49,7 +49,7 @@ public class GitHubRepository<T extends Item> implements Repository<T> {
 
         zipExtractor.extractZip(itemsAsZip, downloadLocation);
 
-        return fileFinder.find(downloadLocation, itemMetadata.fileExtension)
+        return fileFinder.find(downloadLocation, repositoryMetadata.getFileExtension())
                 .stream()
                 .map(itemFactory::fromFile)
                 .toList();

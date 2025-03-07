@@ -27,9 +27,9 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata
 
 
     public final String name;
-    public final String fileExtension;
-    public final String tempDirectoryPrefix;
 
+    private final String fileExtension;
+    private final String tempDirectoryPrefix;
     private final String useSettingKey;
     private final String saveLocationKey;
     private final String repositoryTypeKey;
@@ -94,5 +94,15 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata
     @Override
     public String getSaveLocationKey() {
         return saveLocationKey;
+    }
+
+    @Override
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    @Override
+    public String getTempDirectoryPrefix() {
+        return tempDirectoryPrefix;
     }
 }

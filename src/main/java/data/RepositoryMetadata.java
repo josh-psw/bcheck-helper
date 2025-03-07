@@ -11,4 +11,8 @@ public interface RepositoryMetadata
     String getDefaultRepositoryNameValue();
 
     String getFileSystemRepositoryLocationKey();
+
+    String getFileExtension();
+
+    String getTempDirectoryPrefix();
 }

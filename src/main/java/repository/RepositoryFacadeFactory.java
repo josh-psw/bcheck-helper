@@ -4,7 +4,7 @@ import burp.api.montoya.http.Http;
 import client.GitHubClient;
 import data.Item;
 import data.ItemFactory;
-import data.ItemMetadata;
+import data.RepositoryMetadata;
 import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
@@ -23,7 +23,7 @@ public class RepositoryFacadeFactory {
 
     public <T extends Item> Repository<T> build(ItemSettingsController settingsController,
                                ItemFactory<T> itemFactory,
-                               ItemMetadata itemMetadata) {
+                               RepositoryMetadata repositoryMetadata) {
         RequestSender requestSender = new RequestSender(http, logger);
         GitHubClient gitHubClient = new GitHubClient(requestSender);
         TempFileCreator tempFileCreator = new TempFileCreator(logger);
@@ -37,7 +37,7 @@ public class RepositoryFacadeFactory {
                 zipExtractor,
                 fileFinder,
                 settingsController.gitHubSettings(),
-                itemMetadata
+                repositoryMetadata
         );
 
         FileSystemRepository<T> fileSystemRepository = new FileSystemRepository<>(
@@ -45,7 +45,7 @@ public class RepositoryFacadeFactory {
                 fileFinder,
                 itemFactory,
                 logger,
-                itemMetadata
+                repositoryMetadata
         );
 
         return new RepositoryFacade<>(
