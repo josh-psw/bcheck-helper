@@ -12,7 +12,6 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, Na
             "bambda",
             "portswigger/bambdas");
 
-
     private final String name;
     private final String fileExtension;
     private final String settingPrefix;
