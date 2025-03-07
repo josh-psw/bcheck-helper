@@ -30,6 +30,21 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, Na
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    @Override
+    public String getDefaultRepositoryNameValue() {
+        return defaultRepositoryNameValue;
+    }
+
+    @Override
     public String getRepositoryTypeKey() {
         return settingPrefix + ".repository.type";
     }
@@ -42,11 +57,6 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, Na
     @Override
     public String getRepositoryUrlKey() {
         return settingPrefix + ".github_settings.url";
-    }
-
-    @Override
-    public String getDefaultRepositoryNameValue() {
-        return defaultRepositoryNameValue;
     }
 
     @Override
@@ -65,17 +75,7 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, Na
     }
 
     @Override
-    public String getFileExtension() {
-        return fileExtension;
-    }
-
-    @Override
     public String getTempDirectoryPrefix() {
         return settingPrefix + "-store";
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }
