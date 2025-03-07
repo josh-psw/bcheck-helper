@@ -62,44 +62,37 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata
     }
 
     @Override
-    public String getRepositoryTypeKey()
-    {
+    public String getRepositoryTypeKey() {
         return repositoryTypeKey;
     }
 
     @Override
-    public String getRepositoryNameKey()
-    {
+    public String getRepositoryNameKey() {
         return repositoryNameKey;
     }
 
     @Override
-    public String getRepositoryUrlKey()
-    {
+    public String getRepositoryUrlKey() {
         return repositoryUrlKey;
     }
 
     @Override
-    public String getDefaultRepositoryNameValue()
-    {
+    public String getDefaultRepositoryNameValue() {
         return defaultRepositoryNameValue;
     }
 
     @Override
-    public String getFileSystemRepositoryLocationKey()
-    {
+    public String getFileSystemRepositoryLocationKey() {
         return fileSystemRepositoryLocationKey;
     }
 
     @Override
-    public String getUseSettingKey()
-    {
+    public String getUseSettingKey() {
         return useSettingKey;
     }
 
     @Override
-    public String getSaveLocationKey()
-    {
+    public String getSaveLocationKey() {
         return saveLocationKey;
     }
 }
