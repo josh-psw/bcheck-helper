@@ -1,18 +1,18 @@
 package settings.defaultsavelocation;
 
 import burp.api.montoya.persistence.Preferences;
-import data.ItemMetadata;
+import data.SaveLocationMetadata;
 import settings.AbstractSettings;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 public class DefaultSaveLocationSettings extends AbstractSettings implements DefaultSaveLocationSettingsReader {
-    private final ItemMetadata itemMetadata;
+    private final SaveLocationMetadata saveLocationMetadata;
 
-    public DefaultSaveLocationSettings(Preferences preferences, ItemMetadata itemMetadata) {
+    public DefaultSaveLocationSettings(Preferences preferences, SaveLocationMetadata saveLocationMetadata) {
         super(preferences);
-        this.itemMetadata = itemMetadata;
+        this.saveLocationMetadata = saveLocationMetadata;
     }
 
     @Override
@@ -21,20 +21,20 @@ public class DefaultSaveLocationSettings extends AbstractSettings implements Def
             return Optional.empty();
         }
 
-        String potentialPath = loadStringFromPreferences(itemMetadata.saveLocationKey, null);
+        String potentialPath = loadStringFromPreferences(saveLocationMetadata.getSaveLocationKey(), null);
 
         return potentialPath == null ? Optional.empty() : Optional.of(Path.of(potentialPath));
     }
 
     public void setDefaultSaveLocation(Path defaultSaveLocation) {
-        saveStringToPreferences(itemMetadata.saveLocationKey, defaultSaveLocation.toAbsolutePath().toString());
+        saveStringToPreferences(saveLocationMetadata.getSaveLocationKey(), defaultSaveLocation.toAbsolutePath().toString());
     }
 
     public void setUseSetting(boolean useSetting) {
-        saveBooleanToPreferences(itemMetadata.useSettingKey, useSetting);
+        saveBooleanToPreferences(saveLocationMetadata.getUseSettingKey(), useSetting);
     }
 
     private boolean useSetting() {
-        return loadBooleanFromPreferences(itemMetadata.useSettingKey, false);
+        return loadBooleanFromPreferences(saveLocationMetadata.getUseSettingKey(), false);
     }
 }
