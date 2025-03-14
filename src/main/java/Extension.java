@@ -1,14 +1,8 @@
 import burp.api.montoya.BurpExtension;
 import burp.api.montoya.MontoyaApi;
 import burp.api.montoya.persistence.Persistence;
-import data.bambda.Bambda;
-import data.bambda.BambdaFactory;
-import data.bambda.BambdaFilter;
-import data.bambda.BambdaItemImporter;
-import data.bcheck.BCheck;
-import data.bcheck.BCheckFactory;
-import data.bcheck.BCheckFilter;
-import data.bcheck.BCheckItemImporter;
+import data.bambda.*;
+import data.bcheck.*;
 import logging.Logger;
 import repository.RepositoryFacadeFactory;
 import settings.controller.SettingsController;
@@ -49,7 +43,8 @@ public class Extension implements BurpExtension {
                         BCHECK),
                 new BCheckItemImporter(api.scanner().bChecks(), logger),
                 settingsController.bCheckSettingsController(),
-                BCHECK
+                BCHECK,
+                new BCheckTagColors()
         );
 
         Storefront<Bambda> bambdaStorefront = storefrontFactory.build(
@@ -62,7 +57,8 @@ public class Extension implements BurpExtension {
                 ),
                 new BambdaItemImporter(logger),
                 settingsController.bambdaSettingsController(),
-                BAMBDA
+                BAMBDA,
+                new BambdaTagColors()
         );
 
         JScrollPane settings = new JScrollPane(new Settings(settingsController));

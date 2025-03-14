@@ -4,6 +4,7 @@ import data.ImportMetadata;
 import data.Item;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
+import settings.tags.TagColors;
 import ui.controller.StoreController;
 import ui.controller.TablePanelController;
 import ui.icons.IconFactory;
@@ -26,7 +27,8 @@ public class Storefront<T extends Item> {
                       IconFactory iconFactory,
                       Logger logger,
                       Supplier<Font> fontSupplier,
-                      ImportMetadata importMetadata) {
+                      ImportMetadata importMetadata,
+                      TagColors tagColors) {
         this.title = title;
 
         ActionController<T> actionController = new ActionController<>(
@@ -45,7 +47,8 @@ public class Storefront<T extends Item> {
                 executor,
                 iconFactory,
                 actionController,
-                fontSupplier
+                fontSupplier,
+                tagColors
         );
 
         this.panel = new StorefrontPanel(previewPanel, tablePanel);

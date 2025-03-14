@@ -9,6 +9,7 @@ import file.system.FileSystem;
 import logging.Logger;
 import repository.Repository;
 import settings.controller.ItemSettingsController;
+import settings.tags.TagColors;
 import ui.clipboard.ClipboardManager;
 import ui.controller.StoreController;
 import ui.icons.IconFactory;
@@ -45,7 +46,8 @@ public class StorefrontFactory {
             Repository<T> repository,
             ItemImporter<T> itemImporter,
             ItemSettingsController settingsController,
-            ImportMetadata importMetadata) {
+            ImportMetadata importMetadata,
+            TagColors tagColors) {
         AtomicReference<StorefrontModel<T>> modelReference = new AtomicReference<>();
         StorefrontModel<T> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
 
@@ -70,7 +72,8 @@ public class StorefrontFactory {
                 iconFactory,
                 logger,
                 userInterface::currentDisplayFont,
-                importMetadata
+                importMetadata,
+                tagColors
         );
     }
 }

@@ -36,13 +36,15 @@ public class ItemTablePanel<T extends Item> extends JPanel {
     private final StorefrontModel<T> model;
     private final ActionController<T> actionController;
     private final Supplier<Font> fontSupplier;
+    private final TagColors tagColors;
 
     public ItemTablePanel(TablePanelController<T> panelController,
-                   StorefrontModel<T> storefrontModel,
-                   Executor executor,
-                   IconFactory iconFactory,
-                   ActionController<T> actionController,
-                   Supplier<Font> fontSupplier) {
+                          StorefrontModel<T> storefrontModel,
+                          Executor executor,
+                          IconFactory iconFactory,
+                          ActionController<T> actionController,
+                          Supplier<Font> fontSupplier,
+                          TagColors tagColors) {
         super(new BorderLayout());
 
         this.panelController = panelController;
@@ -50,6 +52,7 @@ public class ItemTablePanel<T extends Item> extends JPanel {
         this.model = storefrontModel;
         this.actionController = actionController;
         this.fontSupplier = fontSupplier;
+        this.tagColors = tagColors;
         this.searchBar = new SearchBar(iconFactory, storefrontModel);
         this.tableModel = new ItemTableModel<>();
         this.itemTable = new JTable();
@@ -104,7 +107,7 @@ public class ItemTablePanel<T extends Item> extends JPanel {
         itemTable.setSelectionMode(SINGLE_SELECTION);
         itemTable.getTableHeader().setReorderingAllowed(false);
         itemTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
-        itemTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
+        itemTable.setDefaultRenderer(Tags.class, new TagRenderer(tagColors));
 
         int rowHeight = (int) (fontSupplier.get().getSize() * 1.5);
         itemTable.setRowHeight(rowHeight);
