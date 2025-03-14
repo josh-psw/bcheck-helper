@@ -1,6 +1,7 @@
 package ui.view.pane.storefront;
 
 import burp.api.montoya.ui.UserInterface;
+import data.ImportMetadata;
 import data.Item;
 import data.ItemFilter;
 import data.ItemImporter;
@@ -43,7 +44,8 @@ public class StorefrontFactory {
             ItemFilter<T> filter,
             Repository<T> repository,
             ItemImporter<T> itemImporter,
-            ItemSettingsController settingsController) {
+            ItemSettingsController settingsController,
+            ImportMetadata importMetadata) {
         AtomicReference<StorefrontModel<T>> modelReference = new AtomicReference<>();
         StorefrontModel<T> lateInitializationStorefrontModel = new LateInitializationStorefrontModel<>(modelReference::get);
 
@@ -67,7 +69,8 @@ public class StorefrontFactory {
                 executor,
                 iconFactory,
                 logger,
-                userInterface::currentDisplayFont
+                userInterface::currentDisplayFont,
+                importMetadata
         );
     }
 }

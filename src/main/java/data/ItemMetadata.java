@@ -1,31 +1,41 @@
 package data;
 
-public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, NameMetadata {
+public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, NameMetadata, ImportMetadata {
     BCHECK(
             "BCheck",
             ".bcheck",
             "bcheck",
-            "portswigger/bchecks"),
+            "portswigger/bchecks",
+            true,
+            "Import BChecks to your BCheck library."),
     BAMBDA(
             "Bambda",
             ".bambda",
             "bambda",
-            "portswigger/bambdas");
+            "portswigger/bambdas",
+            false,
+            "Bambda import not yet supported.\nRegister your interest for this functionality at https://github.com/PortSwigger/burp-extensions-montoya-api/issues/112");
 
     private final String name;
     private final String fileExtension;
     private final String settingPrefix;
     private final String defaultRepositoryNameValue;
+    private final boolean supportsImport;
+    private final String importTooltipText;
 
     ItemMetadata(
             String name,
             String fileExtension,
             String settingPrefix,
-            String defaultRepositoryNameValue) {
+            String defaultRepositoryNameValue,
+            boolean supportsImport,
+            String importTooltipText) {
         this.name = name;
         this.fileExtension = fileExtension;
         this.settingPrefix = settingPrefix;
         this.defaultRepositoryNameValue = defaultRepositoryNameValue;
+        this.supportsImport = supportsImport;
+        this.importTooltipText = importTooltipText;
     }
 
     @Override
@@ -76,5 +86,15 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, Na
     @Override
     public String getTempDirectoryPrefix() {
         return settingPrefix + "-store";
+    }
+
+    @Override
+    public boolean isImportSupported() {
+        return supportsImport;
+    }
+
+    @Override
+    public String getImportTooltipText() {
+        return importTooltipText;
     }
 }

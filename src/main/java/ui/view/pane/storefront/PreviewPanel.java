@@ -1,5 +1,6 @@
 package ui.view.pane.storefront;
 
+import data.ImportMetadata;
 import data.Item;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
@@ -22,7 +23,9 @@ public class PreviewPanel<T extends Item> extends JPanel {
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    public PreviewPanel(StorefrontModel<T> storefrontModel, ActionController<T> actionController) {
+    public PreviewPanel(StorefrontModel<T> storefrontModel,
+                        ActionController<T> actionController,
+                        ImportMetadata importMetadata) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
@@ -33,6 +36,9 @@ public class PreviewPanel<T extends Item> extends JPanel {
         this.copyButton = new JButton("Copy to clipboard");
         this.saveButton = new JButton("Save to file");
         this.saveAllButton = new JButton("Save all items to disk");
+
+        this.importButton.setEnabled(importMetadata.isImportSupported());
+        this.importButton.setToolTipText(importMetadata.getImportTooltipText());
 
         JTextArea codePreview = buildCodePreview();
 

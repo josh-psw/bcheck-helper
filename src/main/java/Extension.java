@@ -48,7 +48,8 @@ public class Extension implements BurpExtension {
                         new BCheckFactory(logger),
                         BCHECK),
                 new BCheckItemImporter(api.scanner().bChecks(), logger),
-                settingsController.bCheckSettingsController()
+                settingsController.bCheckSettingsController(),
+                BCHECK
         );
 
         Storefront<Bambda> bambdaStorefront = storefrontFactory.build(
@@ -59,8 +60,9 @@ public class Extension implements BurpExtension {
                         new BambdaFactory(logger),
                         BAMBDA
                 ),
-                new BambdaItemImporter(logger, api.userInterface().swingUtils().suiteFrame()),
-                settingsController.bambdaSettingsController()
+                new BambdaItemImporter(logger),
+                settingsController.bambdaSettingsController(),
+                BAMBDA
         );
 
         JScrollPane settings = new JScrollPane(new Settings(settingsController));

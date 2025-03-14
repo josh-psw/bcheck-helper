@@ -1,5 +1,6 @@
 package ui.view.pane.storefront;
 
+import data.ImportMetadata;
 import data.Item;
 import logging.Logger;
 import settings.defaultsavelocation.DefaultSaveLocationSettingsReader;
@@ -24,7 +25,8 @@ public class Storefront<T extends Item> {
                       Executor executor,
                       IconFactory iconFactory,
                       Logger logger,
-                      Supplier<Font> fontSupplier) {
+                      Supplier<Font> fontSupplier,
+                      ImportMetadata importMetadata) {
         this.title = title;
 
         ActionController<T> actionController = new ActionController<>(
@@ -35,7 +37,7 @@ public class Storefront<T extends Item> {
                 logger
         );
 
-        PreviewPanel<T> previewPanel = new PreviewPanel<>(storefrontModel, actionController);
+        PreviewPanel<T> previewPanel = new PreviewPanel<>(storefrontModel, actionController, importMetadata);
 
         ItemTablePanel<T> tablePanel = new ItemTablePanel<>(
                 new TablePanelController<>(storeController),
