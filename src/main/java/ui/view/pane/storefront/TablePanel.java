@@ -13,6 +13,8 @@ import ui.view.utils.TagRenderer;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.PopupMenuEvent;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -25,17 +27,19 @@ import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.SwingUtilities.invokeLater;
 import static ui.model.StorefrontModel.SEARCH_FILTER_CHANGED;
+import static ui.model.table.TableColumnMetadata.TAGS;
 
 class TablePanel extends JPanel {
     private final TablePanelController panelController;
-    private final JTable bCheckTable = new JTable();
-    private final BCheckTableModel tableModel = new BCheckTableModel();
-    private final JButton refreshButton = new JButton("Refresh");
+    private final JTable bCheckTable;
+    private final BCheckTableModel tableModel;
+    private final JButton refreshButton;
     private final Executor executor;
     private final JComponent searchBar;
     private final StorefrontModel model;
     private final ActionController actionController;
     private final Supplier<Font> fontSupplier;
+    private final TagRenderer tagRenderer;
 
     TablePanel(TablePanelController panelController,
                StorefrontModel storefrontModel,
@@ -51,6 +55,15 @@ class TablePanel extends JPanel {
         this.actionController = actionController;
         this.fontSupplier = fontSupplier;
         this.searchBar = new SearchBar(iconFactory, storefrontModel);
+        this.tableModel = new BCheckTableModel();
+        this.refreshButton = new JButton("Refresh");
+        this.tagRenderer = new TagRenderer(new TagColors());
+        this.bCheckTable = new JTable() {
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
+                return getPreferredSize().width < getParent().getWidth();
+            }
+        };
 
         BorderLayout borderLayout = new BorderLayout();
         borderLayout.setVgap(10);
@@ -101,7 +114,7 @@ class TablePanel extends JPanel {
         bCheckTable.setSelectionMode(SINGLE_SELECTION);
         bCheckTable.getTableHeader().setReorderingAllowed(false);
         bCheckTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
-        bCheckTable.setDefaultRenderer(Tags.class, new TagRenderer(new TagColors()));
+        bCheckTable.setDefaultRenderer(Tags.class, tagRenderer);
 
         int rowHeight = (int) (fontSupplier.get().getSize() * 1.5);
         bCheckTable.setRowHeight(rowHeight);
@@ -143,7 +156,35 @@ class TablePanel extends JPanel {
             }
 
             refreshButton.setEnabled(true);
+
+            int tagsColumnIndex = TAGS.columnIndex();
+            int maxTagColumnWidth = findMaxColumnWidth(tagsColumnIndex);
+
+            invokeLater(() -> {
+                TableColumnModel columnModel = bCheckTable.getColumnModel();
+
+                for (int i = 0; i < columnModel.getColumnCount(); i++) {
+                    TableColumn column = columnModel.getColumn(i);
+                    int width = i == tagsColumnIndex ? maxTagColumnWidth : column.getWidth();
+                    column.setPreferredWidth(width);
+                }
+
+                bCheckTable.invalidate();
+            });
         });
+    }
+
+    private int findMaxColumnWidth(int columnIndex) {
+        int maxWidth = 0;
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Dimension preferredSize = bCheckTable.prepareRenderer(tagRenderer, i, columnIndex).getPreferredSize();
+            int width = (int) preferredSize.getWidth();
+
+            maxWidth = Math.max(maxWidth, width);
+        }
+
+        return maxWidth;
     }
 
     private void handleTableRowChange(ListSelectionEvent selectionEvent, BCheckTableModel tableModel) {
