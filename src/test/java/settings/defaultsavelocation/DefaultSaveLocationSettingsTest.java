@@ -40,8 +40,8 @@ class DefaultSaveLocationSettingsTest {
     void givenTrueUseDefaultLocationSetting_andNonNullSavedPath_whenGetDefaultSaveLocation_thenOptionalContainingValidPathReturned() {
         String path = "/home/carlos";
 
-        when(preferences.getBoolean("default_save_location.use_setting")).thenReturn(true);
-        when(preferences.getString("default_save_location.save_location")).thenReturn(path);
+        when(preferences.getBoolean("bcheck.default_save_location.use_setting")).thenReturn(true);
+        when(preferences.getString("bcheck.default_save_location.save_location")).thenReturn(path);
 
         assertThat(defaultSaveLocationSettings.defaultSaveLocation()).contains(Path.of(path));
     }

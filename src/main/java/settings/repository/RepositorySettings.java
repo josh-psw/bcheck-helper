@@ -8,8 +8,6 @@ import settings.AbstractSettings;
 import static repository.RepositoryType.GITHUB;
 
 public class RepositorySettings extends AbstractSettings implements RepositorySettingsReader {
-    static final String REPOSITORY_TYPE_KEY = "repository.type";
-
     private final RepositoryMetadata repositoryMetadata;
 
     public RepositorySettings(Preferences preferences, RepositoryMetadata repositoryMetadata) {

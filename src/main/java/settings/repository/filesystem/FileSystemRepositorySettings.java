@@ -5,8 +5,6 @@ import data.RepositoryMetadata;
 import settings.AbstractSettings;
 
 public class FileSystemRepositorySettings extends AbstractSettings implements FileSystemRepositorySettingsReader {
-    static final String REPOSITORY_LOCATION_KEY = "filesystem_repository.location";
-
     private final RepositoryMetadata repositoryMetadata;
 
     public FileSystemRepositorySettings(Preferences preferences, RepositoryMetadata repositoryMetadata) {

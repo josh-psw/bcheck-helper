@@ -14,7 +14,7 @@ class GitHubSettingsTest {
 
     @Test
     void givenNoRepoSet_whenGetRepositoryName_thenDefaultRepoReturned() {
-        when(preferences.getString("github_settings.repo")).thenReturn(null);
+        when(preferences.getString("bcheck.github_settings.repo")).thenReturn(null);
 
         assertThat(gitHubSettings.repositoryName()).isEqualTo("portswigger/bchecks");
     }
@@ -23,14 +23,14 @@ class GitHubSettingsTest {
     void givenRepoSet_whenGetRepositoryName_thenSetRepoReturned() {
         String repo = "repo";
 
-        when(preferences.getString("github_settings.repo")).thenReturn(repo);
+        when(preferences.getString("bcheck.github_settings.repo")).thenReturn(repo);
 
         assertThat(gitHubSettings.repositoryName()).isEqualTo(repo);
     }
 
     @Test
     void givenNoUrlSet_whenGetRepositoryUrl_thenDefaultRepoReturned() {
-        when(preferences.getString("github_settings.url")).thenReturn(null);
+        when(preferences.getString("bcheck.github_settings.url")).thenReturn(null);
 
         assertThat(gitHubSettings.repositoryUrl()).isEqualTo("https://api.github.com");
     }
@@ -39,7 +39,7 @@ class GitHubSettingsTest {
     void givenUrlSet_whenGetRepositoryUrl_thenSetUrlReturned() {
         String url = "https://hackxor.net";
 
-        when(preferences.getString("github_settings.url")).thenReturn(url);
+        when(preferences.getString("bcheck.github_settings.url")).thenReturn(url);
 
         assertThat(gitHubSettings.repositoryUrl()).isEqualTo(url);
     }
