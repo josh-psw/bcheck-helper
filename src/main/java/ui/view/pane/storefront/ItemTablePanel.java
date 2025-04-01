@@ -55,7 +55,7 @@ public class ItemTablePanel<T extends Item> extends JPanel {
         this.model = storefrontModel;
         this.actionController = actionController;
         this.fontSupplier = fontSupplier;
-        this.tagRenderer = new TagRenderer(tagColors);;
+        this.tagRenderer = new TagRenderer(tagColors);
         this.searchBar = new SearchBar(iconFactory, storefrontModel);
         this.tableModel = new ItemTableModel<>();
         this.itemTable = new JTable() {
