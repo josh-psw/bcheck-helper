@@ -13,6 +13,8 @@ import ui.view.utils.TagRenderer;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.PopupMenuEvent;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -25,6 +27,7 @@ import static javax.swing.BorderFactory.createEmptyBorder;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import static javax.swing.SwingUtilities.invokeLater;
 import static ui.model.StorefrontModel.SEARCH_FILTER_CHANGED;
+import static ui.model.table.TableColumnMetadata.TAGS;
 
 public class ItemTablePanel<T extends Item> extends JPanel {
     private final TablePanelController<T> panelController;
@@ -36,7 +39,7 @@ public class ItemTablePanel<T extends Item> extends JPanel {
     private final StorefrontModel<T> model;
     private final ActionController<T> actionController;
     private final Supplier<Font> fontSupplier;
-    private final TagColors tagColors;
+    private final TagRenderer tagRenderer;
 
     public ItemTablePanel(TablePanelController<T> panelController,
                           StorefrontModel<T> storefrontModel,
@@ -52,10 +55,15 @@ public class ItemTablePanel<T extends Item> extends JPanel {
         this.model = storefrontModel;
         this.actionController = actionController;
         this.fontSupplier = fontSupplier;
-        this.tagColors = tagColors;
+        this.tagRenderer = new TagRenderer(tagColors);;
         this.searchBar = new SearchBar(iconFactory, storefrontModel);
         this.tableModel = new ItemTableModel<>();
-        this.itemTable = new JTable();
+        this.itemTable = new JTable() {
+            @Override
+            public boolean getScrollableTracksViewportWidth() {
+                return getPreferredSize().width < getParent().getWidth();
+            }
+        };
         this.refreshButton = new JButton("Refresh");
 
         BorderLayout borderLayout = new BorderLayout();
@@ -107,7 +115,7 @@ public class ItemTablePanel<T extends Item> extends JPanel {
         itemTable.setSelectionMode(SINGLE_SELECTION);
         itemTable.getTableHeader().setReorderingAllowed(false);
         itemTable.getSelectionModel().addListSelectionListener(e -> handleTableRowChange(e, tableModel));
-        itemTable.setDefaultRenderer(Tags.class, new TagRenderer(tagColors));
+        itemTable.setDefaultRenderer(Tags.class, tagRenderer);
 
         int rowHeight = (int) (fontSupplier.get().getSize() * 1.5);
         itemTable.setRowHeight(rowHeight);
@@ -149,7 +157,35 @@ public class ItemTablePanel<T extends Item> extends JPanel {
             }
 
             refreshButton.setEnabled(true);
+
+            int tagsColumnIndex = TAGS.columnIndex();
+            int maxTagColumnWidth = findMaxColumnWidth(tagsColumnIndex);
+
+            invokeLater(() -> {
+                TableColumnModel columnModel = itemTable.getColumnModel();
+
+                for (int i = 0; i < columnModel.getColumnCount(); i++) {
+                    TableColumn column = columnModel.getColumn(i);
+                    int width = i == tagsColumnIndex ? maxTagColumnWidth : column.getWidth();
+                    column.setPreferredWidth(width);
+                }
+
+                itemTable.invalidate();
+            });
         });
+    }
+
+    private int findMaxColumnWidth(int columnIndex) {
+        int maxWidth = 0;
+
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Dimension preferredSize = itemTable.prepareRenderer(tagRenderer, i, columnIndex).getPreferredSize();
+            int width = (int) preferredSize.getWidth();
+
+            maxWidth = Math.max(maxWidth, width);
+        }
+
+        return maxWidth;
     }
 
     private void handleTableRowChange(ListSelectionEvent selectionEvent, ItemTableModel<T> tableModel) {

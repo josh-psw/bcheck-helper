@@ -19,4 +19,8 @@ public enum TableColumnMetadata {
         this.columnClass = columnClass;
         this.renderableTableData = renderableTableData;
     }
+
+    public int columnIndex() {
+        return ordinal();
+    }
 }
