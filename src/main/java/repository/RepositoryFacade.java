@@ -1,31 +1,31 @@
 package repository;
 
-import bcheck.BCheck;
+import data.Item;
 import settings.repository.RepositorySettingsReader;
 
 import java.util.List;
 
-public class RepositoryFacade implements Repository {
-    private final FileSystemRepository fileSystemRepository;
-    private final GitHubRepository gitHubBCheckRepository;
+public class RepositoryFacade<T extends Item> implements Repository<T> {
+    private final FileSystemRepository<T> fileSystemRepository;
+    private final GitHubRepository<T> gitHubRepository;
     private final RepositorySettingsReader repositorySettingsReader;
 
     public RepositoryFacade(
             RepositorySettingsReader repositorySettingsReader,
-            GitHubRepository gitHubBCheckRepository,
-            FileSystemRepository fileSystemRepository) {
+            GitHubRepository<T> gitHubRepository,
+            FileSystemRepository<T> fileSystemRepository) {
         this.fileSystemRepository = fileSystemRepository;
-        this.gitHubBCheckRepository = gitHubBCheckRepository;
+        this.gitHubRepository = gitHubRepository;
         this.repositorySettingsReader = repositorySettingsReader;
     }
 
     @Override
-    public List<BCheck> loadAllBChecks() {
-        Repository repository =  switch (repositorySettingsReader.repositoryType()) {
+    public List<T> loadAllItems() {
+        Repository<T> repository =  switch (repositorySettingsReader.repositoryType()) {
             case FILESYSTEM -> fileSystemRepository;
-            case GITHUB -> gitHubBCheckRepository;
+            case GITHUB -> gitHubRepository;
         };
 
-        return repository.loadAllBChecks();
+        return repository.loadAllItems();
     }
 }

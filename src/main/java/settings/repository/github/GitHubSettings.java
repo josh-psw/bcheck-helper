@@ -1,35 +1,36 @@
 package settings.repository.github;
 
 import burp.api.montoya.persistence.Preferences;
+import data.RepositoryMetadata;
 import settings.AbstractSettings;
 
 public class GitHubSettings extends AbstractSettings implements GitHubSettingsReader {
     private static final String GITHUB_API_URL = "https://api.github.com";
-    private static final String DEFAULT_REPOSITORY_NAME_VALUE = "portswigger/bchecks";
-    private static final String REPOSITORY_NAME_KEY = "github_settings.repo";
-    private static final String REPOSITORY_URL_KEY = "github_settings.url";
-    private static final String API_KEY_KEY = "github_settings.api_key";
+    private static final String API_KEY_KEY = "github_settings.api_key"; //TODO should this be shared across instances or unique?
 
-    public GitHubSettings(Preferences preferences) {
+    private final RepositoryMetadata repositoryMetadata;
+
+    public GitHubSettings(Preferences preferences, RepositoryMetadata repositoryMetadata) {
         super(preferences);
+        this.repositoryMetadata = repositoryMetadata;
     }
 
     @Override
     public String repositoryUrl() {
-        return loadStringFromPreferences(REPOSITORY_URL_KEY, GITHUB_API_URL);
+        return loadStringFromPreferences(repositoryMetadata.getRepositoryUrlKey(), GITHUB_API_URL);
     }
 
     public void setRepositoryUrl(String repositoryName) {
-        saveStringToPreferences(REPOSITORY_URL_KEY, repositoryName);
+        saveStringToPreferences(repositoryMetadata.getRepositoryUrlKey(), repositoryName);
     }
 
     @Override
     public String repositoryName() {
-        return loadStringFromPreferences(REPOSITORY_NAME_KEY, DEFAULT_REPOSITORY_NAME_VALUE);
+        return loadStringFromPreferences(repositoryMetadata.getRepositoryNameKey(), repositoryMetadata.getDefaultRepositoryNameValue());
     }
 
     public void setRepositoryName(String repositoryName) {
-        saveStringToPreferences(REPOSITORY_NAME_KEY, repositoryName);
+        saveStringToPreferences(repositoryMetadata.getRepositoryNameKey(), repositoryName);
     }
 
     @Override

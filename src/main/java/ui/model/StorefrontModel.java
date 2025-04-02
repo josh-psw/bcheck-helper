@@ -1,31 +1,29 @@
 package ui.model;
 
-import bcheck.BCheck;
-
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-public interface StorefrontModel {
-    String SELECTED_BCHECK_CHANGED = "selectedBCheckChanged";
+public interface StorefrontModel<T> {
+    String SELECTED_ITEM_CHANGED = "selectedItemChanged";
     String SEARCH_FILTER_CHANGED = "searchFilterChanged";
     String STATUS_CHANGED = "statusChanged";
-    String BCHECKS_UPDATED = "bchecksUpdated";
+    String ITEMS_UPDATED = "itemsUpdated";
 
-    void setSelectedBCheck(BCheck selectedBCheck);
+    void setSelectedItem(T selectedItem);
 
-    BCheck getSelectedBCheck();
+    T getSelectedItem();
 
     void setSearchFilter(String searchFilter);
 
     void setStatus(String status);
 
-    List<BCheck> getAvailableBChecks();
+    List<T> getAvailableItems();
 
-    List<BCheck> getFilteredBChecks();
+    List<T> getFilteredItems();
 
     void addPropertyChangeListener(PropertyChangeListener listener);
 
     State state();
 
-    void updateModel(List<BCheck> bChecks, State state);
+    void updateModel(List<T> items, State state);
 }

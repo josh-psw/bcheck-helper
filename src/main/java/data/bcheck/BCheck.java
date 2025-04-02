@@ -1,4 +1,7 @@
-package bcheck;
+package data.bcheck;
+
+import data.Item;
+import data.Tags;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -6,9 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static java.nio.file.Files.readString;
-import static java.util.Collections.unmodifiableList;
 
-public class BCheck {
+public class BCheck implements Item {
     private final String name;
     private final String description;
     private final String author;
@@ -16,7 +18,7 @@ public class BCheck {
     private final String path;
     private final String filename;
 
-    private String script;
+    private String content;
 
     BCheck(String name, String description, String author, List<String> tags, String path, String filename) {
         this.name = name;
@@ -28,10 +30,12 @@ public class BCheck {
         this.tags = new Tags(tags);
     }
 
+    @Override
     public String name() {
         return name;
     }
 
+    @Override
     public String description() {
         return description;
     }
@@ -44,24 +48,27 @@ public class BCheck {
         return path;
     }
 
+    @Override
     public String filename() {
         return filename;
     }
 
+    @Override
     public Tags tags() {
         return tags;
     }
 
-    public String script() {
-        if (script == null) {
+    @Override
+    public String content() {
+        if (content == null) {
             try {
-                script = readString(Path.of(path));
+                content = readString(Path.of(path));
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         }
 
-        return script;
+        return content;
     }
 
     @Override
@@ -72,40 +79,11 @@ public class BCheck {
         return Objects.equals(name, bCheck.name) && Objects.equals(description, bCheck.description) &&
                 Objects.equals(author, bCheck.author) && Objects.equals(tags, bCheck.tags) &&
                 Objects.equals(path, bCheck.path) && Objects.equals(filename, bCheck.filename) &&
-                Objects.equals(script, bCheck.script);
+                Objects.equals(content, bCheck.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, author, tags, path, filename, script);
-    }
-
-    public static class Tags {
-        private final List<String> tags;
-
-        private Tags(List<String> tags) {
-            this.tags = tags;
-        }
-
-        public List<String> tags() {
-            return unmodifiableList(tags);
-        }
-
-        public boolean contains(String searchText) {
-            return tags.stream().anyMatch(tag -> tag.equalsIgnoreCase(searchText));
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Tags tags1 = (Tags) o;
-            return Objects.equals(tags, tags1.tags);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(tags);
-        }
+        return Objects.hash(name, description, author, tags, path, filename, content);
     }
 }

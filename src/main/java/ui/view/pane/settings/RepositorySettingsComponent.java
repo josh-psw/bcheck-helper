@@ -1,5 +1,6 @@
 package ui.view.pane.settings;
 
+import data.NameMetadata;
 import repository.RepositoryType;
 import settings.repository.RepositorySettings;
 import settings.repository.filesystem.FileSystemRepositorySettings;
@@ -16,15 +17,18 @@ class RepositorySettingsComponent implements SettingsComponent {
     private final RepositorySettings repositorySettings;
     private final GitHubSettings gitHubSettings;
     private final FileSystemRepositorySettings fileSystemRepositorySettings;
+    private final NameMetadata nameMetadata;
 
     private JComponent subComponent;
 
     RepositorySettingsComponent(RepositorySettings repositorySettings,
                                 GitHubSettings gitHubSettings,
-                                FileSystemRepositorySettings fileSystemRepositorySettings) {
+                                FileSystemRepositorySettings fileSystemRepositorySettings,
+                                NameMetadata nameMetadata) {
         this.repositorySettings = repositorySettings;
         this.gitHubSettings = gitHubSettings;
         this.fileSystemRepositorySettings = fileSystemRepositorySettings;
+        this.nameMetadata = nameMetadata;
         component = new JPanel();
 
         GridBagLayout layout = new GridBagLayout();
@@ -32,7 +36,7 @@ class RepositorySettingsComponent implements SettingsComponent {
         layout.rowHeights = new int[]{0, 15, 0, 25};
         component.setLayout(layout);
 
-        JLabel typeDescriptionLine = new JLabel("BChecks can either be loaded from a remote GitHub repository or from the filesystem.");
+        JLabel typeDescriptionLine = new JLabel(nameMetadata.getName() + "s can either be loaded from a remote GitHub repository or from the filesystem.");
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = FIRST_LINE_START;
         constraints.gridy = 0;
@@ -85,12 +89,12 @@ class RepositorySettingsComponent implements SettingsComponent {
 
     @Override
     public String title() {
-        return "Repository configuration";
+        return "Repository configuration - " + nameMetadata.getName();
     }
 
     @Override
     public String description() {
-        return "Use these settings to configure the repository used to load BChecks.  Once you've changed these settings, you will need to refresh the store for them to take effect.";
+        return "Use these settings to configure the repository used to load " + nameMetadata.getName() + "s.  Once you've changed these settings, you will need to refresh the store for them to take effect.";
     }
 
     @Override

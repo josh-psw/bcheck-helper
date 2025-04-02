@@ -1,7 +1,8 @@
 package ui.controller;
 
-import bcheck.BCheck;
-import bcheck.BCheckImporter;
+import data.Item;
+import data.ItemFilter;
+import data.ItemImporter;
 import file.system.FileSystem;
 import repository.Repository;
 import ui.clipboard.ClipboardManager;
@@ -14,73 +15,62 @@ import java.util.function.Predicate;
 import static java.util.Collections.emptyList;
 import static ui.model.State.ERROR;
 
-public class StoreController {
-    private final StorefrontModel model;
-    private final Repository repository;
-    private final BCheckImporter bCheckImporter;
+public class StoreController<T extends Item> {
+    private final StorefrontModel<T> model;
+    private final Repository<T> repository;
+    private final ItemImporter<T> itemImporter;
     private final ClipboardManager clipboardManager;
     private final FileSystem fileSystem;
+    private final ItemFilter<T> itemFilter;
 
     public StoreController(
-            StorefrontModel model,
-            Repository repository,
-            BCheckImporter bCheckImporter,
+            StorefrontModel<T> model,
+            Repository<T> repository,
+            ItemImporter<T> itemImporter,
             ClipboardManager clipboardManager,
-            FileSystem fileSystem
+            FileSystem fileSystem,
+            ItemFilter<T> itemFilter
     ) {
         this.model = model;
         this.repository = repository;
-        this.bCheckImporter = bCheckImporter;
+        this.itemImporter = itemImporter;
         this.clipboardManager = clipboardManager;
         this.fileSystem = fileSystem;
+        this.itemFilter = itemFilter;
     }
 
     public void loadData() {
         model.setStatus("");
 
         try {
-            model.updateModel(repository.loadAllBChecks(), model.state().nextState());
+            model.updateModel(repository.loadAllItems(), model.state().nextState());
         } catch (Exception e) {
             model.updateModel(emptyList(), ERROR);
         }
     }
 
-    public List<BCheck> findMatchingBChecks(String searchText) {
-        Predicate<BCheck> filter = searchText.isBlank() ? bCheck -> true : new BCheckFilterPredicate(searchText);
+    public List<T> findMatchingItems(String searchText) {
+        Predicate<T> filter = searchText.isBlank()
+                ? item -> true
+                : item -> itemFilter.filter(item, searchText);
 
-        return model.getAvailableBChecks().stream().filter(filter).toList();
+        return model.getAvailableItems().stream().filter(filter).toList();
     }
 
-    public void importBCheck(BCheck bCheck) {
+    public void importItem(T item) {
         try {
-            bCheckImporter.importBCheck(bCheck);
-            model.setStatus("Successfully imported BCheck: " + bCheck.name());
+            itemImporter.importItem(item);
+            model.setStatus("Successfully imported item: " + item.name());
         } catch (IllegalStateException e) {
-            model.setStatus("Error imported BCheck: " + bCheck.name());
+            model.setStatus("Error importing item: " + item.name());
         }
     }
 
-    public void copyBCheck(BCheck bCheck) {
-        clipboardManager.copy(bCheck.script());
+    public void copyItem(T item) {
+        clipboardManager.copy(item.content());
     }
 
-    public void saveBCheck(BCheck bCheck, Path savePath) {
-        fileSystem.saveFile(bCheck.script(), savePath);
-    }
-
-    private static class BCheckFilterPredicate implements Predicate<BCheck> {
-        private final String searchText;
-
-        private BCheckFilterPredicate(String searchText) {
-            this.searchText = searchText.toLowerCase();
-        }
-
-        @Override
-        public boolean test(BCheck bCheck) {
-            return bCheck.name().toLowerCase().contains(searchText) ||
-                    bCheck.author().toLowerCase().contains(searchText) ||
-                    bCheck.description().toLowerCase().contains(searchText) ||
-                    bCheck.tags().contains(searchText);
-        }
+    public void saveItem(T item, Path savePath) {
+        fileSystem.saveFile(item.content(), savePath);
     }
 }

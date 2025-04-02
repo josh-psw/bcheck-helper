@@ -1,6 +1,7 @@
 package ui.view.pane.storefront;
 
-import bcheck.BCheck;
+import data.ImportMetadata;
+import data.Item;
 import ui.model.StorefrontModel;
 import ui.view.pane.storefront.ActionCallbacks.ButtonTogglingActionCallbacks;
 
@@ -13,16 +14,18 @@ import static java.awt.FlowLayout.LEADING;
 import static javax.swing.SwingConstants.VERTICAL;
 import static ui.model.StorefrontModel.*;
 
-class PreviewPanel extends JPanel {
-    private final StorefrontModel model;
-    private final ActionController actionController;
+public class PreviewPanel<T extends Item> extends JPanel {
+    private final StorefrontModel<T> model;
+    private final ActionController<T> actionController;
     private final JLabel statusLabel;
     private final JButton importButton;
     private final JButton copyButton;
     private final JButton saveButton;
     private final JButton saveAllButton;
 
-    PreviewPanel(StorefrontModel storefrontModel, ActionController actionController) {
+    public PreviewPanel(StorefrontModel<T> storefrontModel,
+                        ActionController<T> actionController,
+                        ImportMetadata importMetadata) {
         super(new BorderLayout());
 
         this.model = storefrontModel;
@@ -32,7 +35,10 @@ class PreviewPanel extends JPanel {
         this.importButton = new JButton("Import");
         this.copyButton = new JButton("Copy to clipboard");
         this.saveButton = new JButton("Save to file");
-        this.saveAllButton = new JButton("Save all BChecks to disk");
+        this.saveAllButton = new JButton("Save all items to disk");
+
+        this.importButton.setEnabled(importMetadata.isImportSupported());
+        this.importButton.setToolTipText(importMetadata.getImportTooltipText());
 
         JTextArea codePreview = buildCodePreview();
 
@@ -42,21 +48,21 @@ class PreviewPanel extends JPanel {
         model.addPropertyChangeListener(evt -> {
             switch (evt.getPropertyName()) {
                 case STATUS_CHANGED -> statusLabel.setText((String) evt.getNewValue());
-                case SELECTED_BCHECK_CHANGED -> {
-                    BCheck selectedBCheck = model.getSelectedBCheck();
-                    boolean bCheckSelected = selectedBCheck != null;
+                case SELECTED_ITEM_CHANGED -> {
+                    T selectedItem = model.getSelectedItem();
+                    boolean itemSelected = selectedItem != null;
 
-                    copyButton.setEnabled(bCheckSelected);
-                    saveButton.setEnabled(bCheckSelected);
+                    copyButton.setEnabled(itemSelected);
+                    saveButton.setEnabled(itemSelected);
 
-                    String previewText = bCheckSelected ? selectedBCheck.script() : "";
+                    String previewText = itemSelected ? selectedItem.content() : "";
 
                     codePreview.setText(previewText);
                     codePreview.setCaretPosition(0);
                 }
-                case SEARCH_FILTER_CHANGED, BCHECKS_UPDATED -> {
-                    boolean bChecksEmpty = model.getFilteredBChecks().isEmpty();
-                    saveAllButton.setEnabled(!bChecksEmpty);
+                case SEARCH_FILTER_CHANGED, ITEMS_UPDATED -> {
+                    boolean itemsEmpty = model.getFilteredItems().isEmpty();
+                    saveAllButton.setEnabled(!itemsEmpty);
                 }
             }
         });
@@ -73,7 +79,7 @@ class PreviewPanel extends JPanel {
         codePreview.setEditable(false);
         codePreview.setFont(monospacedFont);
         codePreview.setWrapStyleWord(true);
-        codePreview.setComponentPopupMenu(new BCheckPopupMenu(actionController));
+        codePreview.setComponentPopupMenu(new ItemPopupMenu(actionController));
 
         return codePreview;
     }
@@ -81,10 +87,10 @@ class PreviewPanel extends JPanel {
     private JComponent buildActionPanel() {
         JPanel actionPanel = new JPanel(new FlowLayout(LEADING));
 
-        importButton.addActionListener(e -> actionController.importSelectedBCheck());
-        copyButton.addActionListener(e -> actionController.copySelectedBCheck());
-        saveButton.addActionListener(e -> actionController.saveSelectedBCheck(new ButtonTogglingActionCallbacks(saveButton)));
-        saveAllButton.addActionListener(e -> actionController.saveAllVisibleBChecks(new ButtonTogglingActionCallbacks(saveAllButton)));
+        importButton.addActionListener(e -> actionController.importSelected());
+        copyButton.addActionListener(e -> actionController.copySelected());
+        saveButton.addActionListener(e -> actionController.saveSelected(new ButtonTogglingActionCallbacks(saveButton)));
+        saveAllButton.addActionListener(e -> actionController.saveAllVisible(new ButtonTogglingActionCallbacks(saveAllButton)));
 
         actionPanel.add(importButton);
         actionPanel.add(copyButton);

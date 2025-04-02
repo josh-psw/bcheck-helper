@@ -1,9 +1,9 @@
 package repository;
 
-import bcheck.BCheck;
+import data.Item;
 
 import java.util.List;
 
-public interface Repository {
-    List<BCheck> loadAllBChecks();
+public interface Repository<T extends Item> {
+    List<T> loadAllItems();
 }

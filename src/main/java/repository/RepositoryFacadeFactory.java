@@ -1,42 +1,54 @@
 package repository;
 
-import bcheck.BCheckFactory;
 import burp.api.montoya.http.Http;
 import client.GitHubClient;
-import file.finder.BCheckFileFinder;
+import data.Item;
+import data.ItemFactory;
+import data.RepositoryMetadata;
+import file.finder.FileFinder;
 import file.temp.TempFileCreator;
 import file.zip.ZipExtractor;
 import logging.Logger;
 import network.RequestSender;
-import settings.controller.SettingsController;
+import settings.controller.ItemSettingsController;
 
 public class RepositoryFacadeFactory {
+    private final Logger logger;
+    private final Http http;
 
-    public static Repository from(Logger logger, Http http, SettingsController settingsController) {
+    public RepositoryFacadeFactory(Logger logger, Http http) {
+        this.logger = logger;
+        this.http = http;
+    }
+
+    public <T extends Item> Repository<T> build(ItemSettingsController settingsController,
+                               ItemFactory<T> itemFactory,
+                               RepositoryMetadata repositoryMetadata) {
         RequestSender requestSender = new RequestSender(http, logger);
-        BCheckFactory bCheckFactory = new BCheckFactory(logger);
         GitHubClient gitHubClient = new GitHubClient(requestSender);
         TempFileCreator tempFileCreator = new TempFileCreator(logger);
         ZipExtractor zipExtractor = new ZipExtractor(logger);
-        BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
+        FileFinder fileFinder = new FileFinder();
 
-        GitHubRepository gitHubRepository = new GitHubRepository(
-                bCheckFactory,
+        GitHubRepository<T> gitHubRepository = new GitHubRepository<>(
+                itemFactory,
                 gitHubClient,
                 tempFileCreator,
                 zipExtractor,
-                bCheckFileFinder,
-                settingsController.gitHubSettings()
+                fileFinder,
+                settingsController.gitHubSettings(),
+                repositoryMetadata
         );
 
-        FileSystemRepository fileSystemRepository = new FileSystemRepository(
+        FileSystemRepository<T> fileSystemRepository = new FileSystemRepository<>(
                 settingsController.fileSystemRepositorySettings(),
-                bCheckFileFinder,
-                bCheckFactory,
-                logger
+                fileFinder,
+                itemFactory,
+                logger,
+                repositoryMetadata
         );
 
-        return new RepositoryFacade(
+        return new RepositoryFacade<>(
                 settingsController.repositorySettings(),
                 gitHubRepository,
                 fileSystemRepository

@@ -11,8 +11,8 @@ import static java.nio.file.Files.createDirectory;
 import static java.nio.file.Files.writeString;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BCheckFileFinderTest {
-    private final BCheckFileFinder bCheckFileFinder = new BCheckFileFinder();
+class FileFinderTest {
+    private final FileFinder bCheckFileFinder = new FileFinder();
 
     @Test
     void givenDirectoryStructure_withFolders_andWithBCheckFiles_andWithNonBCheckFiles_whenFindBChecks_thenAllBChecksFound_andNoNonBChecksFound(@TempDir Path directory) throws IOException {
@@ -29,7 +29,7 @@ class BCheckFileFinderTest {
         writeString(nonEmptySubDirectory.resolve("sub-bcheck.bchec"), "");
         writeString(nonEmptySubDirectory.resolve("sub-bcheck"), "");
 
-        List<Path> foundBChecks = bCheckFileFinder.find(directory);
+        List<Path> foundBChecks = bCheckFileFinder.find(directory, ".bcheck");
         assertThat(foundBChecks).containsExactlyInAnyOrder(nonEmptySubDirectory.resolve("sub-bcheck.bcheck"), directory.resolve("bcheck.bcheck"));
     }
 }

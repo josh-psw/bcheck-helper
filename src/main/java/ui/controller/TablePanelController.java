@@ -1,18 +1,15 @@
 package ui.controller;
 
-public interface TablePanelController {
-    void loadData();
+import data.Item;
 
-    class DefaultTablePanelController implements TablePanelController {
-        private final StoreController storeController;
+public class TablePanelController<T extends Item> {
+    private final StoreController<T> storeController;
 
-        public DefaultTablePanelController(StoreController storeController) {
-            this.storeController = storeController;
-        }
+    public TablePanelController(StoreController<T> storeController) {
+        this.storeController = storeController;
+    }
 
-        @Override
-        public void loadData() {
-            storeController.loadData();
-        }
+    public void loadData() {
+        storeController.loadData();
     }
 }

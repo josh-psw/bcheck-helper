@@ -1,26 +1,24 @@
 package ui.model;
 
-import bcheck.BCheck;
-
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class LateInitializationStorefrontModel implements StorefrontModel {
-    private final Supplier<StorefrontModel> modelSupplier;
+public class LateInitializationStorefrontModel<T> implements StorefrontModel<T> {
+    private final Supplier<StorefrontModel<T>> modelSupplier;
 
-    public LateInitializationStorefrontModel(Supplier<StorefrontModel> modelSupplier) {
+    public LateInitializationStorefrontModel(Supplier<StorefrontModel<T>> modelSupplier) {
         this.modelSupplier = modelSupplier;
     }
 
     @Override
-    public void setSelectedBCheck(BCheck selectedBCheck) {
-        model().setSelectedBCheck(selectedBCheck);
+    public void setSelectedItem(T selectedItem) {
+        model().setSelectedItem(selectedItem);
     }
 
     @Override
-    public BCheck getSelectedBCheck() {
-        return model().getSelectedBCheck();
+    public T getSelectedItem() {
+        return model().getSelectedItem();
     }
 
     @Override
@@ -34,13 +32,13 @@ public class LateInitializationStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public List<BCheck> getAvailableBChecks() {
-        return model().getAvailableBChecks();
+    public List<T> getAvailableItems() {
+        return model().getAvailableItems();
     }
 
     @Override
-    public List<BCheck> getFilteredBChecks() {
-        return model().getFilteredBChecks();
+    public List<T> getFilteredItems() {
+        return model().getFilteredItems();
     }
 
     @Override
@@ -54,11 +52,11 @@ public class LateInitializationStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public void updateModel(List<BCheck> bChecks, State state) {
-        model().updateModel(bChecks, state);
+    public void updateModel(List<T> items, State state) {
+        model().updateModel(items, state);
     }
 
-    private StorefrontModel model() {
+    private StorefrontModel<T> model() {
         return modelSupplier.get();
     }
 }

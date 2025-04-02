@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+import static data.ItemMetadata.BAMBDA;
+import static data.ItemMetadata.BCHECK;
 import static java.awt.GridBagConstraints.FIRST_LINE_START;
 import static java.awt.GridBagConstraints.HORIZONTAL;
 
@@ -15,12 +17,22 @@ public class Settings extends JPanel {
         setLayout(new GridBagLayout());
 
         List<SettingsComponent> settingsComponentList = List.of(
-                new DefaultSaveLocationSettingsComponent(settingsController.defaultSaveLocationSettings()),
+                new DefaultSaveLocationSettingsComponent(
+                        settingsController.bCheckSettingsController().defaultSaveLocationSettings(),
+                        BCHECK),
                 new RepositorySettingsComponent(
-                        settingsController.repositorySettings(),
-                        settingsController.gitHubSettings(),
-                        settingsController.fileSystemRepositorySettings()
-                ),
+                        settingsController.bCheckSettingsController().repositorySettings(),
+                        settingsController.bCheckSettingsController().gitHubSettings(),
+                        settingsController.bCheckSettingsController().fileSystemRepositorySettings(),
+                        BCHECK),
+                new DefaultSaveLocationSettingsComponent(
+                        settingsController.bambdaSettingsController().defaultSaveLocationSettings(),
+                        BAMBDA),
+                new RepositorySettingsComponent(
+                        settingsController.bambdaSettingsController().repositorySettings(),
+                        settingsController.bambdaSettingsController().gitHubSettings(),
+                        settingsController.bambdaSettingsController().fileSystemRepositorySettings(),
+                        BAMBDA),
                 new DebugSettingsComponent(settingsController.debugSettings())
         );
 

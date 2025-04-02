@@ -1,2 +1,2 @@
-rootProject.name = "bcheck-helper"
+rootProject.name = "extensibility-helper"
 

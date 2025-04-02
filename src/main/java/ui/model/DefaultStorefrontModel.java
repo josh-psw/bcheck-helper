@@ -1,6 +1,6 @@
 package ui.model;
 
-import bcheck.BCheck;
+import data.Item;
 import ui.controller.StoreController;
 
 import java.beans.PropertyChangeListener;
@@ -11,34 +11,34 @@ import java.util.List;
 import static java.util.Collections.synchronizedList;
 import static java.util.Comparator.comparing;
 
-public class DefaultStorefrontModel implements StorefrontModel {
-    private final StoreController controller;
-    private final List<BCheck> allAvailableBChecks;
+public class DefaultStorefrontModel<T extends Item> implements StorefrontModel<T> {
+    private final StoreController<T> controller;
+    private final List<T> allAvailableItems;
     private final PropertyChangeSupport propertyChangeSupport;
 
     private State state;
     private String searchFilter;
     private String status;
-    private BCheck selectedBCheck;
+    private T selectedItem;
 
-    public DefaultStorefrontModel(StoreController controller) {
+    public DefaultStorefrontModel(StoreController<T> controller) {
         this.controller = controller;
 
         this.state = State.START;
-        this.allAvailableBChecks = synchronizedList(new ArrayList<>());
+        this.allAvailableItems = synchronizedList(new ArrayList<>());
         this.propertyChangeSupport = new PropertyChangeSupport(this);
     }
 
     @Override
-    public void setSelectedBCheck(BCheck selectedBCheck) {
-        BCheck oldselectedBCheck = this.selectedBCheck;
-        this.selectedBCheck = selectedBCheck;
-        propertyChangeSupport.firePropertyChange(SELECTED_BCHECK_CHANGED, oldselectedBCheck, selectedBCheck);
+    public void setSelectedItem(T selectedItem) {
+        T oldSelectedItem = this.selectedItem;
+        this.selectedItem = selectedItem;
+        propertyChangeSupport.firePropertyChange(SELECTED_ITEM_CHANGED, oldSelectedItem, selectedItem);
     }
 
     @Override
-    public BCheck getSelectedBCheck() {
-        return selectedBCheck;
+    public T getSelectedItem() {
+        return selectedItem;
     }
 
     @Override
@@ -56,13 +56,13 @@ public class DefaultStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public List<BCheck> getAvailableBChecks() {
-        return allAvailableBChecks;
+    public List<T> getAvailableItems() {
+        return allAvailableItems;
     }
 
     @Override
-    public List<BCheck> getFilteredBChecks() {
-        return controller.findMatchingBChecks(searchFilter);
+    public List<T> getFilteredItems() {
+        return controller.findMatchingItems(searchFilter);
     }
 
     @Override
@@ -71,25 +71,25 @@ public class DefaultStorefrontModel implements StorefrontModel {
     }
 
     @Override
-    public void updateModel(List<BCheck> bChecks, State state) {
+    public void updateModel(List<T> items, State state) {
         this.state = state;
 
-        allAvailableBChecks.clear();
-        allAvailableBChecks.addAll(bChecks);
-        allAvailableBChecks.sort(comparing(BCheck::name));
-        propertyChangeSupport.firePropertyChange(BCHECKS_UPDATED, null, allAvailableBChecks);
+        allAvailableItems.clear();
+        allAvailableItems.addAll(items);
+        allAvailableItems.sort(comparing(Item::name));
+        propertyChangeSupport.firePropertyChange(ITEMS_UPDATED, null, allAvailableItems);
 
         String status = switch (state) {
             case START -> "Loading";
-            case INITIAL_LOAD -> "Loaded %d BCheck scripts".formatted(allAvailableBChecks.size());
-            case REFRESH -> "Refreshed. Loaded %d BCheck scripts".formatted(allAvailableBChecks.size());
-            case ERROR -> "Error loading BChecks from repository";
+            case INITIAL_LOAD -> "Loaded %d items".formatted(allAvailableItems.size());
+            case REFRESH -> "Refreshed. Loaded %d items".formatted(allAvailableItems.size());
+            case ERROR -> "Error loading from repository";
         };
 
         setStatus(status);
 
-        if (!allAvailableBChecks.contains(selectedBCheck)) {
-            setSelectedBCheck(null);
+        if (!allAvailableItems.contains(selectedItem)) {
+            setSelectedItem(null);
         }
     }
 

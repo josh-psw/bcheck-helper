@@ -2,40 +2,27 @@ package settings.controller;
 
 import burp.api.montoya.persistence.Preferences;
 import settings.debug.DebugSettings;
-import settings.defaultsavelocation.DefaultSaveLocationSettings;
-import settings.repository.RepositorySettings;
-import settings.repository.filesystem.FileSystemRepositorySettings;
-import settings.repository.github.GitHubSettings;
+
+import static data.ItemMetadata.BAMBDA;
+import static data.ItemMetadata.BCHECK;
 
 public class SettingsController {
-    private final DefaultSaveLocationSettings defaultSaveLocationSettings;
-    private final GitHubSettings gitHubSettings;
+    private final ItemSettingsController bCheckSettingsController;
+    private final ItemSettingsController bambdaSettingsController;
     private final DebugSettings debugSettings;
-    private final FileSystemRepositorySettings fileSystemRepositorySettings;
-    private final RepositorySettings repositorySettings;
 
     public SettingsController(Preferences preferences) {
-        this.defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences);
-        this.repositorySettings = new RepositorySettings(preferences);
-        this.gitHubSettings = new GitHubSettings(preferences);
-        this.fileSystemRepositorySettings = new FileSystemRepositorySettings(preferences);
+        this.bCheckSettingsController = new ItemSettingsController(preferences, BCHECK);
+        this.bambdaSettingsController = new ItemSettingsController(preferences, BAMBDA);
         this.debugSettings = new DebugSettings(preferences);
     }
 
-    public DefaultSaveLocationSettings defaultSaveLocationSettings() {
-        return defaultSaveLocationSettings;
+    public ItemSettingsController bCheckSettingsController() {
+        return bCheckSettingsController;
     }
 
-    public RepositorySettings repositorySettings() {
-        return repositorySettings;
-    }
-
-    public GitHubSettings gitHubSettings() {
-        return gitHubSettings;
-    }
-
-    public FileSystemRepositorySettings fileSystemRepositorySettings() {
-        return fileSystemRepositorySettings;
+    public ItemSettingsController bambdaSettingsController() {
+        return bambdaSettingsController;
     }
 
     public DebugSettings debugSettings() {

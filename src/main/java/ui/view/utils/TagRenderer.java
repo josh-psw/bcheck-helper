@@ -1,6 +1,6 @@
 package ui.view.utils;
 
-import bcheck.BCheck.Tags;
+import data.Tags;
 import settings.tags.TagColors;
 
 import javax.swing.*;
