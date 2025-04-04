@@ -2,7 +2,8 @@ package settings.defaultsavelocation;
 
 import burp.api.montoya.persistence.Preferences;
 import data.ItemMetadata;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.nio.file.Path;
 
@@ -12,36 +13,43 @@ import static org.mockito.Mockito.when;
 
 class DefaultSaveLocationSettingsTest {
     private final Preferences preferences = mock(Preferences.class);
-    private final DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, ItemMetadata.BCHECK);
 
-    @Test
-    void givenNullUseDefaultLocationSetting_whenGetDefaultSaveLocation_thenEmptyOptionalReturned() {
-        when(preferences.getBoolean("default_save_location.use_setting")).thenReturn(null);
-
-        assertThat(defaultSaveLocationSettings.defaultSaveLocation()).isEmpty();
-    }
-
-    @Test
-    void givenFalseUseDefaultLocationSetting_whenGetDefaultSaveLocation_thenEmptyOptionalReturned() {
-        when(preferences.getBoolean("default_save_location.use_setting")).thenReturn(false);
+    @ParameterizedTest
+    @EnumSource(ItemMetadata.class)
+    void givenNullUseDefaultLocationSetting_whenGetDefaultSaveLocation_thenEmptyOptionalReturned(ItemMetadata itemMetadata) {
+        DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, itemMetadata);
+        when(preferences.getBoolean(itemMetadata.getUseSettingKey())).thenReturn(null);
 
         assertThat(defaultSaveLocationSettings.defaultSaveLocation()).isEmpty();
     }
 
-    @Test
-    void givenTrueUseDefaultLocationSetting_andNullSavedPath_whenGetDefaultSaveLocation_thenEmptyOptionalReturned() {
-        when(preferences.getBoolean("default_save_location.use_setting")).thenReturn(true);
-        when(preferences.getString("default_save_location.save_location")).thenReturn(null);
+    @ParameterizedTest
+    @EnumSource(ItemMetadata.class)
+    void givenFalseUseDefaultLocationSetting_whenGetDefaultSaveLocation_thenEmptyOptionalReturned(ItemMetadata itemMetadata) {
+        DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, itemMetadata);
+        when(preferences.getBoolean(itemMetadata.getUseSettingKey())).thenReturn(false);
 
         assertThat(defaultSaveLocationSettings.defaultSaveLocation()).isEmpty();
     }
 
-    @Test
-    void givenTrueUseDefaultLocationSetting_andNonNullSavedPath_whenGetDefaultSaveLocation_thenOptionalContainingValidPathReturned() {
+    @ParameterizedTest
+    @EnumSource(ItemMetadata.class)
+    void givenTrueUseDefaultLocationSetting_andNullSavedPath_whenGetDefaultSaveLocation_thenEmptyOptionalReturned(ItemMetadata itemMetadata) {
+        DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, itemMetadata);
+        when(preferences.getBoolean(itemMetadata.getUseSettingKey())).thenReturn(true);
+        when(preferences.getString(itemMetadata.getSaveLocationKey())).thenReturn(null);
+
+        assertThat(defaultSaveLocationSettings.defaultSaveLocation()).isEmpty();
+    }
+
+    @ParameterizedTest
+    @EnumSource(ItemMetadata.class)
+    void givenTrueUseDefaultLocationSetting_andNonNullSavedPath_whenGetDefaultSaveLocation_thenOptionalContainingValidPathReturned(ItemMetadata itemMetadata) {
         String path = "/home/carlos";
+        DefaultSaveLocationSettings defaultSaveLocationSettings = new DefaultSaveLocationSettings(preferences, itemMetadata);
 
-        when(preferences.getBoolean("bcheck.default_save_location.use_setting")).thenReturn(true);
-        when(preferences.getString("bcheck.default_save_location.save_location")).thenReturn(path);
+        when(preferences.getBoolean(itemMetadata.getUseSettingKey())).thenReturn(true);
+        when(preferences.getString(itemMetadata.getSaveLocationKey())).thenReturn(path);
 
         assertThat(defaultSaveLocationSettings.defaultSaveLocation()).contains(Path.of(path));
     }
