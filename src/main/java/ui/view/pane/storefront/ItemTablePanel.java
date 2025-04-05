@@ -94,7 +94,7 @@ public class ItemTablePanel<T extends Item> extends JPanel {
         model.setSearchFilter("");
         tableModel.setItems(model.getFilteredItems());
 
-        JPopupMenu popupMenu = new ItemPopupMenu(actionController);
+        JPopupMenu popupMenu = new ItemPopupMenu<>(actionController);
         popupMenu.addPopupMenuListener(new InertPopupMenuListener()
         {
             @Override

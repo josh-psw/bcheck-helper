@@ -1,9 +1,11 @@
 package ui.view.pane.storefront;
 
+import data.Item;
+
 import javax.swing.*;
 
-public class ItemPopupMenu extends JPopupMenu {
-    public ItemPopupMenu(ActionController actionController) {
+public class ItemPopupMenu<T extends Item> extends JPopupMenu {
+    public ItemPopupMenu(ActionController<T> actionController) {
         JMenuItem importBCheckMenuItem = new JMenuItem("Import item");
         importBCheckMenuItem.addActionListener(l -> actionController.importSelected());
         add(importBCheckMenuItem);
