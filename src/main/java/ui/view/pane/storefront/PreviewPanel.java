@@ -79,7 +79,7 @@ public class PreviewPanel<T extends Item> extends JPanel {
         codePreview.setEditable(false);
         codePreview.setFont(monospacedFont);
         codePreview.setWrapStyleWord(true);
-        codePreview.setComponentPopupMenu(new ItemPopupMenu(actionController));
+        codePreview.setComponentPopupMenu(new ItemPopupMenu<>(actionController));
 
         return codePreview;
     }

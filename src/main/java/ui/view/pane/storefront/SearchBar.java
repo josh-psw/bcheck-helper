@@ -1,5 +1,6 @@
 package ui.view.pane.storefront;
 
+import data.Item;
 import ui.icons.IconFactory;
 import ui.icons.IconType;
 import ui.model.StorefrontModel;
@@ -27,7 +28,7 @@ public class SearchBar extends JTextField {
     private IconType iconType;
     private int scaledIconSize;
 
-    public SearchBar(IconFactory iconFactory, StorefrontModel storefrontModel) {
+    public SearchBar(IconFactory iconFactory, StorefrontModel<? extends Item> storefrontModel) {
         this.iconFactory = iconFactory;
         this.scaledIconSize = scaledIconSize();
         this.iconType = SEARCH;
