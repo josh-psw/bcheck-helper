@@ -13,8 +13,8 @@ public enum ItemMetadata implements RepositoryMetadata, SaveLocationMetadata, Na
             ".bambda",
             "bambda",
             "portswigger/bambdas",
-            false,
-            "Bambda import not yet supported.\nRegister your interest for this functionality at https://github.com/PortSwigger/burp-extensions-montoya-api/issues/112");
+            true,
+            "Import Bambdas to your Bambda library.\nSupported in v2025.4+");
 
     private final String name;
     private final String fileExtension;
