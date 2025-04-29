@@ -49,7 +49,7 @@ public class Extension implements BurpExtension {
                 new BCheckTagColors()
         );
 
-        BambdaItemImporter bambdaItemImporter = api.burpSuite().version().buildNumber() > 20250401000000000L
+        BambdaItemImporter bambdaItemImporter = api.burpSuite().version().buildNumber() > 20250400000000000L
                 ? new BambdaItemImporter(logger, api.bambda())
                 : new BambdaItemImporter(logger, null);
 
