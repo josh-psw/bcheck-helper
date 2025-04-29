@@ -29,4 +29,9 @@ public class Logger {
             logging.logToOutput(debug);
         }
     }
+
+    public void logEventLogError(String error) {
+        logging.logToError(error);
+        logging.raiseErrorEvent(error);
+    }
 }
