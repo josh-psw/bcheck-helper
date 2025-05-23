@@ -16,7 +16,7 @@ public class BambdaItemImporter implements ItemImporter<Bambda> {
     @Override
     public void importItem(Bambda item) {
         if (bambdaApi == null) {
-            logger.logError("Bambda import unsupported in this version of Burp. Please upgrade to v2025.4+");
+            logger.logEventLogError("Bambda import unsupported in this version of Burp. Please upgrade to v2025.4+");
             throw new IllegalStateException("Bambda import is supported in v2025.4+");
         }
 
