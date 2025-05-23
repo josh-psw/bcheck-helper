@@ -67,7 +67,7 @@ public class Extension implements BurpExtension {
                 new BambdaTagColors()
         );
 
-        JScrollPane settings = new JScrollPane(new Settings(settingsController));
+        JComponent settings = new Settings(settingsController);
 
         Store store = new Store(settings, bCheckStorefront, bambdaStorefront);
 
